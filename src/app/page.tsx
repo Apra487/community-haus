@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 export default function Home() {
-  return <main className="container">Main Page</main>;
+  return <main className="mt-10">Main Page</main>;
 }
