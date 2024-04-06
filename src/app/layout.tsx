@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import { Inter } from 'next/font/google';
 import './globals.css';
+require('@solana/wallet-adapter-react-ui/styles.css');
+
+const Providers = dynamic(() => import('./providers'));
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} container flex justify-center `}>
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
