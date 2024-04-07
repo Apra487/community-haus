@@ -90,7 +90,8 @@ export default async function Home() {
   // }, []);
 
   return (
-    <main className="flex flex-col justify-center mt-10">
+    <main className="container flex flex-col justify-center mt-10">
+      <div className="fixed w-screen h-screen bg-collector top-0 right-0 bg-no-repeat bg-cover"></div>
       <h1>check your eligibility to join x person community</h1>
       <ConnectButton />
     </main>

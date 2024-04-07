@@ -23,7 +23,12 @@ const config: Config = {
         md: '1.5rem',
       },
     },
-    extend: {},
+    extend: {
+      backgroundImage: {
+        creator: 'url("/assets/bgs/creator.svg")',
+        collector: 'url("/assets/bgs/collector.svg")',
+      },
+    },
   },
   plugins: [],
 };
