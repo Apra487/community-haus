@@ -1,0 +1,598 @@
+{
+    "https://drip.haus/theburrow": {
+      "name": "the burrow",
+      "twitterUrl": "https://twitter.com/theburrownft"
+    },
+    "https://drip.haus/ambi": {
+      "name": "Ambidextrous_nude",
+      "twitterUrl": "https://twitter.com/Ambi_eth"
+    },
+    "https://drip.haus/nachopcors": {
+      "name": "Nacho",
+      "twitterUrl": "https://twitter.com/nachopcors"
+    },
+    "https://drip.haus/trentinomusic": {
+      "name": "∆ trentino ∇",
+      "twitterUrl": "https://twitter.com/TrentinoMusic"
+    },
+    "https://drip.haus/wilsenway": {
+      "name": "Wilsen Way",
+      "twitterUrl": "https://twitter.com/wilsenway"
+    },
+    "https://drip.haus/coolermint": {
+      "name": "coolermint",
+      "twitterUrl": "https://twitter.com/cooler_thanmint"
+    },
+    "https://drip.haus/br1": {
+      "name": "BR1: INFINITE",
+      "twitterUrl": "https://twitter.com/BR1INFINITE"
+    },
+    "https://drip.haus/hyblinxx": {
+      "name": "Hyblinxx",
+      "twitterUrl": "https://twitter.com/hyblinxx"
+    },
+    "https://drip.haus/rez": {
+      "name": "Rez",
+      "twitterUrl": "https://twitter.com/Rez_inProgress"
+    },
+    "https://drip.haus/degenpoet": {
+      "name": "degen poet",
+      "twitterUrl": "https://twitter.com/solanapoet"
+    },
+    "https://drip.haus/juntdoe": {
+      "name": "JUNTDOE.sol",
+      "twitterUrl": "https://twitter.com/juntdoe"
+    },
+    "https://drip.haus/pixelart": {
+      "name": "Pixel Sculptor",
+      "twitterUrl": "https://twitter.com/PixelChecks"
+    },
+    "https://drip.haus/designz": {
+      "name": "DESIGNZ",
+      "twitterUrl": "https://twitter.com/designzbychance"
+    },
+    "https://drip.haus/enigma": {
+      "name": "ENiGMA",
+      "twitterUrl": "https://twitter.com/enigma_atelier"
+    },
+    "https://drip.haus/createdbyimrie": {
+      "name": "Created by Imrie",
+      "twitterUrl": "https://twitter.com/Createdby_imrie"
+    },
+    "https://drip.haus/dfl": {
+      "name": "DeFi Land",
+      "twitterUrl": "https://twitter.com/DeFi_Land"
+    },
+    "https://drip.haus/earlysaint": {
+      "name": "EarlySaint ",
+      "twitterUrl": "https://twitter.com/earlysaint"
+    },
+    "https://drip.haus/moldy": {
+      "name": "moldy",
+      "twitterUrl": "https://twitter.com/ifeelsomoldy"
+    },
+    "https://drip.haus/nfa": {
+      "name": "New Frontier Art | NFA",
+      "twitterUrl": "https://twitter.com/NewFrontierArt"
+    },
+    "https://drip.haus/vaanarart": {
+      "name": "Vaanar Art",
+      "twitterUrl": "https://twitter.com/VaanarArt"
+    },
+    "https://drip.haus/wiwitaek": {
+      "name": "wiwitaek",
+      "twitterUrl": "https://twitter.com/wiwitaek"
+    },
+    "https://drip.haus/sentientshapes": {
+      "name": "sentientshapes",
+      "twitterUrl": "https://twitter.com/sentientshapes"
+    },
+    "https://drip.haus/sujipop": {
+      "name": "SujiPop",
+      "twitterUrl": "https://twitter.com/suji_pop"
+    },
+    "https://drip.haus/alkebulan": {
+      "name": "A L K Ē B U L A N",
+      "twitterUrl": "https://twitter.com/AlkebulanDrip"
+    },
+    "https://drip.haus/blockframez": {
+      "name": "BlockFramez ",
+      "twitterUrl": "https://twitter.com/blockframez"
+    },
+    "https://drip.haus/silo": {
+      "name": "SiLo Has ART",
+      "twitterUrl": "https://twitter.com/siloHasArt"
+    },
+    "https://drip.haus/tiiinydenise": {
+      "name": "DENISE ツ",
+      "twitterUrl": "https://twitter.com/tiiinydenise"
+    },
+    "https://drip.haus/outkast": {
+      "name": "outkast",
+      "twitterUrl": "https://twitter.com/OutkastNFTs"
+    },
+    "https://drip.haus/willustrator": {
+      "name": "Will",
+      "twitterUrl": "https://twitter.com/will_ustrator"
+    },
+    "https://drip.haus/danwxrld": {
+      "name": "𝗗𝗔𝗡",
+      "twitterUrl": "https://twitter.com/DevilDan_SOL"
+    },
+    "https://drip.haus/degenghosty": {
+      "name": "degen ghosty ",
+      "twitterUrl": "https://twitter.com/degenghosty"
+    },
+    "https://drip.haus/cog": {
+      "name": "City Of Girls 丨NFT NYC 2024 Speaker & Artist 丨",
+      "twitterUrl": "https://twitter.com/CityOfGirls_nft"
+    },
+    "https://drip.haus/wen": {
+      "name": "Wen",
+      "twitterUrl": "https://twitter.com/wenwencoin"
+    },
+    "https://drip.haus/dreader": {
+      "name": "dReader",
+      "twitterUrl": "https://twitter.com/dReaderApp"
+    },
+    "https://drip.haus/quietmaybe": {
+      "name": "quietmaybe",
+      "twitterUrl": "https://twitter.com/quietmaybe"
+    },
+    "https://drip.haus/bangerz": {
+      "name": "bangerz ",
+      "twitterUrl": "https://twitter.com/bangerzNFT"
+    },
+    "https://drip.haus/oddlavox": {
+      "name": "Oddlavox",
+      "twitterUrl": "https://twitter.com/oddlavox"
+    },
+    "https://drip.haus/simplyeto": {
+      "name": "Simply Eto |",
+      "twitterUrl": "https://twitter.com/itsSimplyEto"
+    },
+    "https://drip.haus/keek": {
+      "name": "keek ",
+      "twitterUrl": "https://twitter.com/keek_art"
+    },
+    "https://drip.haus/framemusic": {
+      "name": "FramewkFortune ",
+      "twitterUrl": "https://twitter.com/FramewkFortune"
+    },
+    "https://drip.haus/vanta": {
+      "name": "𝖵𝖠𝖭𝖳𝖠 ",
+      "twitterUrl": "https://twitter.com/Vantarighthere"
+    },
+    "https://drip.haus/alangnft": {
+      "name": "𝙰𝚕𝚊𝚗 𝙶.",
+      "twitterUrl": "https://twitter.com/AlanGnft"
+    },
+    "https://drip.haus/degenroyale": {
+      "name": "Degen Royale ",
+      "twitterUrl": "https://twitter.com/Degen_Royale"
+    },
+    "https://drip.haus/duckzzy": {
+      "name": "𝐃𝐮𝐜𝐤𝐳𝐳𝐲 ",
+      "twitterUrl": "https://twitter.com/DuckzzyOG"
+    },
+    "https://drip.haus/mugenhachi": {
+      "name": "Hachi Mugen",
+      "twitterUrl": "https://twitter.com/mugenhachi"
+    },
+    "https://drip.haus/jimialbert": {
+      "name": "Jimi Albert (jimialbert.eth/.tez/.sol) 1/1 Artist",
+      "twitterUrl": "https://twitter.com/JimiAlbert"
+    },
+    "https://drip.haus/naomi": {
+      "name": "naomi nowak",
+      "twitterUrl": "https://twitter.com/naomi_nowak"
+    },
+    "https://drip.haus/scottythecoach": {
+      "name": "Scotty Russell ",
+      "twitterUrl": "https://twitter.com/ScottyTheCoach"
+    },
+    "https://drip.haus/daa": {
+      "name": "Degenerate Ape Academy",
+      "twitterUrl": "https://twitter.com/DegenApeAcademy"
+    },
+    "https://drip.haus/kirk": {
+      "name": "Kirk Englehardt ",
+      "twitterUrl": "https://twitter.com/kirkenglehardt"
+    },
+    "https://drip.haus/zuluink": {
+      "name": "ZULUINK ˢ ᵒ ˡ/DRIP",
+      "twitterUrl": "https://twitter.com/Z_u_l_u_i_n_k"
+    },
+    "https://drip.haus/atleastwedream": {
+      "name": "𝖆𝖙𝖑𝖊𝖆𝖘𝖙𝖜𝖊𝖉𝖗𝖊𝖆𝖒",
+      "twitterUrl": "https://twitter.com/atleastwedream"
+    },
+    "https://drip.haus/aklo": {
+      "name": "aklo ",
+      "twitterUrl": "https://twitter.com/aklo360"
+    },
+    "https://drip.haus/deftony": {
+      "name": "CharliΞ",
+      "twitterUrl": "https://twitter.com/deftony83"
+    },
+    "https://drip.haus/juleslikm": {
+      "name": "JuleslikM",
+      "twitterUrl": "https://twitter.com/Mjuleslik"
+    },
+    "https://drip.haus/onedopekids": {
+      "name": "ODK",
+      "twitterUrl": "https://twitter.com/onedopekids"
+    },
+    "https://drip.haus/dei": {
+      "name": "Postmodern Ouroboros",
+      "twitterUrl": "https://twitter.com/postmodern_dei"
+    },
+    "https://drip.haus/maquin": {
+      "name": "aquin ",
+      "twitterUrl": "https://twitter.com/MaquinNFT"
+    },
+    "https://drip.haus/fireknots": {
+      "name": "Fire",
+      "twitterUrl": "https://twitter.com/fireknots"
+    },
+    "https://drip.haus/amet": {
+      "name": "AmeT",
+      "twitterUrl": "https://twitter.com/amir_hamz_"
+    },
+    "https://drip.haus/martyparty": {
+      "name": "MartyParty",
+      "twitterUrl": "https://twitter.com/martypartymusic"
+    },
+    "https://drip.haus/studionx": {
+      "name": "StudioNX",
+      "twitterUrl": "https://twitter.com/StudioNX"
+    },
+    "https://drip.haus/novalightsilver": {
+      "name": "Nova Lightsilver",
+      "twitterUrl": "https://twitter.com/Novachrome_x377"
+    },
+    "https://drip.haus/claireujma": {
+      "name": "ClaireUjma",
+      "twitterUrl": "https://twitter.com/ClaireUjma"
+    },
+    "https://drip.haus/0xgrime": {
+      "name": "GRIME",
+      "twitterUrl": "https://twitter.com/0x_Grime"
+    },
+    "https://drip.haus/doodledevils": {
+      "name": "Doodle devils ",
+      "twitterUrl": "https://twitter.com/doodledevils"
+    },
+    "https://drip.haus/dropnation": {
+      "name": "Drop Nation ",
+      "twitterUrl": "https://twitter.com/dropnationsol"
+    },
+    "https://drip.haus/early": {
+      "name": "Early",
+      "twitterUrl": "https://twitter.com/EarlyArt_SOL"
+    },
+    "https://drip.haus/fierza": {
+      "name": "Fierza ",
+      "twitterUrl": "https://twitter.com/fierzafajri"
+    },
+    "https://drip.haus/furrend": {
+      "name": "Furrend ",
+      "twitterUrl": "https://twitter.com/hifurrend"
+    },
+    "https://drip.haus/poetonic": {
+      "name": "Poetonic",
+      "twitterUrl": "https://twitter.com/Poetonic_Art"
+    },
+    "https://drip.haus/churro": {
+      "name": "churro",
+      "twitterUrl": "https://twitter.com/sweetchurro12"
+    },
+    "https://drip.haus/nanieko": {
+      "name": "ᑎᗩᑎIEKO ",
+      "twitterUrl": "https://twitter.com/nani3k0"
+    },
+    "https://drip.haus/tevo": {
+      "name": "tevo",
+      "twitterUrl": "https://twitter.com/tevoeatacid"
+    },
+    "https://drip.haus/karmatic": {
+      "name": "Karmatic",
+      "twitterUrl": "https://twitter.com/Karmatic_xyz"
+    },
+    "https://drip.haus/0xgraffito": {
+      "name": "graffito.sol ",
+      "twitterUrl": "https://twitter.com/0xgraffito"
+    },
+    "https://drip.haus/0xStoek": {
+      "name": "0xStoek ",
+      "twitterUrl": "https://twitter.com/0xStoek"
+    },
+    "https://drip.haus/arsonic": {
+      "name": "Arsonic",
+      "twitterUrl": "https://twitter.com/Ars0nic"
+    },
+    "https://drip.haus/artifex": {
+      "name": "Artifex",
+      "twitterUrl": "https://twitter.com/Artifexr"
+    },
+    "https://drip.haus/bad": {
+      "name": "BAD* ENVIRONMENT CLUB®",
+      "twitterUrl": "https://twitter.com/BadEnvClub"
+    },
+    "https://drip.haus/becc": {
+      "name": "becc",
+      "twitterUrl": "https://twitter.com/URBROBECC"
+    },
+    "https://drip.haus/bork": {
+      "name": "Bork",
+      "twitterUrl": "https://twitter.com/borktheviking"
+    },
+    "https://drip.haus/bullyzcrew": {
+      "name": "Bullyz Crew ",
+      "twitterUrl": "https://twitter.com/BullyzCrew"
+    },
+    "https://drip.haus/bunjil": {
+      "name": "bunjil",
+      "twitterUrl": "https://twitter.com/bunjil"
+    },
+    "https://drip.haus/chads": {
+      "name": "Chads ",
+      "twitterUrl": "https://twitter.com/CHADSwtf"
+    },
+    "https://drip.haus/demarco": {
+      "name": "DEMARCO",
+      "twitterUrl": "https://twitter.com/itsnot_demarco"
+    },
+    "https://drip.haus/drrevel": {
+      "name": "Dr. Revel | DRiP",
+      "twitterUrl": "https://twitter.com/DrRebekkaRevel"
+    },
+    "https://drip.haus/earthtoeve": {
+      "name": "EarthtoEve",
+      "twitterUrl": "https://twitter.com/EarthtoEve1"
+    },
+    "https://drip.haus/eddiefilip": {
+      "name": "Eddie | DRiP",
+      "twitterUrl": "https://twitter.com/eddie_filip"
+    },
+    "https://drip.haus/flg": {
+      "name": "FLG | DRiP Creator",
+      "twitterUrl": "https://twitter.com/flg_art"
+    },
+    "https://drip.haus/heyitsbudds": {
+      "name": "Budds",
+      "twitterUrl": "https://twitter.com/HeyItsBudds"
+    },
+    "https://drip.haus/jakey": {
+      "name": "Jakey",
+      "twitterUrl": "https://twitter.com/SolJakey"
+    },
+    "https://drip.haus/lcillustrates": {
+      "name": "LC | Drip Artist & Illustrator",
+      "twitterUrl": "https://twitter.com/lc_illustrates"
+    },
+    "https://drip.haus/lights": {
+      "name": "LIGHTS | blockchain photographer",
+      "twitterUrl": "https://twitter.com/LIGHTS_artist"
+    },
+    "https://drip.haus/namaste": {
+      "name": "Solana Sensei",
+      "twitterUrl": "https://twitter.com/SolanaSensei"
+    },
+    "https://drip.haus/wetiko": {
+      "name": "WETIKO",
+      "twitterUrl": "https://twitter.com/wetikos"
+    },
+    "https://drip.haus/wizart": {
+      "name": "WizArtStudios",
+      "twitterUrl": "https://twitter.com/WizArt_Studios"
+    },
+    "https://drip.haus/wizardjames": {
+      "name": "wizard james",
+      "twitterUrl": "https://twitter.com/JamesMBristow"
+    },
+    "https://drip.haus/culturehacker": {
+      "name": "culturehacker | ODYSSEY on DRiP ",
+      "twitterUrl": "https://twitter.com/culturehacker"
+    },
+    "https://drip.haus/ohr": {
+      "name": "øhr ",
+      "twitterUrl": "https://twitter.com/ohr_xyz"
+    },
+    "https://drip.haus/shack": {
+      "name": "''Shack!''",
+      "twitterUrl": "https://twitter.com/le_shackgraphic"
+    },
+    "https://drip.haus/artwithhumans": {
+      "name": "Art With Humans",
+      "twitterUrl": "https://twitter.com/artwithhumans"
+    },
+    "https://drip.haus/assetdash": {
+      "name": "AssetDash",
+      "twitterUrl": "https://twitter.com/assetdash"
+    },
+    "https://drip.haus/baxus": {
+      "name": "BAXUS",
+      "twitterUrl": "https://twitter.com/baxusco"
+    },
+    "https://drip.haus/bloodyberlin": {
+      "name": "loody.",
+      "twitterUrl": "https://twitter.com/bloodybulldoge"
+    },
+    "https://drip.haus/backpack": {
+      "name": "Backpack ",
+      "twitterUrl": "https://twitter.com/Backpack"
+    },
+    "https://drip.haus/benharley": {
+      "name": "Ben Harley ◎",
+      "twitterUrl": "https://twitter.com/BenHarleyNFTart"
+    },
+    "https://drip.haus/dmc": {
+      "name": "Darryl \"DMC\" McDaniels",
+      "twitterUrl": "https://twitter.com/thekingdmc"
+    },
+    "https://drip.haus/durty": {
+      "name": "Durty",
+      "twitterUrl": "https://twitter.com/ifeelsodurty"
+    },
+    "https://drip.haus/echomagazine": {
+      "name": "BAT Community",
+      "twitterUrl": "https://twitter.com/BAT_Community"
+    },
+    "https://drip.haus/fs": {
+      "name": "FSL Ecosystem",
+      "twitterUrl": "https://twitter.com/fslweb3"
+    },
+    "https://drip.haus/floor": {
+      "name": "Floor",
+      "twitterUrl": "https://twitter.com/floor"
+    },
+    "https://drip.haus/genopets": {
+      "name": "Genopets - Public Beta V1",
+      "twitterUrl": "https://twitter.com/genopets"
+    },
+    "https://drip.haus/grimsyndicate": {
+      "name": "Grim Syndicate",
+      "twitterUrl": "https://twitter.com/Grim__Syndicate"
+    },
+    "https://drip.haus/hazyarts": {
+      "name": "Hazy Arts Studio",
+      "twitterUrl": "https://twitter.com/playhazyarts"
+    },
+    "https://drip.haus/ghostlord": {
+      "name": "gh◎$tlord",
+      "twitterUrl": "https://twitter.com/IIISO_GHOSTLORD"
+    },
+    "https://drip.haus/itsreallyhymn": {
+      "name": "Woody",
+      "twitterUrl": "https://twitter.com/itsreallyhymn"
+    },
+    "https://drip.haus/lahseminit": {
+      "name": "Faiq",
+      "twitterUrl": "https://twitter.com/lahseminit"
+    },
+    "https://drip.haus/neatstuff": {
+      "name": "Trev El. Viz ",
+      "twitterUrl": "https://twitter.com/trevelviz"
+    },
+    "https://drip.haus/ouvra": {
+      "name": "ouvra",
+      "twitterUrl": "https://twitter.com/ouvra"
+    },
+    "https://drip.haus/pog": {
+      "name": "POG ®",
+      "twitterUrl": "https://twitter.com/pogdigital"
+    },
+    "https://drip.haus/parcl": {
+      "name": "Parcl",
+      "twitterUrl": "https://twitter.com/Parcl"
+    },
+    "https://drip.haus/portals": {
+      "name": "Portals ",
+      "twitterUrl": "https://twitter.com/_portals_"
+    },
+    "https://drip.haus/saturdaymorning": {
+      "name": "GLASS",
+      "twitterUrl": "https://twitter.com/glasssuite"
+    },
+    "https://drip.haus/sharky": {
+      "name": "Sharky ",
+      "twitterUrl": "https://twitter.com/sharkyfi"
+    },
+    "https://drip.haus/showcase": {
+      "name": "DRiP",
+      "twitterUrl": "https://twitter.com/drip_haus"
+    },
+    "https://drip.haus/betdex": {
+      "name": "BetDEX",
+      "twitterUrl": "https://twitter.com/BetDEXLabs"
+    },
+    "https://drip.haus/suprprid3": {
+      "name": "Super Pride|",
+      "twitterUrl": "https://twitter.com/Suprprid3"
+    },
+    "https://drip.haus/syarawi": {
+      "name": "SYARAWI™",
+      "twitterUrl": "https://twitter.com/0xBlockflop"
+    },
+    "https://drip.haus/wave": {
+      "name": "The Wave ",
+      "twitterUrl": "https://twitter.com/TheWaveSolana"
+    },
+    "https://drip.haus/vaultmusic": {
+      "name": "Vault",
+      "twitterUrl": "https://twitter.com/vaultmusichq"
+    },
+    "https://drip.haus/xcelencia": {
+      "name": "el niño ",
+      "twitterUrl": "https://twitter.com/xcelencia"
+    },
+    "https://drip.haus/howdai": {
+      "name": "Tina Dai ",
+      "twitterUrl": "https://twitter.com/howdai27"
+    },
+    "https://drip.haus/kiramoto": {
+      "name": "kiramoto",
+      "twitterUrl": "https://twitter.com/kiramotosan"
+    },
+    "https://drip.haus/tflo": {
+      "name": "tflo",
+      "twitterUrl": "https://twitter.com/tflo__"
+    },
+    "https://drip.haus/drrobo7": {
+      "name": "DrRobo7",
+      "twitterUrl": "https://twitter.com/DrRobo7"
+    },
+    "https://drip.haus/drpeepee": {
+      "name": "Dr. Peepee ",
+      "twitterUrl": "https://twitter.com/Doctor_Peepee"
+    },
+    "https://drip.haus/kevthecactus": {
+      "name": "Kev",
+      "twitterUrl": "https://twitter.com/Kevthecactus"
+    },
+    "https://drip.haus/vuralyalim": {
+      "name": "Yalım Vural | DRiP Creator",
+      "twitterUrl": "https://twitter.com/vuralyalim"
+    },
+    "https://drip.haus/huxsterized": {
+      "name": "Huxsterized ",
+      "twitterUrl": "https://twitter.com/huxsterized"
+    },
+    "https://drip.haus/rafaqin": {
+      "name": "Rafaqin",
+      "twitterUrl": "https://twitter.com/Rafaqin"
+    },
+    "https://drip.haus/youknowkeegan": {
+      "name": "youknowkeegan",
+      "twitterUrl": "https://twitter.com/youknowkeegan"
+    },
+    "https://drip.haus/awag": {
+      "name": "AWAG ",
+      "twitterUrl": "https://twitter.com/aintweallgods"
+    },
+    "https://drip.haus/siriuscrocodile": {
+      "name": "Sirius Crocodile",
+      "twitterUrl": "https://twitter.com/siriuscrocodile"
+    },
+    "https://drip.haus/mpozzecco": {
+      "name": "mpozzecco",
+      "twitterUrl": "https://twitter.com/mpozzecco"
+    },
+    "https://drip.haus/andrewmason": {
+      "name": "Andrew Mason ",
+      "twitterUrl": "https://twitter.com/andrewmvson"
+    },
+    "https://drip.haus/macroverse": {
+      "name": "Macroverse ",
+      "twitterUrl": "https://twitter.com/macroverse"
+    },
+    "https://drip.haus/myspaceship": {
+      "name": "MYSPACESHIP",
+      "twitterUrl": "https://twitter.com/mySpaceshipSOL"
+    },
+    "https://drip.haus/madhouse": {
+      "name": "ᴍᴀᴅ𝙝𝙤𝙪𝙨𝙚",
+      "twitterUrl": "https://twitter.com/madhouse_nft"
+    }
+  }
