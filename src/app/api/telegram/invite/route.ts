@@ -20,18 +20,9 @@ export async function POST(request: Request) {
   const query = { chatID };
   const document = await collection.findOne(query);
 
-  // console.log(result);
-  // result?.users.push(userID);
-  // await result?.save();
-
   if (document) {
-    // Modify the document
     document.users.push(userID);
-
-    // Update the document in the database
     await collection.replaceOne(query, document);
-
-    console.log('Document updated successfully');
   }
 
   const inviteInfo = {

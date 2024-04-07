@@ -3,7 +3,19 @@ import { telegramClient } from '@/utils/telegram';
 import { mongoClient } from '@/utils/mongodb';
 
 export async function POST(request: Request) {
-  const { groupName, creatorTelegramID } = await request.json();
+  const {
+    creatorUsername,
+    creatorTelegramID,
+    communityName,
+    communityDescription,
+    commonCriteria,
+    rareCriteria,
+    legendaryCriteria,
+    ultimateCriteria,
+    droplets,
+    dropsNumber,
+    twitterURL,
+  } = await request.json();
 
   await telegramClient.start({
     phoneNumber: '',
@@ -11,13 +23,11 @@ export async function POST(request: Request) {
     phoneCode: async () => '',
     onError: (err) => console.log(err),
   });
-
   await mongoClient.connect();
-  
 
   const chatInfo = {
-    title: groupName,
     users: [creatorTelegramID],
+    title: communityName,
   };
 
   const result = <any>(
@@ -28,14 +38,29 @@ export async function POST(request: Request) {
 
   const database = mongoClient.db('community_haus');
   const collection = database.collection('creater_groups');
-  await collection.insertOne({
+
+  const creatorChannelInfo = {
+    username: creatorUsername,
+    telegramID: creatorTelegramID,
+    communityName,
+    communityDescription,
     chatID: chatID.value.toString(),
-    title: groupName,
     users: [creatorTelegramID],
-  });
+    criteria: {
+      common: commonCriteria,
+      rate: rareCriteria,
+      legendary: legendaryCriteria,
+      ultimate: ultimateCriteria,
+      droplets,
+      dropsNumber,
+    },
+    twitterURL,
+  };
+
+  await collection.insertOne(creatorChannelInfo);
 
   return Response.json({
     message: 'Group created',
-    data: { chatID, ...chatInfo },
+    data: creatorChannelInfo,
   });
 }
