@@ -1,7 +1,12 @@
 'use client';
+import { IDashboardStore, useDashboardStore } from '@/stores';
 import Image from 'next/image';
 
 export default function Dashboard() {
+  const { communityData } = useDashboardStore((store: IDashboardStore) => ({
+    communityData: store.communityData,
+  }));
+
   return (
     <main className="container flex flex-col justify-center items-center">
       <div className="fixed w-screen h-screen bg-[#0d0d0d] top-0 right-0 bg-no-repeat bg-cover -z-50"></div>
@@ -18,7 +23,7 @@ export default function Dashboard() {
           Here is the link you can share with your collectors.
         </p>
         <div className="px-5 py-3 mt-3 w-11/12 bg-tertiary rounded-2xl flex justify-between">
-          <div>{`community.haus/dhaniya_pudina420`}</div>
+          <div>{`community.haus/${communityData?.username}`}</div>
           <Image
             src="/assets/icons/copy.svg"
             alt="copy"
@@ -26,7 +31,9 @@ export default function Dashboard() {
             height={20}
             className="cursor-pointer"
             onClick={() => {
-              navigator.clipboard.writeText(`community.haus/dhaniya_pudina420`);
+              navigator.clipboard.writeText(
+                `community.haus/${communityData?.username}`
+              );
             }}
           />
         </div>

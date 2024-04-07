@@ -1,7 +1,14 @@
 'use client';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Modal from './Modal';
-import { useCreateStore, ICreateStore } from '@/stores';
+import {
+  useCreateStore,
+  ICreateStore,
+  useDashboardStore,
+  type CommunityDataType,
+  type IDashboardStore,
+} from '@/stores';
 
 interface RarityToggle {
   rarity: string;
@@ -38,6 +45,8 @@ const RarityOptions: RarityToggle[] = [
 ];
 
 const CriteriaModal = () => {
+  const router = useRouter();
+
   const [rarityToggles, setRarityToggles] =
     useState<RarityToggle[]>(RarityOptions);
   const [droplets, setDroplets] = useState<string>('');
@@ -82,6 +91,11 @@ const CriteriaModal = () => {
     nameOfCommunity: store.nameOfCommunity,
     description: store.description,
   }));
+  const { updateCommunityData } = useDashboardStore(
+    (store: IDashboardStore) => ({
+      updateCommunityData: store.updateCommunityData,
+    })
+  );
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -96,24 +110,24 @@ const CriteriaModal = () => {
 
     console.log(formData);
 
-
     const criteria: { [key: string]: string } = {};
 
-    formData.rarities.forEach(rarity => {
+    formData.rarities.forEach((rarity) => {
       // Map rarity to its corresponding criteria
-      criteria[`${rarity.rarity.toLowerCase()}Criteria`] = rarity.value.toString();
+      criteria[`${rarity.rarity.toLowerCase()}Criteria`] =
+        rarity.value.toString();
     });
 
     const jsonFormData = {
-      "creatorUsername": userName,
-      "communityName": nameOfCommunity,
-      "communityDescription": description,
-      "creatorTelegramID": telegramId,
-      "twitterUrl": twitterUrl,
-      "contractAddress": address,
-      "droplets": formData.droplets,
-      "dropsNumber": formData.dropsOwned,
-    }
+      creatorUsername: userName,
+      communityName: nameOfCommunity,
+      communityDescription: description,
+      creatorTelegramID: telegramId,
+      twitterUrl: twitterUrl,
+      contractAddress: address,
+      droplets: formData.droplets,
+      dropsNumber: formData.dropsOwned,
+    };
 
     Object.keys(criteria).forEach((key) => {
       // @ts-ignore
@@ -121,7 +135,6 @@ const CriteriaModal = () => {
     });
 
     console.log(jsonFormData);
-    
 
     fetch('/api/telegram/group', {
       method: 'POST',
@@ -136,13 +149,14 @@ const CriteriaModal = () => {
         }
         return response.json();
       })
-      .then((data) => {
+      .then((data: CommunityDataType) => {
         console.log('Success:', data);
+        updateCommunityData(data);
+        router.push('/dashboard');
       })
       .catch((error) => {
         console.error('Error:', error);
       });
-
   };
 
   return (

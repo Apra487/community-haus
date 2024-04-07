@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
-type CommunityDataType = {
+export type CommunityDataType = {
   username: string;
   telegramID: string;
   communityName: string;
@@ -23,6 +23,7 @@ type CommunityDataType = {
 
 export interface IDashboardStore {
   communityData: CommunityDataType | undefined;
+  updateCommunityData: (_communityData: CommunityDataType) => void;
 }
 
 export const useDashboardStore = create<IDashboardStore>()(
