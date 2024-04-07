@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import Modal from './Modal';
+import { useCreateStore, ICreateStore } from '@/stores';
 
 interface RarityToggle {
   rarity: string;
@@ -66,6 +67,21 @@ const CriteriaModal = () => {
         setter(value);
       }
     };
+  const {
+    twitterUrl,
+    address,
+    telegramId,
+    userName,
+    nameOfCommunity,
+    description,
+  } = useCreateStore((store: ICreateStore) => ({
+    twitterUrl: store.twitterUrl,
+    address: store.address,
+    telegramId: store.telegramId,
+    userName: store.userName,
+    nameOfCommunity: store.nameOfCommunity,
+    description: store.description,
+  }));
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -79,6 +95,55 @@ const CriteriaModal = () => {
     };
 
     console.log(formData);
+
+
+    const criteria: { [key: string]: string } = {};
+
+    formData.rarities.forEach(rarity => {
+      // Map rarity to its corresponding criteria
+      criteria[`${rarity.rarity.toLowerCase()}Criteria`] = rarity.value.toString();
+    });
+
+    const jsonFormData = {
+      "creatorUsername": userName,
+      "communityName": nameOfCommunity,
+      "communityDescription": description,
+      "creatorTelegramID": telegramId,
+      "twitterUrl": twitterUrl,
+      "contractAddress": address,
+      "droplets": formData.droplets,
+      "dropsNumber": formData.dropsOwned,
+    }
+
+    Object.keys(criteria).forEach((key) => {
+      // @ts-ignore
+      jsonFormData[key as keyof typeof jsonFormData] = criteria[key] as string;
+    });
+
+    console.log(jsonFormData);
+    
+
+    fetch('/api/telegram/group', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(jsonFormData) || JSON.stringify({}),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Success:', data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+
+    // Send formData to backend url - http://localhost:3000/api/telegram/group post request
   };
 
   return (

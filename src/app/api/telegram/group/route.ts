@@ -3,6 +3,8 @@ import { telegramClient } from '@/utils/telegram';
 import { mongoClient } from '@/utils/mongodb';
 
 export async function POST(request: Request) {
+  console.log(request);
+  
   let {
     creatorUsername,
     creatorTelegramID,
@@ -18,23 +20,54 @@ export async function POST(request: Request) {
     contractAddress,
   } = await request.json();
 
+  if (!creatorUsername) {
+    return Response.json({
+      message: 'Creator username is required',
+    });
+  }
+  if (!creatorTelegramID) {
+    return Response.json({
+      message: 'Creator telegram ID is required',
+    });
+  }
+  if (!communityName) {
+    return Response.json({
+      message: 'Community name is required',
+    });
+  }
+  if (!communityDescription) {
+    return Response.json({
+      message: 'Community description is required',
+    });
+  }
+  if (!twitterURL) {
+    return Response.json({
+      message: 'Twitter URL is required',
+    });
+  }
+  if (!contractAddress) {
+    return Response.json({
+      message: 'Contract address is required',
+    });
+  }
+
   if (!commonCriteria) {
-    commonCriteria = "0";
+    commonCriteria = '0';
   }
   if (!rareCriteria) {
-    rareCriteria = "0";
+    rareCriteria = '0';
   }
   if (!legendaryCriteria) {
-    legendaryCriteria = "0";
+    legendaryCriteria = '0';
   }
   if (!ultimateCriteria) {
-    ultimateCriteria = "0";
+    ultimateCriteria = '0';
   }
   if (!droplets) {
-    droplets = "0";
+    droplets = '0';
   }
   if (!dropsNumber) {
-    dropsNumber = "0";
+    dropsNumber = '0';
   }
 
   await telegramClient.start({
