@@ -77,10 +77,7 @@ const VerifyModal: React.FC = () => {
             </div>
           </div>
         </div>
-        <button
-          type="button"
-          className="flex flex-col bg-accent py-[10px] mt-5 text-primary-dark justify-center items-center font-bold text-center whitespace-nowrap rounded-md w-[104px]"
-        >
+        <button type="button" className="btn-primary mt-5 w-[104px]">
           <div>Verify</div>
         </button>
         <p className="mt-4 text-secondary ">

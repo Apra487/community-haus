@@ -1,11 +1,11 @@
 'use client';
-import { VerifyModal } from '@/components/modals';
+import { VerifyModal, CreateModal } from '@/components/modals';
 import { useModal } from '@/hooks';
 
 export default function Creator() {
-  const { openModal, closeModal } = useModal();
+  const { openModal } = useModal();
   return (
-    <main className="container flex justify-center">
+    <main className="container flex flex-col justify-center">
       <div className="fixed w-screen h-screen bg-creator top-0 right-0 bg-no-repeat bg-cover -z-50"></div>
       <button
         onClick={() => {
@@ -13,6 +13,13 @@ export default function Creator() {
         }}
       >
         Connect your Socials
+      </button>
+      <button
+        onClick={() => {
+          openModal(<CreateModal />);
+        }}
+      >
+        Create your community
       </button>
     </main>
   );
