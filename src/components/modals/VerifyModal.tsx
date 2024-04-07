@@ -1,20 +1,45 @@
 'use client';
+import { useCallback, useState } from 'react';
 import Image from 'next/image';
 import Modal from './Modal';
 import { useSession, signIn, signOut } from 'next-auth/react';
-import {
-  useAcountStore,
-  type IAccountStore,
-} from '@/stores';
+import { useAcountStore } from '@/stores';
 
 const VerifyModal: React.FC = () => {
-  const { data: session, update: updateSession, status } = useSession();
+  const { data: session } = useSession();
 
-  // set data to store
   useAcountStore.getState().updateName(session?.user?.name ?? '');
   useAcountStore.getState().updateImageUrl(session?.user?.image ?? '');
 
-  console.log(session)
+  const [dripUsername, setDripUsername] = useState<string>('');
+
+  const handleVerify = useCallback(async () => {
+    try {
+      if (!session?.user?.name) throw new Error('User not signed in');
+
+      const dripUrl = `https://drip.haus/${dripUsername}`;
+      const response = await fetch('/data/dripToTwitterInfoMap.json');
+      const data = await response.json();
+      const dripTwitterInfo = data[dripUrl];
+
+      if (
+        session.user.name === dripTwitterInfo.name ||
+        dripTwitterInfo.name.includes(session.user.name)
+      ) {
+        const twitterToAddressResponse = await fetch(
+          '/data/twitterToAddressMap.json'
+        );
+        const twitterToAddressData = await twitterToAddressResponse.json();
+        const address = twitterToAddressData[dripTwitterInfo.twitterUrl];
+        console.log('Address:', address);
+        console.log('Verified');
+      } else {
+        console.log('Not verified');
+      }
+    } catch (error) {
+      console.error('Something went wrong while try to verify', error);
+    }
+  }, [session, dripUsername]);
 
   return (
     <Modal>
@@ -46,6 +71,8 @@ const VerifyModal: React.FC = () => {
               placeholder="@"
               aria-label="DRiP username"
               className="bg-tertiary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
+              value={dripUsername}
+              onChange={(e) => setDripUsername(e.target.value)}
             />
           </div>
           <h5 className="mt-5 text-base font-bold">Integrate X (Twitter)</h5>
@@ -60,7 +87,7 @@ const VerifyModal: React.FC = () => {
               {session ? (
                 <button
                   onClick={() => signOut()}
-                  className="flex items-center w-fit bg-tertiary py-2 px-4 rounded-2xl"
+                  className="flex gap-2 items-center w-fit bg-tertiary py-2 px-4 rounded-2xl"
                 >
                   <Image
                     src="/assets/logos/x.svg"
@@ -87,7 +114,11 @@ const VerifyModal: React.FC = () => {
             </div>
           </div>
         </div>
-        <button type="button" className="btn-primary mt-5">
+        <button
+          type="button"
+          className="btn-primary mt-5"
+          onClick={handleVerify}
+        >
           <div>Verify</div>
         </button>
         <p className="mt-4 text-secondary ">
