@@ -1,31 +1,51 @@
+'use client;';
 import React, { useState } from 'react';
 import Image from 'next/image';
 
 import Modal from './Modal';
+import { useCreateStore, ICreateStore } from '@/stores';
 
 type FormState = {
   username: string;
   telegramId: string;
   communityName: string;
   description: string;
-  type: string;
   logo: File | null;
 };
 
-const CreateModal: React.FC = () => {
+interface Props {
+  closeActon: () => void;
+}
+
+const CreateModal: React.FC<Props> = ({ closeActon }) => {
+  const {
+    updateUserName,
+    updateTelegramId,
+    updateNameOfCommunity,
+    updateDescription,
+  } = useCreateStore((store: ICreateStore) => ({
+    updateUserName: store.updateUserName,
+    updateTelegramId: store.updateTelegramId,
+    updateNameOfCommunity: store.updateNameOfCommunity,
+    updateDescription: store.updateDescription,
+  }));
+
   const [formState, setFormState] = useState<FormState>({
     username: '',
     telegramId: '',
     communityName: '',
     description: '',
-    type: '',
     logo: null,
   });
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Handle the form submission, e.g., via an API call.
+    updateUserName(formState.username);
+    updateTelegramId(formState.telegramId);
+    updateNameOfCommunity(formState.communityName);
+    updateDescription(formState.description);
     console.log(formState);
+    closeActon();
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,18 +120,6 @@ const CreateModal: React.FC = () => {
             <textarea
               name="description"
               value={formState.description}
-              onChange={handleChange}
-              required
-              className="bg-tertiary"
-            />
-          </label>
-          <br />
-          <label>
-            Type:
-            <input
-              name="type"
-              type="text"
-              value={formState.type}
               onChange={handleChange}
               required
               className="bg-tertiary"

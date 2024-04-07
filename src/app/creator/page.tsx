@@ -13,7 +13,14 @@ export default function Creator() {
             <VerifyModal
               closeAction={() => {
                 closeModal();
-                openModal(<CreateModal />);
+                openModal(
+                  <CreateModal
+                    closeActon={() => {
+                      closeModal();
+                      openModal(<CriteriaModal />);
+                    }}
+                  />
+                );
               }}
             />
           );
@@ -23,7 +30,14 @@ export default function Creator() {
       </button>
       <button
         onClick={() => {
-          openModal(<CreateModal />);
+          openModal(
+            <CreateModal
+              closeActon={() => {
+                closeModal();
+                openModal(<CriteriaModal />);
+              }}
+            />
+          );
         }}
       >
         Create your community
