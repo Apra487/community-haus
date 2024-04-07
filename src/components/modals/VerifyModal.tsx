@@ -1,14 +1,14 @@
 'use client';
 import Image from 'next/image';
 import Modal from './Modal';
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 const VerifyModal: React.FC = () => {
-  const { data: session } = useSession()
+  const { data: session } = useSession();
 
   return (
     <Modal>
-      <div className="flex flex-col items-center bg-primary-dark rounded-xl border border-accent border-solid p-5 max-w-[442px]">
+      <div className="flex flex-col items-center bg-primary-dark rounded-xl p-5 max-w-[442px]">
         <h1 className="text-2xl font-bold leading-9 text-center text-lime-500 capitalize">
           Verify your socials to <br />
           <span className="text-accent">lorem ipsum dolor</span>
@@ -47,28 +47,33 @@ const VerifyModal: React.FC = () => {
             }}
           >
             <div className="w-fit bg-primary-dark rounded-2xl">
-              { (session) ? (
-                <button onClick={() => signOut()} className="flex items-center w-fit bg-tertiary py-2 px-4 rounded-2xl">
-                <Image
-                  src="/assets/logos/x.svg"
-                  alt="X"
-                  width={16}
-                  height={16}
-                />
-                <p>{session.user?.name}</p>
-              </button>
+              {session ? (
+                <button
+                  onClick={() => signOut()}
+                  className="flex items-center w-fit bg-tertiary py-2 px-4 rounded-2xl"
+                >
+                  <Image
+                    src="/assets/logos/x.svg"
+                    alt="X"
+                    width={16}
+                    height={16}
+                  />
+                  <p>{session.user?.name}</p>
+                </button>
               ) : (
-                <button onClick={() => signIn('twitter')} className="flex items-center w-fit bg-tertiary py-2 px-4 rounded-2xl">
-                <Image
-                  src="/assets/logos/x.svg"
-                  alt="X"
-                  width={16}
-                  height={16}
-                />
-                <p>Connect your X account</p>
-              </button>
+                <button
+                  onClick={() => signIn('twitter')}
+                  className="flex gap-2 items-center w-fit bg-tertiary py-2 px-4 rounded-2xl"
+                >
+                  <Image
+                    src="/assets/logos/x.svg"
+                    alt="X"
+                    width={16}
+                    height={16}
+                  />
+                  <p>Connect your X account</p>
+                </button>
               )}
-              
             </div>
           </div>
         </div>
