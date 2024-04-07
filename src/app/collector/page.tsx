@@ -16,23 +16,23 @@ const getNftData = async () => {
   const connection = new Connection(
     `https://mainnet.helius-rpc.com/?api-key=${process.env.HELIUS_API_KEY}`
   );
-  const umi = createUmi(
-    `https://mainnet.helius-rpc.com/?api-key=${process.env.HELIUS_API_KEY}`
-  ).use(mplTokenMetadata());
+  // const umi = createUmi(
+  //   `https://mainnet.helius-rpc.com/?api-key=${process.env.HELIUS_API_KEY}`
+  // ).use(mplTokenMetadata());
   const metaplex = new Metaplex(connection);
 
-  // const mintAddress = new PublicKey(
-  //   '8GqDCawh25igLzRF8o77sevix3VLnqBvWxhcJWh6E2bX'
-  // );
-  // metaplex
-  //   .nfts()
-  //   .findByMint({ mintAddress: mintAddress })
-  //   .then((nfts) => {
-  //     console.log(nfts);
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //   });
+  const ownerAddress = new PublicKey(
+    '8GqDCawh25igLzRF8o77sevix3VLnqBvWxhcJWh6E2bX'
+  );
+  metaplex
+    .nfts()
+    .findAllByOwner({ owner: ownerAddress })
+    .then((nfts) => {
+      console.log(nfts);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
   // const umiPublicKey = publicKey(
   //   '8GqDCawh25igLzRF8o77sevix3VLnqBvWxhcJWh6E2bX'
   // );
@@ -53,7 +53,7 @@ const getNftData = async () => {
   // });
 };
 
-export default async function Home() {
+export default async function Collector() {
   await getNftData();
   // useEffect(() => {
   // const mintAddress = new PublicKey(
@@ -91,7 +91,7 @@ export default async function Home() {
 
   return (
     <main className="container flex flex-col justify-center mt-10">
-      <div className="fixed w-screen h-screen bg-collector top-0 right-0 bg-no-repeat bg-cover"></div>
+      <div className="fixed w-screen h-screen bg-collector top-0 right-0 bg-no-repeat bg-cover -z-50"></div>
       <h1>check your eligibility to join x person community</h1>
       <ConnectButton />
     </main>
