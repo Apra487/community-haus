@@ -44,7 +44,12 @@ const RarityOptions: RarityToggle[] = [
   },
 ];
 
-const CriteriaModal = () => {
+interface Props {
+  closeActon: () => void;
+}
+
+
+const CriteriaModal : React.FC<Props> =  ({closeActon}) => {
   const router = useRouter();
 
   const [rarityToggles, setRarityToggles] =
@@ -151,6 +156,7 @@ const CriteriaModal = () => {
       })
       .then((data: CommunityDataType) => {
         console.log('Success:', data);
+        closeActon();
         updateCommunityData(data);
         router.push('/dashboard');
       })

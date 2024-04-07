@@ -55,5 +55,18 @@ body {
     color: black;
     font-weight: 800;
     line-height: normal;
+    cursor: pointer;
+  }
+
+  .btn-secondary {
+    display: flex;
+    padding: 16px 40px 16px 40px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+    color: #8eff01;
+    font-weight: 800;
+    line-height: normal;
+    border: 2px solid #8eff01;
   }
 }
