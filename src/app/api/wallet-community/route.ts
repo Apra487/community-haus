@@ -16,8 +16,19 @@ export async function GET(request: Request) {
         .nfts()
         .findAllByOwner({ owner: ownerAddress });
       const mintAddressArray = nfts.map((nft: any) => nft.mintAddress);
+
+      let communityArray: any[] = [];
+      mintAddressArray.forEach(async (mintAddress: any) => {
+        const communityResponse = await fetch(
+          `/api/community?contractAddress=${mintAddress}`
+        );
+        const communityData = await communityResponse.json();
+        const community = communityData.document;
+        communityArray.push(community);
+      });
+
       return Response.json({
-        mintAddressArray,
+        communityArray,
       });
     }
   } catch (error) {

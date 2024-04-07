@@ -6,15 +6,15 @@ import { ConnectButton } from '@/components/buttons';
 
 export default function Collector() {
   const { publicKey } = useWallet();
-  const [mintAddressArray, setMintAddressArray] = useState([]);
+  const [communityArray, setCommunityArray] = useState([]);
 
   useEffect(() => {
     if (publicKey) {
       const address = publicKey.toBase58();
-      fetch(`/api/wallet-nft?address=${address}`)
+      fetch(`/api/wallet-community?address=${address}`)
         .then((res) => res.json())
         .then((data) => {
-          setMintAddressArray(data.mintAddressArray);
+          setCommunityArray(data.communityArray);
         });
     }
   }, [publicKey]);
