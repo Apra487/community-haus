@@ -15,6 +15,7 @@ export async function POST(request: Request) {
     droplets,
     dropsNumber,
     twitterURL,
+    contractAddress,
   } = await request.json();
 
   await telegramClient.start({
@@ -55,6 +56,7 @@ export async function POST(request: Request) {
       dropsNumber,
     },
     twitterURL,
+    contractAddress,
   };
 
   await collection.insertOne(creatorChannelInfo);
