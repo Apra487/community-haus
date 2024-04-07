@@ -50,28 +50,6 @@ export default function Creator() {
           Connect your Socials
         </button>
       </div>
-
-      {/* <button
-        onClick={() => {
-          openModal(
-            <CreateModal
-              closeActon={() => {
-                closeModal();
-                openModal(<CriteriaModal />);
-              }}
-            />
-          );
-        }}
-      >
-        Create your community
-      </button>
-      <button
-        onClick={() => {
-          openModal(<CriteriaModal />);
-        }}
-      >
-        Crieteria modal
-      </button> */}
     </main>
   );
 }

@@ -22,7 +22,7 @@ const ConnectButton: FC = () => {
 
   return (
     <button
-      className="connect-button"
+      className="btn-secondary mt-5"
       onClick={!connected ? handleConnect : handleDisconnect}
     >
       {!connected ? 'Connect a Wallet' : publicKey?.toBase58()}

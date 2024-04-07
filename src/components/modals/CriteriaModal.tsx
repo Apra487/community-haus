@@ -169,25 +169,29 @@ const CriteriaModal : React.FC<Props> =  ({closeActon}) => {
     <Modal>
       <div className="flex flex-col items-center bg-primary-dark rounded-xl p-5 max-w-[442px]">
         <h1 className="text-2xl font-bold leading-9 text-center text-lime-500 capitalize">
-          You’re just one step away
-          <br />
+        You’re just one step away <br />
           <span className="text-accent">From creating your community!</span>
         </h1>
-        <p className="justify-center text-secondary">
-          Verify your existing social links to lorem ipsum dolor sit amet
-        </p>
-      </div>
+          <div className="flex flex-col justify-center">
+            <p className="justify-center text-secondary">
+            Verify your existing social links to lorem ipsum dolor sit amet
+            </p>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Rarity Based:</label>
+          <label
+            htmlFor="rarity"
+            className="mt-4 flex flex-col justify-center items-start text-base font-bold leading-6 text-white"
+          >Rarity Based:</label>
+
           {rarityToggles.map((toggle, index) => (
-            <div key={toggle.rarity}>
-              <label>
+            <div className='m-2' key={toggle.rarity}>
+              <label
+              >
                 <input
                   type="checkbox"
                   checked={toggle.isChecked}
                   onChange={() => handleRarityToggle(index)}
-                  className="bg-tertiary"
+                  className="bg-tertiary mr-5"
                 />
                 {toggle.rarity}
               </label>
@@ -199,7 +203,7 @@ const CriteriaModal : React.FC<Props> =  ({closeActon}) => {
                     handleRarityValueChange(index, e.target.value)
                   }
                   placeholder={toggle.placeholder}
-                  className="bg-tertiary"
+                  className="bg-tertiary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
                 />
               )}
             </div>
@@ -207,29 +211,38 @@ const CriteriaModal : React.FC<Props> =  ({closeActon}) => {
         </div>
 
         <div>
-          <label>Droplets Based:</label>
+          <label
+            htmlFor="droplets"
+            className="flex flex-col justify-center items-start text-base font-bold leading-6 text-white"
+          >Droplets Based:</label>
+
           <input
             type="number"
             value={droplets}
             onChange={handleNumericChange(setDroplets)}
             placeholder="Enter Droplets Value"
-            className="bg-tertiary"
+            className="bg-tertiary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
           />
         </div>
 
         <div>
-          <label>Number of Drops Owned:</label>
+          <label
+            htmlFor="dropsOwned"
+            className="flex flex-col justify-center items-start text-base font-bold leading-6 text-white"
+          >Number of Drops Owned:</label>
           <input
             type="number"
             value={dropsOwned}
             onChange={handleNumericChange(setDropsOwned)}
             placeholder="Enter Number of Drops Owned"
-            className="bg-tertiary"
+            className="bg-tertiary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
           />
         </div>
+        </form>
+        </div>
+        <button className="btn-primary" type="submit">Submit</button>
 
-        <button type="submit">Submit</button>
-      </form>
+      </div>
     </Modal>
   );
 };
