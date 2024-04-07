@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     ultimateCriteria,
     droplets,
     dropsNumber,
-    twitterURL,
+    twitterUrl,
     contractAddress,
   } = await request.json();
 
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
       message: 'Community description is required',
     });
   }
-  if (!twitterURL) {
+  if (!twitterUrl) {
     return Response.json({
       message: 'Twitter URL is required',
     });
@@ -107,7 +107,7 @@ export async function POST(request: Request) {
       droplets,
       dropsNumber,
     },
-    twitterURL,
+    twitterUrl,
     contractAddress,
   };
 

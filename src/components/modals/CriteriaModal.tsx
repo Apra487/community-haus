@@ -143,7 +143,6 @@ const CriteriaModal = () => {
         console.error('Error:', error);
       });
 
-    // Send formData to backend url - http://localhost:3000/api/telegram/group post request
   };
 
   return (
