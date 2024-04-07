@@ -11,8 +11,15 @@ export async function POST(request: Request) {
     phoneCode: async () => '',
     onError: (err) => console.log(err),
   });
-
   await mongoClient.connect();
+
+  const inviteInfo = {
+    chatId: chatID,
+    userId: userID,
+    fwdLimit: 43,
+  };
+
+  await telegramClient.invoke(new Api.messages.AddChatUser(inviteInfo));
 
   const database = mongoClient.db('community_haus');
   const collection = database.collection('creater_groups');
@@ -24,14 +31,6 @@ export async function POST(request: Request) {
     document.users.push(userID);
     await collection.replaceOne(query, document);
   }
-
-  const inviteInfo = {
-    chatId: chatID,
-    userId: userID,
-    fwdLimit: 43,
-  };
-
-  await telegramClient.invoke(new Api.messages.AddChatUser(inviteInfo));
 
   return Response.json({
     message: 'User invited',
