@@ -2,12 +2,6 @@ import Image from 'next/image';
 import Modal from './Modal';
 
 const VerifyModal: React.FC = () => {
-  console.log('VerifyModal');
-  const socialLinks = [
-    { username: 'twitter_username', service: 'Twitter' },
-    { username: 'instagram_username', service: 'Instagram' },
-  ];
-
   return (
     <Modal>
       <div className="flex flex-col items-center bg-primary-dark rounded-xl border border-accent border-solid p-5 max-w-[442px]">
