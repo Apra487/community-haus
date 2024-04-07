@@ -27,6 +27,7 @@ const config: Config = {
       backgroundImage: {
         creator: 'url("/assets/bgs/creator.svg")',
         collector: 'url("/assets/bgs/collector.svg")',
+        header: 'url("/assets/bgs/header.svg")',
       },
       colors: {
         tertiary: 'rgba(255, 255, 255, 0.04)',
