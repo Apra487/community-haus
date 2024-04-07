@@ -6,6 +6,9 @@ export default function Dashboard() {
   const { communityData } = useDashboardStore((store: IDashboardStore) => ({
     communityData: store.communityData,
   }));
+  
+  // @ts-ignore
+  const userName = communityData ? communityData?.data?.username : '';
 
   return (
     <main className="container flex flex-col justify-center items-center">
@@ -23,7 +26,7 @@ export default function Dashboard() {
           Here is the link you can share with your collectors.
         </p>
         <div className="px-5 py-3 mt-3 w-11/12 bg-tertiary rounded-2xl flex justify-between">
-          <div>{`community.haus/${communityData?.username}`}</div>
+          <div>{`community.haus/${userName}`}</div>
           <Image
             src="/assets/icons/copy.svg"
             alt="copy"
@@ -32,7 +35,7 @@ export default function Dashboard() {
             className="cursor-pointer"
             onClick={() => {
               navigator.clipboard.writeText(
-                `community.haus/${communityData?.username}`
+                `community.haus/${userName}`
               );
             }}
           />
