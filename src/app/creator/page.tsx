@@ -1,5 +1,5 @@
 'use client';
-import { VerifyModal, CreateModal } from '@/components/modals';
+import { VerifyModal, CreateModal, CriteriaModal } from '@/components/modals';
 import { useModal } from '@/hooks';
 
 export default function Creator() {
@@ -20,6 +20,13 @@ export default function Creator() {
         }}
       >
         Create your community
+      </button>
+      <button
+        onClick={() => {
+          openModal(<CriteriaModal />);
+        }}
+      >
+        Crieteria modal
       </button>
     </main>
   );
