@@ -2,9 +2,19 @@
 import Image from 'next/image';
 import Modal from './Modal';
 import { useSession, signIn, signOut } from 'next-auth/react';
+import {
+  useAcountStore,
+  type IAccountStore,
+} from '@/stores';
 
 const VerifyModal: React.FC = () => {
-  const { data: session } = useSession();
+  const { data: session, update: updateSession, status } = useSession();
+
+  // set data to store
+  useAcountStore.getState().updateName(session?.user?.name ?? '');
+  useAcountStore.getState().updateImageUrl(session?.user?.image ?? '');
+
+  console.log(session)
 
   return (
     <Modal>
