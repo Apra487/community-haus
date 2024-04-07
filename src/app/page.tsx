@@ -8,6 +8,8 @@ import { ConnectButton } from '@/components/buttons';
 export default function Home() {
   const { data: session } = useSession()
 
+  console.log(session);
+
   if (session) {
     return (
       <main className="flex flex-col justify-center mt-10">
