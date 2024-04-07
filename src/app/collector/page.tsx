@@ -8,6 +8,8 @@ export default function Collector() {
   const { publicKey } = useWallet();
   const [communityArray, setCommunityArray] = useState([]);
 
+  console.log(communityArray);
+
   useEffect(() => {
     if (publicKey) {
       const address = publicKey.toBase58();
@@ -21,8 +23,20 @@ export default function Collector() {
   return (
     <main className="container flex flex-col justify-center mt-10">
       <div className="fixed w-screen h-screen bg-collector top-0 right-0 bg-no-repeat bg-cover -z-50"></div>
-      <h1>check your eligibility to join x person community</h1>
-      <ConnectButton />
+      {!publicKey && (
+        <>
+          <h1>check your eligibility to join x person community</h1>
+          <ConnectButton />
+        </>
+      )}
+      {communityArray.length === 0 && publicKey && <>Loading...</>}
+      {communityArray.length > 0 && publicKey && (
+        <>
+          <h1>
+            Congratulations! You are eligible to join the common community!
+          </h1>
+        </>
+      )}
     </main>
   );
 }
