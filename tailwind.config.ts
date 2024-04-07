@@ -28,6 +28,9 @@ const config: Config = {
         creator: 'url("/assets/bgs/creator.svg")',
         collector: 'url("/assets/bgs/collector.svg")',
       },
+      colors: {
+        tertiary: 'rgba(255, 255, 255, 0.04)',
+      },
     },
   },
   plugins: [],
