@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import SessionWrapper from '../components/SessionWrapper'
 require('@solana/wallet-adapter-react-ui/styles.css');
 
 const Providers = dynamic(() => import('./providers'));
@@ -19,10 +20,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} flex justify-center `}>
-        <Providers>{children}</Providers>
-      </body>
-    </html>
+    <SessionWrapper>
+      <html lang="en">
+        <body className={`${inter.className} flex justify-center `}>
+          <Providers>{children}</Providers>
+        </body>
+      </html>
+    </SessionWrapper>
   );
 }
