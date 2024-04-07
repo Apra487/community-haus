@@ -3,7 +3,7 @@ import { telegramClient } from '@/utils/telegram';
 import { mongoClient } from '@/utils/mongodb';
 
 export async function POST(request: Request) {
-  const {
+  let {
     creatorUsername,
     creatorTelegramID,
     communityName,
@@ -17,6 +17,25 @@ export async function POST(request: Request) {
     twitterURL,
     contractAddress,
   } = await request.json();
+
+  if (!commonCriteria) {
+    commonCriteria = "0";
+  }
+  if (!rareCriteria) {
+    rareCriteria = "0";
+  }
+  if (!legendaryCriteria) {
+    legendaryCriteria = "0";
+  }
+  if (!ultimateCriteria) {
+    ultimateCriteria = "0";
+  }
+  if (!droplets) {
+    droplets = "0";
+  }
+  if (!dropsNumber) {
+    dropsNumber = "0";
+  }
 
   await telegramClient.start({
     phoneNumber: '',
