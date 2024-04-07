@@ -3,13 +3,23 @@ import { useCallback, useState } from 'react';
 import Image from 'next/image';
 import Modal from './Modal';
 import { useSession, signIn, signOut } from 'next-auth/react';
-import { useAcountStore } from '@/stores';
+import { useAcountStore, useCreateStore, type ICreateStore } from '@/stores';
 
-const VerifyModal: React.FC = () => {
+interface Props {
+  closeAction: () => void;
+}
+
+const VerifyModal: React.FC<Props> = ({ closeAction }) => {
   const { data: session } = useSession();
-
   useAcountStore.getState().updateName(session?.user?.name ?? '');
   useAcountStore.getState().updateImageUrl(session?.user?.image ?? '');
+
+  const { updateTwitterUrl, updateAddress } = useCreateStore(
+    (store: ICreateStore) => ({
+      updateTwitterUrl: store.updateTwitterUrl,
+      updateAddress: store.updateAddress,
+    })
+  );
 
   const [dripUsername, setDripUsername] = useState<string>('');
 
@@ -31,15 +41,17 @@ const VerifyModal: React.FC = () => {
         );
         const twitterToAddressData = await twitterToAddressResponse.json();
         const address = twitterToAddressData[dripTwitterInfo.twitterUrl];
-        console.log('Address:', address);
-        console.log('Verified');
+        updateTwitterUrl(dripTwitterInfo.twitterUrl);
+        updateAddress(address);
+        console.log('Verified', address);
+        closeAction();
       } else {
         console.log('Not verified');
       }
     } catch (error) {
       console.error('Something went wrong while try to verify', error);
     }
-  }, [session, dripUsername]);
+  }, [session, dripUsername, updateTwitterUrl, updateAddress, closeAction]);
 
   return (
     <Modal>
