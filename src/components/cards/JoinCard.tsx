@@ -61,6 +61,7 @@ const JoinCard: React.FC<Props> = ({ communityData }) => {
         mintAddresses.length > 0 &&
         mintAddresses.includes(communityData.contractAddress)
       ) {
+        console.log('User has the NFT');
         const criteria = communityData.criteria;
         const rarityTypes = ['Rarity', 'Drop'];
 

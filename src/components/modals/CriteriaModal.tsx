@@ -121,9 +121,14 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
       contractAddress: address,
     };
 
+    function delay (ms: number) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     try {
       let communityDatas: CommunityDataType[] = [];
-      formData.rarities.forEach(async (rarity) => {
+      
+      for (const rarity of formData.rarities) {
         const jsonBodyWithRarity = {
           ...jsonFormatedData,
           creatorUsername: `${jsonFormatedData.creatorUsername}-${rarity.rarity}`,
@@ -144,7 +149,10 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
         }
         const data = await response.json();
         communityDatas.push(data);
-      });
+
+        await delay(1000);
+        
+      }
 
       if (formData.droplets !== '') {
         const jsonBodyWithDroplets = {
