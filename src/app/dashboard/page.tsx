@@ -37,7 +37,7 @@ export default function Dashboard() {
           <p className="mt-10">
             Here is the link you can share with your collectors.
           </p>
-          {communityData.map((data) => {
+          {communityData.map((data:any) => {
             return (
               <div
                 key={data.chatID}
