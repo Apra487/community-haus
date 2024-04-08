@@ -68,89 +68,102 @@ const CreateModal: React.FC<Props> = ({ closeActon }) => {
         <Image
           src="/assets/bgs/cover.svg"
           alt="cover-image"
-          width={400}
-          height={188}
+          width={440}
+          height={207}
         />
         <Image
           src="/assets/bgs/profile.svg"
           alt="cover-image"
           width={132}
           height={132}
-          className="opacity-50 absolute left-[154px] top-[132px]"
+          className="opacity-50 absolute left-[174px] top-[132px]"
         />
-        <form onSubmit={handleSubmit} className=" mt-16">
+        <form onSubmit={handleSubmit} className=" mt-5">
           <div className="flex flex-col justify-center mt-5">
             <label
               htmlFor="username"
-              className="flex flex-col justify-center items-start text-base font-bold leading-6 text-white"
+              className="flex flex-col justify-center items-start text-sm font-semibold leading-6 text-white"
             >
-              Username:
+              Username
             </label>
             <input
               name="username"
               type="text"
+              placeholder="Enter you community username"
               value={formState.username}
               onChange={handleChange}
               required
-              className="bg-tertiary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
+              className="bg-tertiary w-full text-sm py-3 px-4 rounded-2xl focus:outline-none mt-2"
             />
           </div>
-          <br />
+          <p className="text-xs text-secondary mt-1">
+            Your profile will be available on
+            communityhaus.com/community/[username]
+          </p>
           <label
             htmlFor="telegramId"
-            className="flex flex-col justify-center items-start text-base font-bold leading-6 text-white"
+            className="mt-3 flex flex-col justify-center items-start text-sm font-semibold leading-6 text-white"
           >
-            Telegram ID:
+            Telegram ID
             <input
               name="telegramId"
               type="text"
+              placeholder="Enter your Telegram ID"
               value={formState.telegramId}
               onChange={handleChange}
               required
-              className="bg-tertiary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
+              className="bg-tertiary w-full text-sm py-3 px-4 rounded-2xl focus:outline-none mt-2"
             />
           </label>
-          <br />
           <label
             htmlFor="communityName"
-            className="flex flex-col justify-center items-start text-base font-bold leading-6 text-white"
+            className="mt-3 flex flex-col justify-center items-start text-sm font-semibold leading-6 text-white"
           >
-            Name of the Community:
+            Name of the Community
             <input
               name="communityName"
               type="text"
               value={formState.communityName}
+              placeholder="Enter your username"
               onChange={handleChange}
               required
-              className="bg-tertiary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
+              className="bg-tertiary w-full text-sm py-3 px-4 rounded-2xl focus:outline-none mt-2"
             />
           </label>
-          <br />
           <label
             htmlFor="description"
-            className="flex flex-col justify-center items-start text-base font-bold leading-6 text-white"
+            className="mt-3 flex flex-col justify-center items-start text-sm font-semibold leading-6 text-white"
           >
-            Short Description of Community:
+            Short description about your community
             <textarea
               name="description"
               value={formState.description}
+              placeholder="Tell about your community in a few words"
               onChange={handleChange}
               required
-              className="bg-tertiary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
+              className="bg-tertiary w-full text-sm py-3 px-4 rounded-2xl focus:outline-none mt-2"
             />
           </label>
-          <br />
-          <label
+          {/* <label
             htmlFor="logo"
-            className="flex flex-col justify-center items-start text-base font-bold leading-6 text-white"
+            className="mt-3 flex flex-col justify-center items-start text-sm font-semibold leading-6 text-white"
           >
-            Upload Logo:
-            <input className="" type="file" onChange={handleFileChange} accept="image/*" />
+            Upload your logo
+            <input
+              className=""
+              type="file"
+              onChange={handleFileChange}
+              accept="image/*"
+            />
           </label>
-          <br />
-          <button type="submit" className="btn-primary">
-            Submit
-          </button>
+          <p className="text-xs text-secondary mt-1">
+            Keep the logo size under 250 x 150 px.
+          </p> */}
+          <div className="flex w-full justify-center">
+            <button type="submit" className="btn-primary mt-10">
+              Submit
+            </button>
+          </div>
         </form>
       </div>
     </Modal>

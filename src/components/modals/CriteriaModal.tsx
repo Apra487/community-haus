@@ -175,27 +175,26 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
           You’re just one step away <br />
           <span className="text-accent">From creating your community!</span>
         </h1>
-        <div className="flex flex-col justify-center">
-          <p className="justify-center text-secondary">
-            Verify your existing social links to lorem ipsum dolor sit amet
+        <div className="flex flex-col justify-center mt-10">
+          <p className="justify-center text-primary font-bold text-base">
+            What should be a collector’s criteria for joining your community?
           </p>
           <form onSubmit={handleSubmit}>
             <div>
               <label
                 htmlFor="rarity"
-                className="mt-4 flex flex-col justify-center items-start text-base font-bold leading-6 text-white"
+                className="bg-tertiary text-secondary rounded-xl py-3 px-4 mt-4 flex flex-col justify-center items-start text-sm leading-6 text-white"
               >
-                Rarity Based:
+                Rarity based
               </label>
-
               {rarityToggles.map((toggle, index) => (
-                <div className="m-2" key={toggle.rarity}>
+                <div className="m-2 " key={toggle.rarity}>
                   <label>
                     <input
                       type="checkbox"
                       checked={toggle.isChecked}
                       onChange={() => handleRarityToggle(index)}
-                      className="bg-tertiary mr-5"
+                      className="bg-tertiary py-2 px-4 text-primary mr-5"
                     />
                     {toggle.rarity}
                   </label>
@@ -207,7 +206,7 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
                         handleRarityValueChange(index, e.target.value)
                       }
                       placeholder={toggle.placeholder}
-                      className="bg-tertiary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
+                      className="bg-tertiary text-sm text-primary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
                     />
                   )}
                 </div>
@@ -217,9 +216,9 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
             <div>
               <label
                 htmlFor="droplets"
-                className="flex flex-col justify-center items-start text-base font-bold leading-6 text-white"
+                className="bg-tertiary text-secondary rounded-xl py-3 px-4 flex mt-5 flex-col justify-center items-start text-sm leading-6 text-white"
               >
-                Droplets Based:
+                Droplets based
               </label>
 
               <input
@@ -234,9 +233,9 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
             <div>
               <label
                 htmlFor="dropsOwned"
-                className="flex flex-col justify-center items-start text-base font-bold leading-6 text-white"
+                className="bg-tertiary text-secondary rounded-xl py-3 px-4 flex flex-col mt-5 justify-center items-start text-sm leading-6 text-white"
               >
-                Number of Drops Owned:
+                Number of drops they own
               </label>
               <input
                 type="number"
