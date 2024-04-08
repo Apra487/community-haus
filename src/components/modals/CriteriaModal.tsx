@@ -192,7 +192,7 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
         communityDatas.push(data);
       }
       console.log(communityDatas);
-      updateCommunityData(communityDatas);
+      await updateCommunityData(communityDatas);
       router.push('/dashboard');
       closeActon();
     } catch (error) {
