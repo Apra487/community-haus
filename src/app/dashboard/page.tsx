@@ -37,7 +37,7 @@ export default function Dashboard() {
             Here is the link you can share with your collectors.
           </p>
           <div className="px-5 py-3 mt-3 w-11/12 bg-tertiary rounded-2xl flex justify-between">
-            <div>{`community-haus-two.vercel.app/community/${userName}`}</div>
+            <div>{`community.haus/community/${userName}`}</div>
             <Image
               src="/assets/icons/copy.svg"
               alt="copy"
@@ -46,7 +46,7 @@ export default function Dashboard() {
               className="cursor-pointer"
               onClick={() => {
                 navigator.clipboard.writeText(
-                  `community-haus-two.vercel.app/community/${userName}`
+                  `community.haus/community/${userName}`
                 );
               }}
             />
