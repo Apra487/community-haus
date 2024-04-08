@@ -12,6 +12,7 @@ const JoinCard: React.FC<Props> = ({ communityData }) => {
   const { connected, publicKey } = useWallet();
   const [isEligible, setIsEligible] = useState(false);
   const [checkingEligibility, setCheckingEligibility] = useState(false);
+  console.log(communityData);
 
   useEffect(() => {
     async function checkIfEligible(address: string) {

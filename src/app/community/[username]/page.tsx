@@ -1,5 +1,6 @@
 import { NextPage } from 'next';
 import { JoinCard } from '@/components/cards';
+import { redirect } from 'next/navigation';
 
 async function getCommunityByUserame(username: string) {
   const res = await fetch(
@@ -11,7 +12,11 @@ async function getCommunityByUserame(username: string) {
       },
     }
   );
-  return res.json();
+  const data = await res.json();
+  if (data.document === null) {
+    redirect('/collector');
+  }
+  return data;
 }
 interface Props {
   params: {
