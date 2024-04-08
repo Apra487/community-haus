@@ -4,7 +4,7 @@ import { mongoClient } from '@/utils/mongodb';
 
 export async function POST(request: Request) {
   console.log(request);
-  
+
   let {
     creatorUsername,
     creatorTelegramID,
@@ -52,22 +52,22 @@ export async function POST(request: Request) {
   }
 
   if (!commonCriteria) {
-    commonCriteria = '0';
+    commonCriteria = '';
   }
   if (!rareCriteria) {
-    rareCriteria = '0';
+    rareCriteria = '';
   }
   if (!legendaryCriteria) {
-    legendaryCriteria = '0';
+    legendaryCriteria = '';
   }
   if (!ultimateCriteria) {
-    ultimateCriteria = '0';
+    ultimateCriteria = '';
   }
   if (!droplets) {
-    droplets = '0';
+    droplets = '';
   }
   if (!dropsNumber) {
-    dropsNumber = '0';
+    dropsNumber = '';
   }
 
   await telegramClient.start({
