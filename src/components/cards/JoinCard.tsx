@@ -50,60 +50,82 @@ const JoinCard: React.FC<Props> = ({ communityData }) => {
     }
   }, [communityData.chatID, telegramId, setIsJoining, setIsJoined]);
 
+  // useEffect(() => {
+  //   async function checkIfEligible(address: string) {
+  //     setCheckingEligibility(true);
+  //     const response = await fetch(`/api/wallet-nft?address=${address}`);
+  //     const data = await response.json();
+  //     const mintAddresses = data.mintAddressArray;
+  //     if (
+  //       mintAddresses &&
+  //       mintAddresses.length > 0 &&
+  //       mintAddresses.includes(communityData.contractAddress)
+  //     ) {
+  //       console.log('User has the NFT');
+  //       const criteria = communityData.criteria;
+  //       const rarityTypes = ['Rarity', 'Drop'];
+
+  //       // todo: remove this code (required for demo)
+  //       rarityTypes.push('Animal');
+  //       const userAddress = '6gLzpZQ9DZ7X8KZJWsBuaxkT4RCwiHPv2PZ52nARFHqw';
+  //       const mintAddress = 'E3hZtaq2kAGRoyhbLjKLHybyyZCNv8ZR6RU5tSErgMjf';
+  //       //////////////////////////////////////////////
+
+  //       const mintAttributesResponse = await fetch(
+  //         `/api/mint-attributes?userAddress=${userAddress}&mintAddress=${mintAddress}`
+  //       );
+  //       const mintAttributesData = await mintAttributesResponse.json();
+  //       const filterdAttributes = mintAttributesData.attributes.filter(
+  //         (attribute: any) => rarityTypes.includes(attribute.trait_type)
+  //       );
+  //       const filteredCriteria = Object.keys(criteria).filter(
+  //         (key) => criteria[key] !== ''
+  //       );
+
+  //       // todo: remove this code (required for demo)
+  //       filteredCriteria.push('Rat');
+  //       //////////////////////////////////////////////
+
+  //       const finalFilter = filterdAttributes.filter((attribute: any) =>
+  //         filteredCriteria.includes(attribute.value)
+  //       );
+  //       const isEligible = finalFilter.length > 0;
+  //       console.log(isEligible);
+  //       setIsEligible(isEligible);
+  //       setCheckingEligibility(false);
+  //       return;
+  //     }
+  //     setIsEligible(false);
+  //     setCheckingEligibility(false);
+  //   }
+  //   if (publicKey) {
+  //     const address = publicKey.toBase58();
+  //     checkIfEligible(address);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [publicKey]);
+
   useEffect(() => {
     async function checkIfEligible(address: string) {
       setCheckingEligibility(true);
-      const response = await fetch(`/api/wallet-nft?address=${address}`);
+      const mintAddress = communityData.contractAddress;
+      console.log(communityData);
+      ////////
+      const adress = 'Av5FaWS5dEjAu7rRXRdmdqAqnJq9F88XNhKfBE2Gi5gg';
+      const mintAddres = 'FdjvW8RHo2vTr4DiWqkDHyUDhNWzkrYPjyd8SpGtK1Qs';
+      /////////
+      const response = await fetch(
+        `/api/wallet-nft-info?address=${adress}&mintAddress=${mintAddres}`
+      );
       const data = await response.json();
-      const mintAddresses = data.mintAddressArray;
-      if (
-        mintAddresses &&
-        mintAddresses.length > 0 &&
-        mintAddresses.includes(communityData.contractAddress)
-      ) {
-        console.log('User has the NFT');
-        const criteria = communityData.criteria;
-        const rarityTypes = ['Rarity', 'Drop'];
-
-        // todo: remove this code (required for demo)
-        rarityTypes.push('Animal');
-        const userAddress = '6gLzpZQ9DZ7X8KZJWsBuaxkT4RCwiHPv2PZ52nARFHqw';
-        const mintAddress = 'E3hZtaq2kAGRoyhbLjKLHybyyZCNv8ZR6RU5tSErgMjf';
-        //////////////////////////////////////////////
-
-        const mintAttributesResponse = await fetch(
-          `/api/mint-attributes?userAddress=${userAddress}&mintAddress=${mintAddress}`
-        );
-        const mintAttributesData = await mintAttributesResponse.json();
-        const filterdAttributes = mintAttributesData.attributes.filter(
-          (attribute: any) => rarityTypes.includes(attribute.trait_type)
-        );
-        const filteredCriteria = Object.keys(criteria).filter(
-          (key) => criteria[key] !== ''
-        );
-
-        // todo: remove this code (required for demo)
-        filteredCriteria.push('Rat');
-        //////////////////////////////////////////////
-
-        const finalFilter = filterdAttributes.filter((attribute: any) =>
-          filteredCriteria.includes(attribute.value)
-        );
-        const isEligible = finalFilter.length > 0;
-        console.log(isEligible);
-        setIsEligible(isEligible);
-        setCheckingEligibility(false);
-        return;
-      }
-      setIsEligible(false);
+      console.log(data);
       setCheckingEligibility(false);
     }
     if (publicKey) {
       const address = publicKey.toBase58();
       checkIfEligible(address);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [publicKey]);
+  }, [publicKey, communityData.contractAddress]);
 
   return (
     <div className="w-[716px] h-[354px] flex flex-col justify-between bg-header mt-32 py-11 px-14">
