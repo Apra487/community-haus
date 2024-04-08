@@ -17,6 +17,12 @@ export async function GET(request: Request) {
         .findAllByOwner({ owner: ownerAddress });
       const mintAddressArray = nfts.map((nft: any) => nft.mintAddress);
 
+      // todo: remove this code (required for demo)
+      if (address === '7wSmD3PTW6DSaJrLPq5NGtykFZRSSxxBrhRYYZTRWXa1') {
+        mintAddressArray.push('8wAMHDzquTAhwpXSdtZYZCyGpuw2cqwbGQonFH5DRBUE');
+      }
+      /////////////////////////////////////////////
+
       return Response.json({
         mintAddressArray,
       });

@@ -20,7 +20,7 @@ export async function GET(request: Request) {
       let communityArray: any[] = [];
       mintAddressArray.forEach(async (mintAddress: any) => {
         const communityResponse = await fetch(
-          `/api/community?contractAddress=${mintAddress}`
+          `https://community-haus-two.vercel.app/api/community?contractAddress=${mintAddress}`
         );
         const communityData = await communityResponse.json();
         const community = communityData.document;
