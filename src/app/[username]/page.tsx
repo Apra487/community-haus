@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 
 async function getCommunityByUserame(username: string) {
-  const res = await fetch(`http:localhost:3000/api/community?username=${username}`, {
+  const res = await fetch(`https://community-haus-two.vercel.app/api/community?username=${username}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
