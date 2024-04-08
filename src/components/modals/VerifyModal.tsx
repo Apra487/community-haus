@@ -57,8 +57,8 @@ const VerifyModal: React.FC<Props> = ({ closeAction }) => {
     <Modal>
       <div className="flex flex-col items-center bg-primary-dark rounded-xl p-5 max-w-[442px]">
         <h1 className="text-2xl font-bold leading-9 text-center text-lime-500 capitalize">
-          Verify your socials to <br />
-          <span className="text-accent">lorem ipsum dolor</span>
+          {/* Verify your socials to <br /> */}
+          <span className="text-accent">{`Let's get started!`}</span>
         </h1>
         <div className="flex flex-col justify-center self-stretch mt-8">
           <div className="flex flex-col justify-center">
@@ -66,7 +66,7 @@ const VerifyModal: React.FC<Props> = ({ closeAction }) => {
               <div className="justify-center">Social links</div>
             </h2>
             <p className="justify-center text-secondary">
-              Verify your existing social links to lorem ipsum dolor sit amet
+              Verify your socials links to start your community
             </p>
           </div>
           <div className="flex flex-col justify-center mt-5">
