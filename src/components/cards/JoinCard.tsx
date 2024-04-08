@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 
 import { ConnectButton } from '../buttons';
+import { redirect } from 'next/navigation';
 
 interface Props {
   communityData: any;
@@ -164,7 +165,10 @@ const JoinCard: React.FC<Props> = ({ communityData }) => {
             {isJoining ? 'Joining...' : 'Join Now'}
           </button>
         )}
-        <button className="btn-secondary mt-5">Create</button>
+        <button onClick={() =>{
+          redirect('/creator');
+        } } className="btn-secondary mt-5">Create</button>
+
       </div>
     </div>
   );
