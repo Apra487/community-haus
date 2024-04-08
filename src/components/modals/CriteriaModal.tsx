@@ -102,70 +102,102 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
     })
   );
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    console.log('submit');
-    console.log(event);
-
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+    console.log('submit');
     const formData = {
       rarities: rarityToggles
         .filter((toggle) => toggle.isChecked)
-        .map(({ rarity, value }) => ({ rarity, value: Number(value) })),
-      droplets: Number(droplets),
-      dropsOwned: Number(dropsOwned),
+        .map(({ rarity, value }) => ({ rarity, value: value })),
+      droplets: droplets,
+      dropsOwned: dropsOwned,
     };
-
-    console.log(formData);
-
-    const criteria: { [key: string]: string } = {};
-
-    formData.rarities.forEach((rarity) => {
-      // Map rarity to its corresponding criteria
-      criteria[`${rarity.rarity.toLowerCase()}Criteria`] =
-        rarity.value.toString();
-    });
-
-    const jsonFormData = {
+    const jsonFormatedData = {
       creatorUsername: userName,
+      creatorTelegramID: telegramId,
       communityName: nameOfCommunity,
       communityDescription: description,
-      creatorTelegramID: telegramId,
       twitterUrl: twitterUrl,
       contractAddress: address,
-      droplets: formData.droplets,
-      dropsNumber: formData.dropsOwned,
     };
 
-    Object.keys(criteria).forEach((key) => {
-      // @ts-ignore
-      jsonFormData[key as keyof typeof jsonFormData] = criteria[key] as string;
-    });
-
-    console.log(jsonFormData);
-
-    fetch('/api/telegram/group', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(jsonFormData) || JSON.stringify({}),
-    })
-      .then((response) => {
+    try {
+      let communityDatas: CommunityDataType[] = [];
+      formData.rarities.forEach(async (rarity) => {
+        const jsonBodyWithRarity = {
+          ...jsonFormatedData,
+          creatorUsername: `${jsonFormatedData.creatorUsername}-${rarity.rarity}`,
+          communityName: `${jsonFormatedData.communityName} (${rarity.rarity})`,
+          communityDescription: `${rarity.rarity} - ${jsonFormatedData.communityDescription}`,
+          [`${rarity.rarity.toLowerCase()}Criteria`]: rarity.value,
+        };
+        console.log(jsonBodyWithRarity);
+        const response = await fetch('/api/telegram/group', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(jsonBodyWithRarity) || JSON.stringify({}),
+        });
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        return response.json();
-      })
-      .then((data: CommunityDataType) => {
-        console.log('Success:', data);
-        closeActon();
-        updateCommunityData(data);
-        router.push('/dashboard');
-      })
-      .catch((error) => {
-        console.error('Error:', error);
+        const data = await response.json();
+        communityDatas.push(data);
       });
+
+      if (formData.droplets !== '') {
+        const jsonBodyWithDroplets = {
+          ...jsonFormatedData,
+          creatorUsername: `${jsonFormatedData.creatorUsername}-Droplets`,
+          communityName: `${jsonFormatedData.communityName} (Droplets)`,
+          communityDescription: `Droplets - ${jsonFormatedData.communityDescription}`,
+          droplets: formData.droplets,
+        };
+        console.log(jsonBodyWithDroplets);
+        const response = await fetch('/api/telegram/group', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(jsonBodyWithDroplets) || JSON.stringify({}),
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        communityDatas.push(data);
+      }
+
+      if (formData.dropsOwned !== '') {
+        const jsonBodyWithDropsOwned = {
+          ...jsonFormatedData,
+          creatorUsername: `${jsonFormatedData.creatorUsername}-General`,
+          communityName: `${jsonFormatedData.communityName} (General)`,
+          communityDescription: `General - ${jsonFormatedData.communityDescription}`,
+          dropsNumber: formData.dropsOwned,
+        };
+        console.log(jsonBodyWithDropsOwned);
+        const response = await fetch('/api/telegram/group', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(jsonBodyWithDropsOwned) || JSON.stringify({}),
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        communityDatas.push(data);
+      }
+      console.log(communityDatas);
+      updateCommunityData(communityDatas);
+      router.push('/dashboard');
+      closeActon();
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (

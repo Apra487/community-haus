@@ -22,8 +22,8 @@ export type CommunityDataType = {
 };
 
 export interface IDashboardStore {
-  communityData: CommunityDataType | undefined;
-  updateCommunityData: (_communityData: CommunityDataType) => void;
+  communityData: CommunityDataType[] | undefined;
+  updateCommunityData: (_communityData: CommunityDataType[]) => void;
 }
 
 export const useDashboardStore = create<IDashboardStore>()(
@@ -31,11 +31,11 @@ export const useDashboardStore = create<IDashboardStore>()(
     persist(
       (set) => ({
         communityData: undefined,
-        updateCommunityData: (_communityData: CommunityDataType) =>
+        updateCommunityData: (_communityData: CommunityDataType[]) =>
           set({ communityData: _communityData }),
       }),
       {
-        name: 'create-store',
+        name: 'dashboard-store',
         getStorage: () => localStorage,
       }
     )
