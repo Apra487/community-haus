@@ -1,9 +1,37 @@
 'use client';
 import { VerifyModal, CreateModal, CriteriaModal } from '@/components/modals';
 import { useModal } from '@/hooks';
+import { useAcountStore} from '@/stores';
+import { useEffect } from 'react';
 
 export default function Creator() {
   const { openModal, closeModal } = useModal();
+  const name = useAcountStore.getState().name;
+  useEffect(() => {
+    if (name) {
+      openModal(
+        <VerifyModal
+          closeAction={() => {
+            closeModal();
+            openModal(
+              <CreateModal
+                closeActon={() => {
+                  closeModal();
+                  openModal(
+                    <CriteriaModal
+                      closeActon={() => {
+                        closeModal();
+                      }}
+                    />
+                  );
+                }}
+              />
+            );
+          }}
+        />
+      );
+    }
+  }, [name, openModal, closeModal]);
   return (
     <main className="container flex flex-col justify-center">
       <div className="flex flex-col items-baseline justify-center fixed w-screen h-screen bg-creator top-0 right-0 bg-no-repeat bg-cover -z-50">
