@@ -66,7 +66,7 @@ const VerifyModal: React.FC<Props> = ({ closeAction }) => {
               <div className="justify-center">Social links</div>
             </h2>
             <p className="justify-center text-secondary">
-              Verify your socials links to start your community
+              Verify your socials to start your community
             </p>
           </div>
           <div className="flex flex-col justify-center mt-5">
