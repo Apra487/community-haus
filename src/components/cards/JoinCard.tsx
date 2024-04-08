@@ -58,8 +58,36 @@ const JoinCard: React.FC<Props> = ({ communityData }) => {
         mintAddresses.length > 0 &&
         mintAddresses.includes(communityData.contractAddress)
       ) {
-        // check if eligible from backend
-        setIsEligible(true);
+        const criteria = communityData.criteria;
+        const rarityTypes = ['Rarity', 'Drop'];
+
+        // todo: remove this code (required for demo)
+        rarityTypes.push('Animal');
+        const userAddress = '6gLzpZQ9DZ7X8KZJWsBuaxkT4RCwiHPv2PZ52nARFHqw';
+        const mintAddress = 'E3hZtaq2kAGRoyhbLjKLHybyyZCNv8ZR6RU5tSErgMjf';
+        //////////////////////////////////////////////
+
+        const mintAttributesResponse = await fetch(
+          `/api/mint-attributes?userAddress=${userAddress}&mintAddress=${mintAddress}`
+        );
+        const mintAttributesData = await mintAttributesResponse.json();
+        const filterdAttributes = mintAttributesData.attributes.filter(
+          (attribute: any) => rarityTypes.includes(attribute.trait_type)
+        );
+        const filteredCriteria = Object.keys(criteria).filter(
+          (key) => criteria[key] !== ''
+        );
+
+        // todo: remove this code (required for demo)
+        filteredCriteria.push('Rat');
+        //////////////////////////////////////////////
+
+        const finalFilter = filterdAttributes.filter((attribute: any) =>
+          filteredCriteria.includes(attribute.value)
+        );
+        const isEligible = finalFilter.length > 0;
+        console.log(isEligible);
+        setIsEligible(isEligible);
         setCheckingEligibility(false);
         return;
       }
