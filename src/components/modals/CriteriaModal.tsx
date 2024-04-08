@@ -294,7 +294,7 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
             type="submit"
             disabled={isSumbitting}
           >
-            Submit
+            {isSumbitting ? 'Submitting...' : 'Submit'}
           </button>
         </div>
       </div>
