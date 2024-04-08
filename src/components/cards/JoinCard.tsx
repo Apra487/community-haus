@@ -1,19 +1,21 @@
 'use client';
-import React, { useEffect, useState, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 
 import { ConnectButton } from '../buttons';
-import { redirect } from 'next/navigation';
 
 interface Props {
   communityData: any;
 }
+const map = {
+  common: 'Common',
+  legendary: 'Legendary',
+  rate: 'Rare',
+  ultimate: 'Ultimate',
+} as const;
 
 const JoinCard: React.FC<Props> = ({ communityData }) => {
-  const router = useRouter();
   const { connected, publicKey } = useWallet();
-  const [isEligible, setIsEligible] = useState(false);
   const [checkingEligibility, setCheckingEligibility] = useState(false);
   const [telegramId, settelegramId] = useState('');
   const [isJoining, setIsJoining] = useState(false);
@@ -105,20 +107,21 @@ const JoinCard: React.FC<Props> = ({ communityData }) => {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [publicKey]);
 
+  console.log(communityData);
+  const [eligibilityData, setEligibilityData] = useState<any>({});
   useEffect(() => {
     async function checkIfEligible(address: string) {
       setCheckingEligibility(true);
       const mintAddress = communityData.contractAddress;
-      console.log(communityData);
       ////////
-      const adress = 'Av5FaWS5dEjAu7rRXRdmdqAqnJq9F88XNhKfBE2Gi5gg';
-      const mintAddres = 'FdjvW8RHo2vTr4DiWqkDHyUDhNWzkrYPjyd8SpGtK1Qs';
+      // const adress = 'Av5FaWS5dEjAu7rRXRdmdqAqnJq9F88XNhKfBE2Gi5gg';
+      // const mintAddres = 'FdjvW8RHo2vTr4DiWqkDHyUDhNWzkrYPjyd8SpGtK1Qs';
       /////////
       const response = await fetch(
-        `/api/wallet-nft-info?address=${adress}&mintAddress=${mintAddres}`
+        `/api/wallet-nft-info?address=${address}&mintAddress=${mintAddress}`
       );
       const data = await response.json();
-      console.log(data);
+      setEligibilityData(data?.criteriaBasedCount);
       setCheckingEligibility(false);
     }
     if (publicKey) {
@@ -126,6 +129,25 @@ const JoinCard: React.FC<Props> = ({ communityData }) => {
       checkIfEligible(address);
     }
   }, [publicKey, communityData.contractAddress]);
+
+  const isEligible = useMemo(() => {
+    const criteriaArr = ['common', 'legendary', 'rate', 'ultimate'] as const;
+
+    const criteria = communityData.criteria || {};
+
+    for (let i = 0; i < criteriaArr.length; i++) {
+      const element = criteriaArr[i];
+      if (criteria[element] !== '') {
+        const criteriaCount = Number(criteria[element]);
+        const eligibilityCount = eligibilityData[map[element]] || 0;
+        if (criteriaCount <= eligibilityCount) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }, [communityData.criteria, eligibilityData]);
 
   return (
     <div className="w-[716px] h-[354px] flex flex-col justify-between bg-header mt-32 py-11 px-14">
