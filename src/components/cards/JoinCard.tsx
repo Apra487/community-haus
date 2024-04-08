@@ -121,14 +121,7 @@ const JoinCard: React.FC<Props> = ({ communityData }) => {
               ? `You are currently not eligible`
               : `Eligibility`
         }`}</span>
-        {`${
-          isEligible
-            ? ` to join the common community!`
-            : connected && !checkingEligibility && !isEligible
-              ? ` to join the ultimate community!`
-              : ` to join
-              x person community`
-        }`}
+        {` to join the ${communityData.communityName} community!`}
       </h1>
       {isJoined ? (
         <p className="mt-10">
@@ -167,12 +160,12 @@ const JoinCard: React.FC<Props> = ({ communityData }) => {
             {isJoining ? 'Joining...' : 'Join Now'}
           </button>
         )}
-        <button
+        {/* <button
           className="btn-secondary mt-5"
           onClick={() => router.push('/creator')}
         >
           Create
-        </button>
+        </button> */}
       </div>
     </div>
   );
