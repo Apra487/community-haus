@@ -56,6 +56,7 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
     useState<RarityToggle[]>(RarityOptions);
   const [droplets, setDroplets] = useState<string>('');
   const [dropsOwned, setDropsOwned] = useState<string>('');
+  const [isSumbitting, setIsSumbitting] = useState<boolean>(false);
 
   const handleRarityToggle = (index: number) => {
     setRarityToggles((prev) =>
@@ -105,6 +106,7 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log('submit');
+    setIsSumbitting(true);
     const formData = {
       rarities: rarityToggles
         .filter((toggle) => toggle.isChecked)
@@ -121,13 +123,13 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
       contractAddress: address,
     };
 
-    function delay (ms: number) {
-      return new Promise(resolve => setTimeout(resolve, ms));
+    function delay(ms: number) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
     try {
       let communityDatas: CommunityDataType[] = [];
-      
+
       for (const rarity of formData.rarities) {
         const jsonBodyWithRarity = {
           ...jsonFormatedData,
@@ -151,7 +153,6 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
         communityDatas.push(data);
 
         await delay(1000);
-        
       }
 
       if (formData.droplets !== '') {
@@ -206,6 +207,7 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
     } catch (error) {
       console.error('Error:', error);
     }
+    setIsSumbitting(false);
   };
 
   return (
@@ -290,6 +292,7 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
             onClick={(e) => handleSubmit(e)}
             className="btn-primary mt-6"
             type="submit"
+            disabled={isSumbitting}
           >
             Submit
           </button>
