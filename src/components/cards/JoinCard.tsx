@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { useWallet } from '@solana/wallet-adapter-react';
 
 import { ConnectButton } from '../buttons';
@@ -10,6 +11,7 @@ interface Props {
 }
 
 const JoinCard: React.FC<Props> = ({ communityData }) => {
+  const router = useRouter();
   const { connected, publicKey } = useWallet();
   const [isEligible, setIsEligible] = useState(false);
   const [checkingEligibility, setCheckingEligibility] = useState(false);
@@ -165,10 +167,12 @@ const JoinCard: React.FC<Props> = ({ communityData }) => {
             {isJoining ? 'Joining...' : 'Join Now'}
           </button>
         )}
-        <button onClick={() =>{
-          redirect('/creator');
-        } } className="btn-secondary mt-5">Create</button>
-
+        <button
+          className="btn-secondary mt-5"
+          onClick={() => router.push('/creator')}
+        >
+          Create
+        </button>
       </div>
     </div>
   );

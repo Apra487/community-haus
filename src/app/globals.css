@@ -45,6 +45,11 @@ body {
     align-items: center;
   }
 
+  .blurred-header {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(25px);
+  }
+
   .btn-primary {
     display: flex;
     padding: 16px 40px 16px 40px;

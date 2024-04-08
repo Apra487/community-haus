@@ -1,15 +1,15 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useWallet } from '@solana/wallet-adapter-react';
 
 import { ConnectButton } from '@/components/buttons';
 
 export default function Collector() {
+  const router = useRouter();
   const { publicKey } = useWallet();
   const [communityArray, setCommunityArray] = useState([]);
-
-  console.log(communityArray);
-
   useEffect(() => {
     if (publicKey) {
       const address = publicKey.toBase58();
@@ -22,6 +22,21 @@ export default function Collector() {
   }, [publicKey]);
   return (
     <main className="container flex flex-col justify-center mt-10">
+      <header className="absolute top-0 right-0 w-screen blurred-header h-28 z-50 flex items-center">
+        <div className="container flex justify-between items-center">
+          <Image
+            src="/assets/logos/logo.svg"
+            alt="logo"
+            width={150}
+            height={50}
+            className="cursor-pointer"
+            onClick={() => router.push('/')}
+          />
+          <p className="justify-center text-[#8EFF01]">
+            DRiP Communities for Collectors
+          </p>
+        </div>
+      </header>
       {!publicKey && (
         <div className="flex flex-col items-baseline justify-center fixed w-screen h-screen bg-collector top-0 right-0 bg-no-repeat bg-cover -z-50">
           <div className="ml-32">
