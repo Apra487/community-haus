@@ -10,6 +10,7 @@ interface Props {
 const map = {
   common: 'Common',
   legendary: 'Legendary',
+  rare: 'Rare',
   rate: 'Rare',
   ultimate: 'Ultimate',
 } as const;
@@ -131,7 +132,7 @@ const JoinCard: React.FC<Props> = ({ communityData }) => {
   }, [publicKey, communityData.contractAddress]);
 
   const isEligible = useMemo(() => {
-    const criteriaArr = ['common', 'legendary', 'rate', 'ultimate'] as const;
+    const criteriaArr = ['common', 'legendary', 'rate', 'rare', 'ultimate'] as const;
 
     const criteria = communityData.criteria || {};
 
