@@ -22,6 +22,7 @@ export type CommunityDataType = {
 };
 
 export interface IDashboardStore {
+  superUsername: string | undefined;
   communityData: CommunityDataType[] | undefined;
   updateCommunityData: (_communityData: CommunityDataType[]) => Promise<void>;
 }
@@ -30,7 +31,10 @@ export const useDashboardStore = create<IDashboardStore>()(
   devtools(
     persist(
       (set) => ({
+        superUsername: undefined,
         communityData: undefined,
+        updateSuperUsername: async (_superUsername: string) =>
+          set({ superUsername: _superUsername }),
         updateCommunityData: async (_communityData: CommunityDataType[]) =>
           set({ communityData: _communityData }),
       }),
