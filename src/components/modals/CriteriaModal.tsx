@@ -97,8 +97,9 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
     nameOfCommunity: store.nameOfCommunity,
     description: store.description,
   }));
-  const { updateCommunityData } = useDashboardStore(
+  const { updateSuperUsername, updateCommunityData } = useDashboardStore(
     (store: IDashboardStore) => ({
+      updateSuperUsername: store.updateSuperUsername,
       updateCommunityData: store.updateCommunityData,
     })
   );
@@ -202,6 +203,7 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
       }
       console.log(communityDatas);
       await updateCommunityData(communityDatas);
+      updateSuperUsername(userName);
       router.push('/dashboard');
       closeActon();
     } catch (error) {

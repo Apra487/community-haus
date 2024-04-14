@@ -24,6 +24,7 @@ export type CommunityDataType = {
 export interface IDashboardStore {
   superUsername: string | undefined;
   communityData: CommunityDataType[] | undefined;
+  updateSuperUsername: (_superUsername: string) => Promise<void>;
   updateCommunityData: (_communityData: CommunityDataType[]) => Promise<void>;
 }
 

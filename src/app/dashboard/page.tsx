@@ -6,25 +6,21 @@ import Image from 'next/image';
 
 export default function Dashboard() {
   const router = useRouter();
-  const { communityData } = useDashboardStore((store: IDashboardStore) => ({
-    communityData: store.communityData,
+  const { superUsername } = useDashboardStore((store: IDashboardStore) => ({
+    superUsername: store.superUsername,
   }));
-  console.log('communityData', communityData);
-
-  // @ts-ignore
-  const userName = communityData ? communityData?.data?.username : '';
 
   useEffect(() => {
-    if (!communityData) {
+    if (!superUsername) {
       router.push('/creator');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [superUsername]);
 
   return (
     <main className="container flex flex-col justify-center items-center">
       <div className="fixed w-screen h-screen bg-[#0d0d0d] top-0 right-0 bg-no-repeat bg-cover -z-50" />
-      {communityData && (
+      {superUsername && (
         <div className="w-[716px] h-[354px] bg-header mt-32 py-11 px-14">
           <h1 className="text-primary text-[54px] font-bold">
             Your community has been{' '}
@@ -37,30 +33,8 @@ export default function Dashboard() {
           <p className="mt-10">
             Here is the link you can share with your collectors.
           </p>
-          {communityData.map((data:any) => {
-            return (
-              <div
-                key={data.chatID}
-                className="px-5 py-3 mt-3 w-11/12 bg-tertiary rounded-2xl flex justify-between"
-              >
-                <div>{`community.haus/community/${data.data.username}`}</div>
-                <Image
-                  src="/assets/icons/copy.svg"
-                  alt="copy"
-                  width={20}
-                  height={20}
-                  className="cursor-pointer"
-                  onClick={() => {
-                    navigator.clipboard.writeText(
-                      `community.haus/community/${data.data.username}`
-                    );
-                  }}
-                />
-              </div>
-            );
-          })}
-          {/* <div className="px-5 py-3 mt-3 w-11/12 bg-tertiary rounded-2xl flex justify-between">
-            <div>{`community.haus/community/${userName}`}</div>
+          <div className="px-5 py-3 mt-3 w-11/12 bg-tertiary rounded-2xl flex justify-between">
+            <div>{`community.haus/communities/${superUsername}`}</div>
             <Image
               src="/assets/icons/copy.svg"
               alt="copy"
@@ -69,11 +43,11 @@ export default function Dashboard() {
               className="cursor-pointer"
               onClick={() => {
                 navigator.clipboard.writeText(
-                  `community.haus/community/${userName}`
+                  `community.haus/communities/${superUsername}`
                 );
               }}
             />
-          </div> */}
+          </div>
         </div>
       )}
     </main>
