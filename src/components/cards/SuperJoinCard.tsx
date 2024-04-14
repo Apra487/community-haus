@@ -111,6 +111,28 @@ const SuperJoinCard: React.FC<Props> = ({ superUsername, communities }) => {
 
   const isEligibleToJoinTheCommunity = useCallback(
     (community: any) => {
+      if (!eligibilityData || !eligibilityData.criteriaBasedCount) return false;
+      if (community.username.endsWith('-General')) {
+        return (
+          Number(eligibilityData.totalCount) >=
+          Number(community.criteria.dropsNumber)
+        );
+      }
+      if (community.username.endsWith('-Droplets')) {
+        const eligibilityCriterias =
+          Object.keys(eligibilityData.criteriaBasedCount) || [];
+        const requiredDropletsCount = Number(community.criteria.droplets);
+        let dropletsCount = 0;
+        for (const criteria of eligibilityCriterias) {
+          if (Number(criteria)) {
+            dropletsCount += Number(
+              eligibilityData.criteriaBasedCount[criteria]
+            );
+          }
+        }
+        return dropletsCount >= requiredDropletsCount;
+      }
+
       const criteriaArr = [
         'common',
         'legendary',
@@ -125,7 +147,8 @@ const SuperJoinCard: React.FC<Props> = ({ superUsername, communities }) => {
         const element = criteriaArr[i];
         if (criteria[element] !== '') {
           const criteriaCount = Number(criteria[element]);
-          const eligibilityCount = eligibilityData[map[element]] || 0;
+          const eligibilityCount =
+            eligibilityData.criteriaBasedCount[map[element]] || 0;
           if (criteriaCount <= eligibilityCount) {
             return true;
           }
@@ -159,7 +182,7 @@ const SuperJoinCard: React.FC<Props> = ({ superUsername, communities }) => {
         `/api/wallet-nft-info?address=${address}&mintAddress=${mintAddress}`
       );
       const data = await response.json();
-      setEligibilityData(data?.criteriaBasedCount);
+      setEligibilityData(data);
       setCheckingEligibility(false);
     }
     if (publicKey) {
@@ -193,7 +216,8 @@ const SuperJoinCard: React.FC<Props> = ({ superUsername, communities }) => {
             You have been added to the group. Pleas check your telegram.
           </p>
         ) : (
-          isEligible && (
+          isEligible &&
+          !checkingEligibility && (
             <div className="bg-primary-dark rounded-2xl mt-5">
               <input
                 type="text"
