@@ -16,22 +16,72 @@ const map = {
   ultimate: 'Ultimate',
 } as const;
 
+interface CommunityProps {
+  community: any;
+  isEligibleToJoinTheCommunity: Function;
+  handleTelegramJoining: Function;
+}
+
+const CommunityUrlCard: React.FC<CommunityProps> = ({
+  community,
+  isEligibleToJoinTheCommunity,
+  handleTelegramJoining,
+}) => {
+  const [isCommunityJoining, setIsCommunityJoining] = useState(false);
+  const [isCommunityJoined, setIsCommunityJoined] = useState(false);
+  const isEligibleToJoinThisCommunity = isEligibleToJoinTheCommunity(community);
+  return (
+    <div
+      key={community.chatID}
+      className="px-5 py-3 mt-3 w-full bg-tertiary rounded-2xl flex justify-between"
+    >
+      <div>{`community.haus/community/${community.username}`}</div>
+      {isEligibleToJoinThisCommunity ? (
+        <button
+          className="btn-tertiary"
+          onClick={() => {
+            if (isCommunityJoined) return;
+            handleTelegramJoining(
+              community,
+              setIsCommunityJoining,
+              setIsCommunityJoined
+            );
+          }}
+        >
+          {isCommunityJoined
+            ? 'Joined'
+            : isCommunityJoining
+              ? 'Joining...'
+              : 'Join Now'}
+        </button>
+      ) : (
+        <button className="btn-disabled" disabled>
+          Not Eligible
+        </button>
+      )}
+    </div>
+  );
+};
+
 const SuperJoinCard: React.FC<Props> = ({ superUsername, communities }) => {
   const { connected, publicKey } = useWallet();
   const [checkingEligibility, setCheckingEligibility] = useState(false);
   const [telegramId, settelegramId] = useState('');
-  const [isJoining, setIsJoining] = useState(false);
   const [isJoined, setIsJoined] = useState(false);
   const [eligibilityData, setEligibilityData] = useState<any>({});
 
   const handleTelegramJoining = useCallback(
-    async (community: any) => {
+    async (
+      community: any,
+      setIsCommunityJoining: Function,
+      setIsCommunityJoined: Function
+    ) => {
       if (!community.chatID) {
         console.error('Chat ID not found');
         return;
       }
       try {
-        setIsJoining(true);
+        setIsCommunityJoining(true);
         const jsonFormatedBody = JSON.stringify({
           chatID: community.chatID,
           userID: telegramId,
@@ -48,14 +98,15 @@ const SuperJoinCard: React.FC<Props> = ({ superUsername, communities }) => {
         if (data.message === 'User invited') {
           setIsJoined(true);
         }
-        setIsJoining(false);
+        setIsCommunityJoining(false);
       } catch {
-        setIsJoining(false);
+        setIsCommunityJoining(false);
         setIsJoined(false);
+        setIsCommunityJoined(false);
         console.error('Error joining telegram group');
       }
     },
-    [telegramId, setIsJoining, setIsJoined]
+    [telegramId, setIsJoined]
   );
 
   const isEligibleToJoinTheCommunity = useCallback(
@@ -86,82 +137,26 @@ const SuperJoinCard: React.FC<Props> = ({ superUsername, communities }) => {
   );
 
   const isEligible = useMemo(() => {
+    let canJoinACommunity = false;
+
     communities.forEach((community: any) => {
       if (isEligibleToJoinTheCommunity(community)) {
-        return true;
+        canJoinACommunity = true;
       }
     });
-
-    return false;
+    return canJoinACommunity;
   }, [communities, isEligibleToJoinTheCommunity]);
-
-  // useEffect(() => {
-  //   async function checkIfEligible(address: string) {
-  //     setCheckingEligibility(true);
-  //     const response = await fetch(`/api/wallet-nft?address=${address}`);
-  //     const data = await response.json();
-  //     const mintAddresses = data.mintAddressArray;
-  //     if (
-  //       mintAddresses &&
-  //       mintAddresses.length > 0 &&
-  //       mintAddresses.includes(communityData.contractAddress)
-  //     ) {
-  //       console.log('User has the NFT');
-  //       const criteria = communityData.criteria;
-  //       const rarityTypes = ['Rarity', 'Drop'];
-
-  //       // todo: remove this code (required for demo)
-  //       rarityTypes.push('Animal');
-  //       const userAddress = '6gLzpZQ9DZ7X8KZJWsBuaxkT4RCwiHPv2PZ52nARFHqw';
-  //       const mintAddress = 'E3hZtaq2kAGRoyhbLjKLHybyyZCNv8ZR6RU5tSErgMjf';
-  //       //////////////////////////////////////////////
-
-  //       const mintAttributesResponse = await fetch(
-  //         `/api/mint-attributes?userAddress=${userAddress}&mintAddress=${mintAddress}`
-  //       );
-  //       const mintAttributesData = await mintAttributesResponse.json();
-  //       const filterdAttributes = mintAttributesData.attributes.filter(
-  //         (attribute: any) => rarityTypes.includes(attribute.trait_type)
-  //       );
-  //       const filteredCriteria = Object.keys(criteria).filter(
-  //         (key) => criteria[key] !== ''
-  //       );
-
-  //       // todo: remove this code (required for demo)
-  //       filteredCriteria.push('Rat');
-  //       //////////////////////////////////////////////
-
-  //       const finalFilter = filterdAttributes.filter((attribute: any) =>
-  //         filteredCriteria.includes(attribute.value)
-  //       );
-  //       const isEligible = finalFilter.length > 0;
-  //       console.log(isEligible);
-  //       setIsEligible(isEligible);
-  //       setCheckingEligibility(false);
-  //       return;
-  //     }
-  //     setIsEligible(false);
-  //     setCheckingEligibility(false);
-  //   }
-  //   if (publicKey) {
-  //     const address = publicKey.toBase58();
-  //     checkIfEligible(address);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [publicKey]);
-
-  // console.log(communityData);
 
   useEffect(() => {
     async function checkIfEligible(address: string) {
       setCheckingEligibility(true);
       const mintAddress = communities[0].contractAddress;
       ////////
-      const adress = 'Av5FaWS5dEjAu7rRXRdmdqAqnJq9F88XNhKfBE2Gi5gg';
-      const mintAddres = 'FdjvW8RHo2vTr4DiWqkDHyUDhNWzkrYPjyd8SpGtK1Qs';
+      // const adress = 'Av5FaWS5dEjAu7rRXRdmdqAqnJq9F88XNhKfBE2Gi5gg';
+      // const mintAddres = 'FdjvW8RHo2vTr4DiWqkDHyUDhNWzkrYPjyd8SpGtK1Qs';
       /////////
       const response = await fetch(
-        `/api/wallet-nft-info?address=${adress}&mintAddress=${mintAddres}`
+        `/api/wallet-nft-info?address=${address}&mintAddress=${mintAddress}`
       );
       const data = await response.json();
       setEligibilityData(data?.criteriaBasedCount);
@@ -220,54 +215,20 @@ const SuperJoinCard: React.FC<Props> = ({ superUsername, communities }) => {
               Checking Eligibility...
             </button>
           )}
-          {/* {isEligible && !isJoined && (
-            <button
-              className="btn-secondary mt-5"
-              onClick={() => {
-                handleTelegramJoining();
-              }}
-            >
-              {isJoining ? 'Joining...' : 'Join Now'}
-            </button>
-          )} */}
-          {/* <button
-          className="btn-secondary mt-5"
-          onClick={() => router.push('/creator')}
-        >
-          Create
-        </button> */}
         </div>
       </div>
       <div className="flex flex-col px-14">
         <p className="mt-10">
           {`Here's some of the communities you can join based on your eligibility.`}
         </p>
-        {communities.map((community: any) => {
-          const isEligibleToJoinThisCommunity =
-            isEligibleToJoinTheCommunity(community);
-          return (
-            <div
-              key={community.chatID}
-              className="px-5 py-3 mt-3 w-full bg-tertiary rounded-2xl flex justify-between"
-            >
-              <div>{`community.haus/community/${community.username}`}</div>
-              {isEligibleToJoinThisCommunity ? (
-                <button
-                  className="btn-tertiary"
-                  onClick={() => {
-                    handleTelegramJoining(community);
-                  }}
-                >
-                  {isJoining ? 'Joining...' : 'Join Now'}
-                </button>
-              ) : (
-                <button className="btn-disabled" disabled>
-                  Not Eligible
-                </button>
-              )}
-            </div>
-          );
-        })}
+        {communities.map((community: any) => (
+          <CommunityUrlCard
+            key={community.chatID}
+            community={community}
+            isEligibleToJoinTheCommunity={isEligibleToJoinTheCommunity}
+            handleTelegramJoining={handleTelegramJoining}
+          />
+        ))}
       </div>
     </div>
   );
