@@ -45,6 +45,7 @@ const CreateModal: React.FC<Props> = ({
     description: '',
     logo: null,
   });
+  const [toggleInstructions, setToggleInstructions] = useState(false);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -121,7 +122,7 @@ const CreateModal: React.FC<Props> = ({
               value={formState.telegramId}
               onChange={handleChange}
               required
-              className="bg-tertiary w-full text-sm py-3 px-4 rounded-2xl focus:outline-none mt-2"
+              className="bg-tertiary w-full text-sm py-3 px-4 font-normal rounded-2xl focus:outline-none mt-2"
             />
           </label>
           <label
@@ -136,7 +137,7 @@ const CreateModal: React.FC<Props> = ({
               placeholder="Enter the name of your community"
               onChange={handleChange}
               required
-              className="bg-tertiary w-full text-sm py-3 px-4 rounded-2xl focus:outline-none mt-2"
+              className="bg-tertiary w-full font-normal text-sm py-3 px-4 rounded-2xl focus:outline-none mt-2"
             />
           </label>
           {!requiresGroupCreation && (
@@ -145,7 +146,10 @@ const CreateModal: React.FC<Props> = ({
               className="mt-3 relative flex flex-col justify-center items-start text-sm font-semibold leading-6 text-white"
             >
               Group Chat ID
-              <span className="absolute top-[2px] left-[100px] cursor-pointer">
+              <span
+                className="absolute top-[2px] left-[100px] cursor-pointer"
+                onClick={() => setToggleInstructions(!toggleInstructions)}
+              >
                 <svg
                   width="20"
                   height="20"
@@ -159,6 +163,23 @@ const CreateModal: React.FC<Props> = ({
                   />
                 </svg>
               </span>
+              {toggleInstructions && (
+                <section>
+                  <h6 className="text-xs text-secondary mt-1">
+                    Follow given instruction to get the chat ID:
+                  </h6>
+                  <div className="font-normal">
+                    <p className="text-xs text-secondary mt-1">
+                      • Add @community_haus to your group and make it admin.
+                    </p>
+                    <p className="text-xs text-secondary mt-1">
+                      {`• Add @raw_data_bot to your group. This would give you`}
+                      <br />
+                      {`chat ID. (eg: 4125558344)`}
+                    </p>
+                  </div>
+                </section>
+              )}
               <input
                 name="communityChatId"
                 type="text"
@@ -166,7 +187,7 @@ const CreateModal: React.FC<Props> = ({
                 placeholder="Enter chat ID of your community"
                 onChange={handleChange}
                 required
-                className="bg-tertiary w-full text-sm py-3 px-4 rounded-2xl focus:outline-none mt-2"
+                className="bg-tertiary font-normal w-full text-sm py-3 px-4 rounded-2xl focus:outline-none mt-2"
               />
             </label>
           )}
@@ -181,7 +202,7 @@ const CreateModal: React.FC<Props> = ({
               placeholder="Tell about your community in a few words"
               onChange={handleChange}
               required
-              className="bg-tertiary w-full text-sm py-3 px-4 rounded-2xl focus:outline-none mt-2"
+              className="bg-tertiary font-normal w-full text-sm py-3 px-4 rounded-2xl focus:outline-none mt-2"
             />
           </label>
           {/* <label
