@@ -7,9 +7,10 @@ import { useAcountStore, useCreateStore, type ICreateStore } from '@/stores';
 
 interface Props {
   closeAction: () => void;
+  waitlistAction: () => void;
 }
 
-const VerifyModal: React.FC<Props> = ({ closeAction }) => {
+const VerifyModal: React.FC<Props> = ({ closeAction, waitlistAction }) => {
   const { data: session } = useSession();
   useAcountStore.getState().updateName(session?.user?.name ?? '');
   useAcountStore.getState().updateImageUrl(session?.user?.image ?? '');
@@ -52,6 +53,10 @@ const VerifyModal: React.FC<Props> = ({ closeAction }) => {
       console.error('Something went wrong while try to verify', error);
     }
   }, [session, dripUsername, updateTwitterUrl, updateAddress, closeAction]);
+
+  const goToWaitlist = useCallback(() => {
+    waitlistAction();
+  }, [waitlistAction]);
 
   return (
     <Modal>
@@ -133,9 +138,10 @@ const VerifyModal: React.FC<Props> = ({ closeAction }) => {
         >
           <div>Verify</div>
         </button>
-        <p className="mt-4 text-secondary ">
-          Not a member on Drip? Join the waitlist
-        </p>
+        <p className="mt-4 text-secondary ">Not a member on Community Haus?</p>
+        <button type="button" onClick={goToWaitlist}>
+          <p className="text-secondary">Join Waitlist</p>
+        </button>
       </div>
     </Modal>
   );

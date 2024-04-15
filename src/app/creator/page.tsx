@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { VerifyModal, CreateModal, CriteriaModal } from '@/components/modals';
+import { VerifyModal, CreateModal, CriteriaModal, WaitlistModal } from '@/components/modals';
 import { useModal } from '@/hooks';
 
 export default function Creator() {
@@ -47,6 +47,16 @@ export default function Creator() {
           onClick={() => {
             openModal(
               <VerifyModal
+                waitlistAction={() => {
+                  closeModal();
+                  openModal(
+                    <WaitlistModal
+                      closeAction={() => {
+                        closeModal();
+                      }}
+                    />
+                  )
+                }}
                 closeAction={() => {
                   closeModal();
                   openModal(
