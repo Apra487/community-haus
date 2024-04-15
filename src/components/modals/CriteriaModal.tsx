@@ -146,7 +146,20 @@ const CriteriaModal: React.FC<Props> = ({
         .filter((toggle) => toggle.isChecked)
         .map(({ rarity, value }) => ({ rarity, value: value }));
       const rarity = rarities[0];
+      jsonFormatedData.creatorUsername = `${jsonFormatedData.creatorUsername}-${rarity.rarity}`;
+      jsonFormatedData.communityName = `${jsonFormatedData.communityName} (${rarity.rarity})`;
+      jsonFormatedData.communityDescription = `${rarity.rarity} - ${jsonFormatedData.communityDescription}`;
       jsonFormatedData[`${rarity.rarity.toLowerCase()}Criteria`] = rarity.value;
+    }
+    if (dropletsBasedEnabled) {
+      jsonFormatedData.creatorUsername = `${jsonFormatedData.creatorUsername}-Droplets`;
+      jsonFormatedData.communityName = `${jsonFormatedData.communityName} (Droplets)`;
+      jsonFormatedData.communityDescription = `Droplets - ${jsonFormatedData.communityDescription}`;
+    }
+    if (dropsOwnedEnabled) {
+      jsonFormatedData.creatorUsername = `${jsonFormatedData.creatorUsername}-General`;
+      jsonFormatedData.communityName = `${jsonFormatedData.communityName} (General)`;
+      jsonFormatedData.communityDescription = `General - ${jsonFormatedData.communityDescription}`;
     }
     console.log('submit without group creation', jsonFormatedData);
     try {
