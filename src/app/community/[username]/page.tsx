@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 
 async function getCommunityByUserame(username: string) {
   const res = await fetch(
-    `https://community-haus-two.vercel.app/api/community?username=${username}`,
+    `https://www.community.haus/api/community?username=${username}`,
     {
       method: 'GET',
       headers: {

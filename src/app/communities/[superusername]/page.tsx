@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 
 async function getCommunitiesByUserame(superusername: string) {
   const res = await fetch(
-    `http://localhost:3000/api/communities?superUsername=${superusername}`,
+    `https://www.community.haus/api/communities?superUsername=${superusername}`,
     {
       method: 'GET',
       headers: {
