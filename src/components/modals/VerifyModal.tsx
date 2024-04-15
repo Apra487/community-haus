@@ -6,7 +6,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 import { useAcountStore, useCreateStore, type ICreateStore } from '@/stores';
 
 interface Props {
-  closeAction: () => void;
+  closeAction: (requiresGroupCreation?: boolean) => void;
 }
 
 const VerifyModal: React.FC<Props> = ({ closeAction }) => {
@@ -22,6 +22,9 @@ const VerifyModal: React.FC<Props> = ({ closeAction }) => {
   );
 
   const [dripUsername, setDripUsername] = useState<string>('');
+  const [isTelegrapGroupEnabled, setIsTelegrapGroupEnabled] = useState(false);
+
+  const toggleSwitch = () => setIsTelegrapGroupEnabled(!isTelegrapGroupEnabled);
 
   const handleVerify = useCallback(async () => {
     try {
@@ -44,14 +47,21 @@ const VerifyModal: React.FC<Props> = ({ closeAction }) => {
         updateTwitterUrl(dripTwitterInfo.twitterUrl);
         updateAddress(address);
         console.log('Verified', address);
-        closeAction();
+        closeAction(!isTelegrapGroupEnabled);
       } else {
         console.log('Not verified');
       }
     } catch (error) {
       console.error('Something went wrong while try to verify', error);
     }
-  }, [session, dripUsername, updateTwitterUrl, updateAddress, closeAction]);
+  }, [
+    session,
+    dripUsername,
+    updateTwitterUrl,
+    updateAddress,
+    closeAction,
+    isTelegrapGroupEnabled,
+  ]);
 
   return (
     <Modal>
@@ -125,6 +135,23 @@ const VerifyModal: React.FC<Props> = ({ closeAction }) => {
               )}
             </div>
           </div>
+        </div>
+        <div className="flex w-full mt-5 justify-between items-center space-x-2">
+          <label className="text-base font-bold">
+            Already have telegram group?
+          </label>
+          <button
+            onClick={toggleSwitch}
+            className={`${
+              isTelegrapGroupEnabled ? ' bg-accent' : 'bg-secondary'
+            } relative inline-flex items-center h-6 rounded-full w-11 transition-colors`}
+          >
+            <span
+              className={`${
+                isTelegrapGroupEnabled ? 'translate-x-6' : 'translate-x-1'
+              } inline-block w-4 h-4 transform bg-primary rounded-full transition-transform`}
+            />
+          </button>
         </div>
         <button
           type="button"

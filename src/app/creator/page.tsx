@@ -47,14 +47,16 @@ export default function Creator() {
           onClick={() => {
             openModal(
               <VerifyModal
-                closeAction={() => {
+                closeAction={(requiresGroupCreation = true) => {
                   closeModal();
                   openModal(
                     <CreateModal
+                      requiresGroupCreation={requiresGroupCreation}
                       closeActon={() => {
                         closeModal();
                         openModal(
                           <CriteriaModal
+                            requiresGroupCreation={requiresGroupCreation}
                             closeActon={() => {
                               closeModal();
                             }}

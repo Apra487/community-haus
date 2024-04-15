@@ -9,24 +9,31 @@ type FormState = {
   username: string;
   telegramId: string;
   communityName: string;
+  communityChatId: string;
   description: string;
   logo: File | null;
 };
 
 interface Props {
+  requiresGroupCreation: boolean;
   closeActon: () => void;
 }
 
-const CreateModal: React.FC<Props> = ({ closeActon }) => {
+const CreateModal: React.FC<Props> = ({
+  requiresGroupCreation,
+  closeActon,
+}) => {
   const {
     updateUserName,
     updateTelegramId,
     updateNameOfCommunity,
+    updateCommunityChatId,
     updateDescription,
   } = useCreateStore((store: ICreateStore) => ({
     updateUserName: store.updateUserName,
     updateTelegramId: store.updateTelegramId,
     updateNameOfCommunity: store.updateNameOfCommunity,
+    updateCommunityChatId: store.updateCommunityChatId,
     updateDescription: store.updateDescription,
   }));
 
@@ -34,6 +41,7 @@ const CreateModal: React.FC<Props> = ({ closeActon }) => {
     username: '',
     telegramId: '',
     communityName: '',
+    communityChatId: '',
     description: '',
     logo: null,
   });
@@ -43,6 +51,7 @@ const CreateModal: React.FC<Props> = ({ closeActon }) => {
     updateUserName(formState.username);
     updateTelegramId(formState.telegramId);
     updateNameOfCommunity(formState.communityName);
+    updateCommunityChatId(formState.communityChatId);
     updateDescription(formState.description);
     console.log(formState);
     closeActon();
@@ -124,12 +133,29 @@ const CreateModal: React.FC<Props> = ({ closeActon }) => {
               name="communityName"
               type="text"
               value={formState.communityName}
-              placeholder="Enter your username"
+              placeholder="Enter the name of your community"
               onChange={handleChange}
               required
               className="bg-tertiary w-full text-sm py-3 px-4 rounded-2xl focus:outline-none mt-2"
             />
           </label>
+          {!requiresGroupCreation && (
+            <label
+              htmlFor="communityChatId"
+              className="mt-3 flex flex-col justify-center items-start text-sm font-semibold leading-6 text-white"
+            >
+              Group Chat ID
+              <input
+                name="communityChatId"
+                type="text"
+                value={formState.communityChatId}
+                placeholder="Enter chat ID of your community"
+                onChange={handleChange}
+                required
+                className="bg-tertiary w-full text-sm py-3 px-4 rounded-2xl focus:outline-none mt-2"
+              />
+            </label>
+          )}
           <label
             htmlFor="description"
             className="mt-3 flex flex-col justify-center items-start text-sm font-semibold leading-6 text-white"

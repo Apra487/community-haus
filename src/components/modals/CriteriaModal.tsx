@@ -1,6 +1,7 @@
 // @ts-nocheck
 'use client';
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Modal from './Modal';
 import {
@@ -46,10 +47,14 @@ const RarityOptions: RarityToggle[] = [
 ];
 
 interface Props {
+  requiresGroupCreation: boolean;
   closeActon: () => void;
 }
 
-const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
+const CriteriaModal: React.FC<Props> = ({
+  requiresGroupCreation,
+  closeActon,
+}) => {
   const router = useRouter();
 
   const [rarityToggles, setRarityToggles] =
@@ -59,6 +64,16 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
   const [isSumbitting, setIsSumbitting] = useState<boolean>(false);
 
   const handleRarityToggle = (index: number) => {
+    if (!requiresGroupCreation) {
+      setRarityToggles((prev) =>
+        prev.map((item, i) =>
+          i === index
+            ? { ...item, isChecked: !item.isChecked }
+            : { ...item, isChecked: false }
+        )
+      );
+      return;
+    }
     setRarityToggles((prev) =>
       prev.map((item, i) =>
         i === index ? { ...item, isChecked: !item.isChecked } : item
@@ -88,6 +103,7 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
     telegramId,
     userName,
     nameOfCommunity,
+    communityChatId,
     description,
   } = useCreateStore((store: ICreateStore) => ({
     twitterUrl: store.twitterUrl,
@@ -95,6 +111,7 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
     telegramId: store.telegramId,
     userName: store.userName,
     nameOfCommunity: store.nameOfCommunity,
+    communityChatId: store.communityChatId,
     description: store.description,
   }));
   const { updateSuperUsername, updateCommunityData } = useDashboardStore(
@@ -103,6 +120,36 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
       updateCommunityData: store.updateCommunityData,
     })
   );
+
+  const [rarityBasedEnabled, setRarityBasedEnabled] = useState<boolean>(false);
+  const [dropletsBasedEnabled, setDropletsBasedEnabled] =
+    useState<boolean>(false);
+  const [dropsOwnedEnabled, setDropsOwnedEnabled] = useState<boolean>(false);
+
+  const handleSubmitWithoutGroupCreation = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+    const jsonFormatedData = {
+      creatorUsername: userName,
+      creatorTelegramID: telegramId,
+      communityName: nameOfCommunity,
+      communityDescription: description,
+      twitterUrl: twitterUrl,
+      contractAddress: address,
+      chatID: communityChatId,
+      droplets: dropletsBasedEnabled ? droplets : '',
+      dropsNumber: dropsOwnedEnabled ? dropsOwned : '',
+    };
+    if (rarityBasedEnabled) {
+      const rarities = rarityToggles
+        .filter((toggle) => toggle.isChecked)
+        .map(({ rarity, value }) => ({ rarity, value: value }));
+      const rarity = rarities[0];
+      jsonFormatedData[`${rarity.rarity.toLowerCase()}Criteria`] = rarity.value;
+    }
+    console.log('submit without group creation', jsonFormatedData);
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -227,71 +274,131 @@ const CriteriaModal: React.FC<Props> = ({ closeActon }) => {
             <div>
               <label
                 htmlFor="rarity"
-                className="bg-tertiary text-secondary rounded-xl py-3 px-4 mt-4 flex flex-col justify-center items-start text-sm leading-6 text-white"
+                className="bg-tertiary cursor-pointer text-secondary rounded-xl py-3 px-4 mt-4 flex flex-row justify-between items-center text-sm leading-6 text-white"
+                onClick={() => {
+                  if (!requiresGroupCreation) {
+                    setRarityBasedEnabled(!rarityBasedEnabled);
+                    setDropletsBasedEnabled(false);
+                    setDropsOwnedEnabled(false);
+                    return;
+                  }
+                  setRarityBasedEnabled(!rarityBasedEnabled);
+                }}
               >
                 Rarity based
+                <span>
+                  <Image
+                    src={'/assets/icons/down-arrow.svg'}
+                    alt="down-arrow"
+                    width={20}
+                    height={20}
+                  />
+                </span>
               </label>
-              {rarityToggles.map((toggle, index) => (
-                <div className="m-2 " key={toggle.rarity}>
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={toggle.isChecked}
-                      onChange={() => handleRarityToggle(index)}
-                      className="bg-tertiary py-2 px-4 text-primary mr-5"
-                    />
-                    {toggle.rarity}
-                  </label>
-                  {toggle.isChecked && (
-                    <input
-                      type="number"
-                      value={toggle.value}
-                      onChange={(e) =>
-                        handleRarityValueChange(index, e.target.value)
-                      }
-                      placeholder={toggle.placeholder}
-                      className="bg-tertiary text-sm text-primary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
-                    />
-                  )}
-                </div>
-              ))}
+              {rarityBasedEnabled &&
+                rarityToggles.map((toggle, index) => (
+                  <div className="m-2 " key={toggle.rarity}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={toggle.isChecked}
+                        onChange={() => handleRarityToggle(index)}
+                        className="bg-tertiary py-2 px-4 text-primary mr-5"
+                      />
+                      {toggle.rarity}
+                    </label>
+                    {toggle.isChecked && (
+                      <input
+                        type="number"
+                        value={toggle.value}
+                        onChange={(e) =>
+                          handleRarityValueChange(index, e.target.value)
+                        }
+                        placeholder={toggle.placeholder}
+                        className="bg-tertiary text-sm text-primary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
+                      />
+                    )}
+                  </div>
+                ))}
             </div>
 
             <div>
               <label
                 htmlFor="droplets"
-                className="bg-tertiary text-secondary rounded-xl py-3 px-4 flex mt-5 flex-col justify-center items-start text-sm leading-6 text-white"
+                className="bg-tertiary cursor-pointer text-secondary rounded-xl py-3 px-4 flex mt-5 flex-row justify-between items-center text-sm leading-6 text-white"
+                onClick={() => {
+                  if (!requiresGroupCreation) {
+                    setDropletsBasedEnabled(!dropletsBasedEnabled);
+                    setRarityBasedEnabled(false);
+                    setDropsOwnedEnabled(false);
+                    return;
+                  }
+                  setDropletsBasedEnabled(!dropletsBasedEnabled);
+                }}
               >
                 Droplets based
+                <span>
+                  <Image
+                    src={'/assets/icons/down-arrow.svg'}
+                    alt="down-arrow"
+                    width={20}
+                    height={20}
+                  />
+                </span>
               </label>
 
-              <input
-                type="number"
-                value={droplets}
-                onChange={handleNumericChange(setDroplets)}
-                placeholder="Enter Droplets Value"
-                className="bg-tertiary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
-              />
+              {dropletsBasedEnabled && (
+                <input
+                  type="number"
+                  value={droplets}
+                  onChange={handleNumericChange(setDroplets)}
+                  placeholder="Enter Droplets Value"
+                  className="bg-tertiary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
+                />
+              )}
             </div>
 
             <div>
               <label
                 htmlFor="dropsOwned"
-                className="bg-tertiary text-secondary rounded-xl py-3 px-4 flex flex-col mt-5 justify-center items-start text-sm leading-6 text-white"
+                className="bg-tertiary cursor-pointer text-secondary rounded-xl py-3 px-4 flex flex-row mt-5 justify-between items-center text-sm leading-6 text-white"
+                onClick={() => {
+                  if (!requiresGroupCreation) {
+                    setDropsOwnedEnabled(!dropsOwnedEnabled);
+                    setRarityBasedEnabled(false);
+                    setDropletsBasedEnabled(false);
+                    return;
+                  }
+                  setDropsOwnedEnabled(!dropsOwnedEnabled);
+                }}
               >
                 Number of drops they own
+                <span>
+                  <Image
+                    src={'/assets/icons/down-arrow.svg'}
+                    alt="down-arrow"
+                    width={20}
+                    height={20}
+                  />
+                </span>
               </label>
-              <input
-                type="number"
-                value={dropsOwned}
-                onChange={handleNumericChange(setDropsOwned)}
-                placeholder="Enter Number of Drops Owned"
-                className="bg-tertiary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
-              />
+              {dropsOwnedEnabled && (
+                <input
+                  type="number"
+                  value={dropsOwned}
+                  onChange={handleNumericChange(setDropsOwned)}
+                  placeholder="Enter Number of Drops Owned"
+                  className="bg-tertiary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
+                />
+              )}
             </div>
           </form>
           <button
-            onClick={(e) => handleSubmit(e)}
+            onClick={
+              requiresGroupCreation
+                ? handleSubmit
+                : handleSubmitWithoutGroupCreation
+            }
             className="btn-primary mt-6"
             type="submit"
             disabled={isSumbitting}
