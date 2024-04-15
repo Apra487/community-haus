@@ -69,13 +69,13 @@ const WaitlistModal: React.FC<Props> = ({ closeAction }) => {
               htmlFor="xUrl"
               className="flex flex-col justify-center items-start text-base font-bold leading-6 text-white"
             >
-              X url associated with your DRiP account
+              X url
             </label>
             <input
               type="text"
               id="xUrl"
               name="xUrl"
-              placeholder="X URL"
+              placeholder="Enter your X url linked to DRiP account here"
               aria-label="X Url"
               className="bg-tertiary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
                 value={xUrl}
@@ -93,7 +93,7 @@ const WaitlistModal: React.FC<Props> = ({ closeAction }) => {
               type="email"
               id="email"
               name="email"
-              placeholder="email"
+              placeholder="Enter your email here"
               aria-label="email"
               className="bg-tertiary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
               value={email}
