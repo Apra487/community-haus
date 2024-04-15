@@ -149,6 +149,29 @@ const CriteriaModal: React.FC<Props> = ({
       jsonFormatedData[`${rarity.rarity.toLowerCase()}Criteria`] = rarity.value;
     }
     console.log('submit without group creation', jsonFormatedData);
+    try {
+      const reponse = await fetch('/api/group', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(jsonFormatedData) || JSON.stringify({}),
+      });
+      if (!reponse.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await reponse.json();
+      console.log(data);
+      await updateCommunityData([data]);
+      updateSuperUsername(userName);
+      router.push('/dashboard');
+      closeActon();
+    } catch (error: any) {
+      console.error(
+        'Something went wrong while submitting without group creation:',
+        error
+      );
+    }
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
