@@ -193,7 +193,7 @@ const SuperJoinCard: React.FC<Props> = ({ superUsername, communities }) => {
 
   return (
     <div>
-      <div className="w-[716px] h-[354px] flex flex-col justify-between bg-header mt-32 py-11 px-14">
+      <div className="w-[716px] h-[354px] flex flex-col justify-between bg-header py-11 px-14">
         <h1 className="text-primary text-5xl font-bold">
           {`${
             isEligible

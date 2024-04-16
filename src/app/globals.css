@@ -96,4 +96,12 @@ body {
     line-height: normal;
     cursor: not-allowed;
   }
+
+  .border-brand-green {
+    color: #213c00;
+  }
+
+  .border-brand-green-bright {
+    color: #8eff01;
+  }
 }
