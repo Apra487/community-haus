@@ -81,13 +81,15 @@ const CreateModal: React.FC<Props> = ({
           width={440}
           height={207}
         />
-        <Image
-          src="/assets/bgs/profile.svg"
-          alt="cover-image"
-          width={132}
-          height={132}
-          className="opacity-50 absolute left-[174px] top-[132px]"
-        />
+        <div className="relative">
+          <Image
+            src="/assets/bgs/profile.svg"
+            alt="cover-image"
+            width={132}
+            height={132}
+            className="opacity-50 absolute -translate-x-1/2 -translate-y-2/3 left-1/2"
+          />
+        </div>
         <form onSubmit={handleSubmit} className=" mt-5">
           <div className="flex flex-col justify-center mt-5">
             <label

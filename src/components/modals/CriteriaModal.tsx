@@ -130,6 +130,7 @@ const CriteriaModal: React.FC<Props> = ({
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
+    setIsSumbitting(true);
     const jsonFormatedData = {
       creatorUsername: userName,
       creatorTelegramID: telegramId,
@@ -185,6 +186,7 @@ const CriteriaModal: React.FC<Props> = ({
         error
       );
     }
+    setIsSumbitting(false);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

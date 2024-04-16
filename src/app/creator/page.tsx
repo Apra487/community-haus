@@ -268,7 +268,12 @@ export default function Creator() {
           />
         </div>
         <div className=" flex items-center justify-center mt-20">
-          <button className="relative btn-primary text-sm sm:text-3xl">
+          <button
+            className="relative btn-primary text-sm sm:text-3xl"
+            onClick={() => {
+              openModal(<WaitlistModal closeAction={closeModal} />);
+            }}
+          >
             Join The Waitlist
             <Image
               src="/assets/images/arrow.svg"
