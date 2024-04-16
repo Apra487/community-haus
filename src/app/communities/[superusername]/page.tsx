@@ -33,7 +33,7 @@ const Username: NextPage<Props> = async ({ params }) => {
   return (
     <main className="container flex flex-col justify-center items-center">
       <div className="w-screen h-screen flex">
-        <div className="basis-1/5 bg-[#253411] p-10">
+        <div className="basis-1/5 bg-[#253411] p-10 hidden lg:block">
           <img src="/assets/logos/company.svg" alt="logo" />
           <div className="flex flex-col items-start py-10">
             <button className="flex pt-5 font-semibold text-lg text-[#8EFF01]">
@@ -108,8 +108,8 @@ const Username: NextPage<Props> = async ({ params }) => {
               </div>
             </div>
           </div>
-          <div className="flex mt-12">
-            <div className="basis-3/5 flex justify-center align-center px-10">
+          <div className="flex mt-12 flex-col items-center sm:flex-row sm:items-start">
+            <div className="basis-3/5 flex justify-center align-center px-10 mb-16">
               <SuperJoinCard
                 superUsername={superusername}
                 communities={data.documents}
