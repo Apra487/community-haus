@@ -3,13 +3,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const Footer = () => {
+  const isSmallDevice = window.innerWidth < 640;
   return (
     <div className="relative">
       <Image
         src="/assets/bgs/footer.svg"
         alt="footer=bg"
-        width={1440}
-        height={829}
+        width={isSmallDevice ? 448 : 1440}
+        height={isSmallDevice ? 597 : 829}
         style={{
           position: 'absolute',
           width: '100vw',
@@ -19,7 +20,7 @@ const Footer = () => {
         className="pointer-events-none"
       />
       <section className="container flex flex-col-reverse">
-        <section className="w-full flex flex-row justify-between mb-16">
+        <section className="w-full flex flex-col-reverse sm:flex-row gap-1 justify-between mb-5 sm:mb-16">
           <p className="text-xs text-secondary">
             © 2024 Inagiffy All rights reserved
           </p>
@@ -68,7 +69,7 @@ const Footer = () => {
             </ul>
           </section>
           <section>
-            <ul className="flex flex-row gap-10">
+            <ul className="flex flex-col sm:flex-row sm:gap-10">
               <li>
                 <Link
                   href="#"
@@ -88,8 +89,8 @@ const Footer = () => {
             </ul>
           </section>
         </section>
-        <section className="w-full flex flex-row justify-center items-center mb-20">
-          <ul className="flex flex-row gap-6">
+        <section className="w-full flex flex-row justify-center items-center mb-8 sm:mb-20">
+          <ul className="flex flex-col sm:flex-row gap-1 text-center sm:gap-6">
             <li>
               <Link href="#" className="text-sm text-secondary cursor-pointer">
                 Benefits
@@ -128,7 +129,7 @@ const Footer = () => {
           alt="logo"
           width={162}
           height={64}
-          className="mb-5 self-center mt-20"
+          className="mb-5 self-center mt-0 sm:mt-20"
         />
       </section>
     </div>
