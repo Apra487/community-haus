@@ -31,6 +31,7 @@ const config: Config = {
       },
       colors: {
         tertiary: 'rgba(255, 255, 255, 0.04)',
+        bg: '#0d0d0d',
       },
     },
   },
