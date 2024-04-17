@@ -4,6 +4,8 @@ import Image from 'next/image';
 import Modal from './Modal';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useAcountStore, useCreateStore, type ICreateStore } from '@/stores';
+import { useModal } from '@/hooks';
+import { CantVerifyModal } from '@/components/modals';
 
 interface Props {
   closeAction: (requiresGroupCreation?: boolean) => void;
@@ -11,6 +13,7 @@ interface Props {
 }
 
 const VerifyModal: React.FC<Props> = ({ closeAction, waitlistAction }) => {
+  const { openModal } = useModal();
   const { data: session } = useSession();
   useAcountStore.getState().updateName(session?.user?.name ?? '');
   useAcountStore.getState().updateImageUrl(session?.user?.image ?? '');
@@ -37,8 +40,8 @@ const VerifyModal: React.FC<Props> = ({ closeAction, waitlistAction }) => {
       const dripTwitterInfo = data[dripUrl];
 
       if (
-        session.user.name === dripTwitterInfo.name ||
-        dripTwitterInfo.name.includes(session.user.name)
+        session?.user?.name === dripTwitterInfo?.name ||
+        dripTwitterInfo?.name?.includes(session?.user?.name)
       ) {
         const twitterToAddressResponse = await fetch(
           '/data/twitterToAddressMap.json'
@@ -51,6 +54,8 @@ const VerifyModal: React.FC<Props> = ({ closeAction, waitlistAction }) => {
         closeAction(!isTelegrapGroupEnabled);
       } else {
         console.log('Not verified');
+        closeAction();
+        openModal(<CantVerifyModal waitlistAction={waitlistAction} />);
       }
     } catch (error) {
       console.error('Something went wrong while try to verify', error);

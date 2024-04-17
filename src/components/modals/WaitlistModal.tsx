@@ -1,12 +1,15 @@
 'use client';
 import { useCallback, useState } from 'react';
 import Modal from './Modal';
+import { useModal } from '@/hooks';
+import { WaitlistAckowledgementModal } from '@/components/modals';
 
 interface Props {
   closeAction: () => void;
 }
 
 const WaitlistModal: React.FC<Props> = ({ closeAction }) => {
+  const { openModal } = useModal();
   const [dripUsername, setDripUsername] = useState('');
   const [xUrl, setXUrl] = useState('');
   const [email, setEmail] = useState('');
@@ -25,9 +28,12 @@ const WaitlistModal: React.FC<Props> = ({ closeAction }) => {
     });
     if (!response.ok) {
       throw new Error('Network response was not ok');
+    } else {
+      console.log('Add to waitlist');
+      closeAction();
+      openModal(<WaitlistAckowledgementModal />);
     }
-    console.log('Add to waitlist');
-    closeAction();
+    
   }, [closeAction, dripUsername, xUrl, email]);
 
   return (
