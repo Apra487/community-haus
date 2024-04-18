@@ -1,6 +1,25 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 
+export const FAQ = [
+  {
+    question: 'Why Join Community Haus?',
+    answer: `Many miss out on the artist's upcoming drops and creative journey. This platform connects enthusiasts directly with artists for exclusive insights and offers.`,
+  },
+  {
+    question: 'How to Join the Community?',
+    answer: `Simply sign up for the waitlist, and we'll guide you through the next steps.`,
+  },
+  {
+    question: 'How to Start Your Community?',
+    answer: `Once selected, we assist in launching your community, offering content and engagement support for the initial three months.`,
+  },
+  {
+    question: 'What is the Cost involved?',
+    answer: `It's free for DRiP creators for the first three months, followed by a customized retainer based on your community's specific needs.`,
+  },
+];
+
 interface Props {
   question: string;
   answer: string;

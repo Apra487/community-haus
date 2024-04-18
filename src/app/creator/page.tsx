@@ -10,29 +10,7 @@ import {
 import { useModal } from '@/hooks';
 import Faq from '@/components/Faq';
 import Footer from '@/components/Footer';
-
-const FAQ = [
-  {
-    question: 'Why Join Community Haus?',
-    answer:
-      'Simply sign up for the waitlist, and we will guide you through the next steps.',
-  },
-  {
-    question: 'How to Join the Community?',
-    answer:
-      'Simply sign up for the waitlist, and we will guide you through the next steps.',
-  },
-  {
-    question: 'How to Start Your Community?',
-    answer:
-      'Simply sign up for the waitlist, and we will guide you through the next steps.',
-  },
-  {
-    question: 'What is the Cost involved?',
-    answer:
-      'Simply sign up for the waitlist, and we will guide you through the next steps.',
-  },
-];
+import { FAQ } from '@/components/Faq';
 
 export default function Creator() {
   const { openModal, closeModal } = useModal();
