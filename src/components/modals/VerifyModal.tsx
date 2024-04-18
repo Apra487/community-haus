@@ -15,6 +15,7 @@ interface Props {
 const VerifyModal: React.FC<Props> = ({ closeAction, waitlistAction }) => {
   const { openModal } = useModal();
   const { data: session } = useSession();
+  console.log('session', session);
   useAcountStore.getState().updateName(session?.user?.name ?? '');
   useAcountStore.getState().updateImageUrl(session?.user?.image ?? '');
 
