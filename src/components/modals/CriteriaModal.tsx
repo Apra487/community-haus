@@ -1,6 +1,6 @@
 // @ts-nocheck
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Modal from './Modal';
@@ -55,6 +55,8 @@ const CriteriaModal: React.FC<Props> = ({
   requiresGroupCreation,
   closeActon,
 }) => {
+  const criteriaSelectionLimit = 3;
+
   const router = useRouter();
 
   const [rarityToggles, setRarityToggles] =
@@ -62,6 +64,8 @@ const CriteriaModal: React.FC<Props> = ({
   const [droplets, setDroplets] = useState<string>('');
   const [dropsOwned, setDropsOwned] = useState<string>('');
   const [isSumbitting, setIsSumbitting] = useState<boolean>(false);
+  const [maxCriteriaSelectionReached, setMaxCriteriaSelectionReached] =
+    useState<boolean>(false);
 
   const handleRarityToggle = (index: number) => {
     if (!requiresGroupCreation) {
@@ -76,7 +80,9 @@ const CriteriaModal: React.FC<Props> = ({
     }
     setRarityToggles((prev) =>
       prev.map((item, i) =>
-        i === index ? { ...item, isChecked: !item.isChecked } : item
+        i === index && (!maxCriteriaSelectionReached || item.isChecked)
+          ? { ...item, isChecked: !item.isChecked }
+          : item
       )
     );
   };
@@ -297,6 +303,24 @@ const CriteriaModal: React.FC<Props> = ({
     setIsSumbitting(false);
   };
 
+  useEffect(() => {
+    const formData = {
+      rarities: rarityToggles
+        .filter((toggle) => toggle.isChecked)
+        .map(({ rarity, value }) => ({ rarity, value: value })),
+      droplets: droplets,
+      dropsOwned: dropsOwned,
+    };
+    const raritySelected = formData.rarities.length;
+    const dropletsSelected = formData.droplets !== '' ? 1 : 0;
+    const dropsOwnedSelected = formData.dropsOwned !== '' ? 1 : 0;
+    const totalSelected =
+      raritySelected + dropletsSelected + dropsOwnedSelected;
+    totalSelected >= criteriaSelectionLimit
+      ? setMaxCriteriaSelectionReached(true)
+      : setMaxCriteriaSelectionReached(false);
+  }, [rarityToggles, droplets, dropsOwned]);
+
   return (
     <Modal>
       <div className="flex flex-col items-center bg-primary-dark rounded-xl p-5 max-w-[442px]">
@@ -308,7 +332,13 @@ const CriteriaModal: React.FC<Props> = ({
           <p className="justify-center text-primary font-bold text-base">
             What should be a collector’s criteria for joining your community?
           </p>
-          <form onSubmit={handleSubmit}>
+          <form
+            onSubmit={
+              requiresGroupCreation
+                ? handleSubmit
+                : handleSubmitWithoutGroupCreation
+            }
+          >
             <div>
               <label
                 htmlFor="rarity"
@@ -374,7 +404,7 @@ const CriteriaModal: React.FC<Props> = ({
                   setDropletsBasedEnabled(!dropletsBasedEnabled);
                 }}
               >
-                Droplets based
+                Drop number based
                 <span>
                   <Image
                     src={'/assets/icons/down-arrow.svg'}
@@ -389,8 +419,12 @@ const CriteriaModal: React.FC<Props> = ({
                 <input
                   type="number"
                   value={droplets}
-                  onChange={handleNumericChange(setDroplets)}
-                  placeholder="Enter Droplets Value"
+                  onChange={
+                    !maxCriteriaSelectionReached || droplets !== ''
+                      ? handleNumericChange(setDroplets)
+                      : null
+                  }
+                  placeholder="Enter Number of Drops with Drop Number"
                   className="bg-tertiary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
                 />
               )}
@@ -424,7 +458,11 @@ const CriteriaModal: React.FC<Props> = ({
                 <input
                   type="number"
                   value={dropsOwned}
-                  onChange={handleNumericChange(setDropsOwned)}
+                  onChange={
+                    !maxCriteriaSelectionReached || dropsOwned !== ''
+                      ? handleNumericChange(setDropsOwned)
+                      : null
+                  }
                   placeholder="Enter Number of Drops Owned"
                   className="bg-tertiary w-full py-2 px-4 rounded-2xl focus:outline-none mt-2"
                 />
