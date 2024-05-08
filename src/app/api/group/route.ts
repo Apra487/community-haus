@@ -1,8 +1,6 @@
 import { mongoClient } from '@/utils/mongodb';
 
 export async function POST(request: Request) {
-  console.log(request);
-
   let {
     creatorUsername,
     creatorTelegramID,
@@ -56,28 +54,35 @@ export async function POST(request: Request) {
   }
 
   if (!commonCriteria) {
-    commonCriteria = '';
+    commonCriteria = -1;
   }
   if (!rareCriteria) {
-    rareCriteria = '';
+    rareCriteria = -1;
   }
   if (!legendaryCriteria) {
-    legendaryCriteria = '';
+    legendaryCriteria = -1;
   }
   if (!ultimateCriteria) {
-    ultimateCriteria = '';
+    ultimateCriteria = -1;
   }
   if (!droplets) {
-    droplets = '';
+    droplets = -1;
   }
   if (!dropsNumber) {
-    dropsNumber = '';
+    dropsNumber = -1;
   }
 
   await mongoClient.connect();
 
   const database = mongoClient.db('community_haus');
   const collection = database.collection('creater_groups');
+
+  const alreadyExists = await collection.findOne({ username: creatorUsername });
+  if (alreadyExists) {
+    return Response.json({
+      message: 'Username should be unique',
+    });
+  }
 
   const creatorChannelInfo = {
     username: creatorUsername,
@@ -87,12 +92,12 @@ export async function POST(request: Request) {
     chatID,
     users: [creatorTelegramID],
     criteria: {
-      common: commonCriteria,
-      rate: rareCriteria,
-      legendary: legendaryCriteria,
-      ultimate: ultimateCriteria,
-      droplets,
-      dropsNumber,
+      common: parseInt(commonCriteria),
+      rate: parseInt(rareCriteria),
+      legendary: parseInt(legendaryCriteria),
+      ultimate: parseInt(ultimateCriteria),
+      droplets: parseInt(droplets),
+      dropsNumber: parseInt(dropsNumber),
     },
     twitterUrl,
     contractAddress,

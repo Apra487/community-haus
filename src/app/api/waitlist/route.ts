@@ -3,11 +3,7 @@ import { mongoClient } from '@/utils/mongodb';
 export async function POST(request: Request) {
   console.log(request);
 
-  let {
-    dripUsername,
-    xUrl,
-    email,
-  } = await request.json();
+  let { dripUsername, xUrl, email } = await request.json();
 
   if (!dripUsername) {
     return Response.json({
@@ -30,6 +26,13 @@ export async function POST(request: Request) {
   const database = mongoClient.db('community_haus');
   const collection = database.collection('waitlist');
 
+  const alreadyExists = await collection.findOne({ dripUsername });
+  if (alreadyExists) {
+    return Response.json({
+      message: 'You are already on waiting list',
+    });
+  }
+
   const waitlistInfo = {
     dripUsername: dripUsername,
     xUrl: xUrl,
@@ -40,6 +43,6 @@ export async function POST(request: Request) {
 
   return Response.json({
     message: 'Added to waitlist successfully!',
-    data: 'hola',
+    data: waitlistInfo,
   });
 }

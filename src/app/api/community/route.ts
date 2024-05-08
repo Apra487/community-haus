@@ -32,7 +32,9 @@ export async function GET(request: Request) {
     const database = mongoClient.db('community_haus');
     const collection = database.collection('creater_groups');
 
-    const documents = await collection.find({contractAddress: contractAddress}).toArray();
+    const documents = await collection
+      .find({ contractAddress: contractAddress })
+      .toArray();
 
     return Response.json({
       documents,

@@ -3,8 +3,6 @@ import { telegramClient } from '@/utils/telegram';
 import { mongoClient } from '@/utils/mongodb';
 
 export async function POST(request: Request) {
-  console.log(request);
-
   let {
     creatorUsername,
     creatorTelegramID,
@@ -52,22 +50,32 @@ export async function POST(request: Request) {
   }
 
   if (!commonCriteria) {
-    commonCriteria = '';
+    commonCriteria = -1;
   }
   if (!rareCriteria) {
-    rareCriteria = '';
+    rareCriteria = -1;
   }
   if (!legendaryCriteria) {
-    legendaryCriteria = '';
+    legendaryCriteria = -1;
   }
   if (!ultimateCriteria) {
-    ultimateCriteria = '';
+    ultimateCriteria = -1;
   }
   if (!droplets) {
-    droplets = '';
+    droplets = -1;
   }
   if (!dropsNumber) {
-    dropsNumber = '';
+    dropsNumber = -1;
+  }
+
+  const database = mongoClient.db('community_haus');
+  const collection = database.collection('creater_groups');
+
+  const alreadyExists = await collection.findOne({ username: creatorUsername });
+  if (alreadyExists) {
+    return Response.json({
+      message: 'Username should be unique',
+    });
   }
 
   await telegramClient.start({
@@ -87,10 +95,9 @@ export async function POST(request: Request) {
     await telegramClient.invoke(new Api.messages.CreateChat(chatInfo))
   );
 
-  const chatID = result.chats.find((chat: any) => chat.className === 'Chat').id;
-
-  const database = mongoClient.db('community_haus');
-  const collection = database.collection('creater_groups');
+  const chatID = result.updates.chats.find(
+    (chat: any) => chat.className === 'Chat'
+  ).id;
 
   const creatorChannelInfo = {
     username: creatorUsername,
@@ -100,12 +107,12 @@ export async function POST(request: Request) {
     chatID: chatID.value.toString(),
     users: [creatorTelegramID],
     criteria: {
-      common: commonCriteria,
-      rate: rareCriteria,
-      legendary: legendaryCriteria,
-      ultimate: ultimateCriteria,
-      droplets,
-      dropsNumber,
+      common: parseInt(commonCriteria),
+      rate: parseInt(rareCriteria),
+      legendary: parseInt(legendaryCriteria),
+      ultimate: parseInt(ultimateCriteria),
+      droplets: parseInt(droplets),
+      dropsNumber: parseInt(dropsNumber),
     },
     twitterUrl,
     contractAddress,
