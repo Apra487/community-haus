@@ -1,4 +1,5 @@
 import { Api } from 'telegram';
+import BigInteger from 'big-integer';
 import { telegramClient } from '@/utils/telegram';
 import { mongoClient } from '@/utils/mongodb';
 
@@ -95,13 +96,33 @@ export async function POST(request: Request) {
     await telegramClient.invoke(new Api.messages.CreateChat(chatInfo))
   );
 
-  const chatID = result.updates.chats.find(
-    (chat: any) => chat.className === 'Chat'
-  ).id;
+  const chatID = result.chats.find((chat: any) => chat.className === 'Chat').id;
+
+  await telegramClient.invoke(
+    new Api.messages.EditChatAdmin({
+      chatId: chatID,
+      userId: creatorTelegramID,
+      isAdmin: true,
+    })
+  );
+
+  const inviteResponse = await telegramClient.invoke(
+    new Api.messages.ExportChatInvite({
+      peer: BigInteger(chatID),
+      legacyRevokePermanent: true,
+      requestNeeded: false,
+      title: 'Invite Link',
+    })
+  );
+
+  const inviteLink = (inviteResponse as any).link;
+
+  await telegramClient.sendMessage(creatorTelegramID, { message: inviteLink });
 
   const creatorChannelInfo = {
     username: creatorUsername,
     telegramID: creatorTelegramID,
+    telegramInviteLink: inviteLink,
     communityName,
     communityDescription,
     chatID: chatID.value.toString(),
