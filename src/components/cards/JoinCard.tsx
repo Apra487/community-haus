@@ -114,10 +114,10 @@ const JoinCard: React.FC<Props> = ({ communityData }) => {
     async function checkIfEligible(address: string) {
       setCheckingEligibility(true);
       const mintAddress = communityData.contractAddress;
-      ////////
+      //////
       // const adress = 'Av5FaWS5dEjAu7rRXRdmdqAqnJq9F88XNhKfBE2Gi5gg';
       // const mintAddres = 'FdjvW8RHo2vTr4DiWqkDHyUDhNWzkrYPjyd8SpGtK1Qs';
-      /////////
+      ///////
       const response = await fetch(
         `/api/wallet-nft-info?address=${address}&mintAddress=${mintAddress}`
       );
@@ -132,13 +132,19 @@ const JoinCard: React.FC<Props> = ({ communityData }) => {
   }, [publicKey, communityData.contractAddress]);
 
   const isEligible = useMemo(() => {
-    const criteriaArr = ['common', 'legendary', 'rate', 'rare', 'ultimate'] as const;
+    const criteriaArr = [
+      'common',
+      'legendary',
+      'rate',
+      'rare',
+      'ultimate',
+    ] as const;
 
     const criteria = communityData.criteria || {};
 
     for (let i = 0; i < criteriaArr.length; i++) {
       const element = criteriaArr[i];
-      if (criteria[element] !== '') {
+      if (criteria[element] !== -1) {
         const criteriaCount = Number(criteria[element]);
         const eligibilityCount = eligibilityData[map[element]] || 0;
         if (criteriaCount <= eligibilityCount) {

@@ -145,7 +145,7 @@ const SuperJoinCard: React.FC<Props> = ({ superUsername, communities }) => {
 
       for (let i = 0; i < criteriaArr.length; i++) {
         const element = criteriaArr[i];
-        if (criteria[element] !== '') {
+        if (criteria[element] !== -1) {
           const criteriaCount = Number(criteria[element]);
           const eligibilityCount =
             eligibilityData.criteriaBasedCount[map[element]] || 0;
@@ -181,7 +181,7 @@ const SuperJoinCard: React.FC<Props> = ({ superUsername, communities }) => {
       const response = await fetch(
         `/api/wallet-nft-info?address=${address}&mintAddress=${mintAddress}`
       );
-      
+
       const data = await response.json();
       setEligibilityData(data);
       setCheckingEligibility(false);
