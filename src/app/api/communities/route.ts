@@ -15,7 +15,8 @@ export async function GET(request: Request) {
     await mongoClient.connect();
     const database = mongoClient.db('community_haus');
     const collection = database.collection('creater_groups');
-    console.log(collection);
+    const avatarCollection = database.collection('avatar');
+
     const usernameTags = [
       'Common',
       'Rare',
@@ -27,9 +28,18 @@ export async function GET(request: Request) {
 
     const documents = [];
     for (const tag of usernameTags) {
-      const document = await collection.findOne({
+      const document = (await collection.findOne({
+        username: `${superUsername}-${tag}`,
+      })) as any;
+
+      const avatarData = await avatarCollection.findOne({
         username: `${superUsername}-${tag}`,
       });
+
+      if (document && avatarData) {
+        document.avatar = avatarData.url;
+      }
+
       if (document) documents.push(document);
     }
     return Response.json({

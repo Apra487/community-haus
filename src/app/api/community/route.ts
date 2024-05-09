@@ -18,10 +18,19 @@ export async function GET(request: Request) {
     await mongoClient.connect();
     const database = mongoClient.db('community_haus');
     const collection = database.collection('creater_groups');
+    const avatarCollection = database.collection('avatar');
 
     const document = await collection.findOne({
       username: username,
     });
+
+    const avatarData = await avatarCollection.findOne({
+      username: username,
+    });
+
+    if (document && avatarData) {
+      document.avatar = avatarData.url;
+    }
 
     return Response.json({
       document,

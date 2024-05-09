@@ -21,6 +21,7 @@
     "@solana/wallet-adapter-wallets": "^0.19.32",
     "@solana/web3.js": "^1.91.4",
     "mongodb": "^6.5.0",
+    "moralis": "^2.26.1",
     "next": "14.1.4",
     "next-auth": "^4.24.7",
     "react": "^18",
