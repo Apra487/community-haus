@@ -118,7 +118,7 @@ const CreateModal: React.FC<Props> = ({
             alt="cover-image"
             width={132}
             height={132}
-            className={`${!uploadedImageSrc && 'opacity-50'} absolute -translate-x-1/2 -translate-y-2/3 left-1/2`}
+            className={`${!uploadedImageSrc && 'opacity-50'} absolute -translate-x-1/2 -translate-y-2/3 left-1/2 rounded-full`}
           />
         </div>
         <form onSubmit={handleSubmit} className=" mt-5">

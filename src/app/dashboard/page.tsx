@@ -102,7 +102,7 @@ export default function Dashboard() {
                       : '/assets/icons/profile.svg'
                   }
                   alt="profile"
-                  className="w-full h-full rounded-full"
+                  className="w-full h-full rounded-full object-cover"
                 />
               </div>
             </div>

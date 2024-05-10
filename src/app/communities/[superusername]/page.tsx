@@ -107,12 +107,12 @@ const Username: NextPage<Props> = async ({ params }) => {
               <div className="w-12 h-12 rounded-full">
                 <img
                   src={
-                    data && data[0] && data[0].avatar
-                      ? data[0].avatar
+                    data
+                      ? data.documents[0].avatar
                       : '/assets/icons/profile.svg'
                   }
                   alt="profile"
-                  className="w-full h-full rounded-full"
+                  className="w-full h-full rounded-full object-cover"
                 />
               </div>
             </div>
