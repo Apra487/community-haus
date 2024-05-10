@@ -85,7 +85,6 @@ const CreateModal: React.FC<Props> = ({
         : FormStateSchemaWithoutGroupCreation.parse(formState);
     } catch (error: any) {
       alert(JSON.parse(error.message)[0].message);
-      console.log(JSON.parse(error.message));
       return;
     }
     updateUserName(formState.username);

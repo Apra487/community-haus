@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Modal from './Modal';
+import { z } from 'zod';
 import {
   useCreateStore,
   ICreateStore,
@@ -45,6 +46,11 @@ const RarityOptions: RarityToggle[] = [
     value: '',
   },
 ];
+
+const CountSchema = z
+  .number()
+  .positive('Must be a positive number')
+  .min(1, 'Must be greater than zero');
 
 interface Props {
   requiresGroupCreation: boolean;
@@ -88,6 +94,12 @@ const CriteriaModal: React.FC<Props> = ({
   };
 
   const handleRarityValueChange = (index: number, value: string) => {
+    try {
+      value !== '' && CountSchema.parse(Number(value));
+    } catch (error) {
+      alert(JSON.parse(error.message)[0].message);
+      return;
+    }
     if (!isNaN(Number(value))) {
       setRarityToggles((prev) =>
         prev.map((item, i) => (i === index ? { ...item, value } : item))
@@ -98,6 +110,12 @@ const CriteriaModal: React.FC<Props> = ({
   const handleNumericChange =
     (setter: React.Dispatch<React.SetStateAction<string>>) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
+      try {
+        e.target.value !== '' && CountSchema.parse(Number(e.target.value));
+      } catch (error) {
+        alert(JSON.parse(error.message)[0].message);
+        return;
+      }
       const { value } = e.target;
       if (!isNaN(Number(value))) {
         setter(value);
