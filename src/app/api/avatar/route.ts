@@ -1,6 +1,5 @@
-import Moralis from 'moralis';
-
 import { mongoClient } from '@/utils/mongodb';
+import { connectMoralis } from '@/utils/moralis';
 
 export const POST = async (req: Request) => {
   const formData = await req.formData();
@@ -43,7 +42,7 @@ export const POST = async (req: Request) => {
     });
   }
 
-  await Moralis.start({ apiKey: process.env.MORALIS_API_KEY });
+  const moralisInstance = await connectMoralis();
 
   const uniqueImageName =
     Date.now() + '-' + Math.round(Math.random() * 1e9) + '-' + username;
@@ -58,7 +57,7 @@ export const POST = async (req: Request) => {
     },
   ];
 
-  const response = await Moralis.EvmApi.ipfs.uploadFolder({
+  const response = await moralisInstance.EvmApi.ipfs.uploadFolder({
     abi: imageABI,
   });
 
