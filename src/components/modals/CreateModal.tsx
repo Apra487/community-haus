@@ -1,6 +1,7 @@
 'use client;';
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { z } from 'zod';
 
 import Modal from './Modal';
 import { useCreateStore, ICreateStore } from '@/stores';
@@ -13,6 +14,30 @@ type FormState = {
   description: string;
   logo: File | undefined;
 };
+
+const FormStateSchemaWithoutGroupCreation = z.object({
+  username: z
+    .string()
+    .regex(
+      /^[a-zA-Z0-9_]+$/,
+      'Username must contain only letters, numbers, and underscores'
+    ),
+  communityChatId: z
+    .string()
+    .regex(
+      /^\d+$/,
+      'Community Chat ID must be a positive number without any signs'
+    ),
+});
+
+const FormStateSchemaWithGroupCreation = z.object({
+  username: z
+    .string()
+    .regex(
+      /^[a-zA-Z0-9_]+$/,
+      'Username must contain only letters, numbers, and underscores'
+    ),
+});
 
 interface Props {
   requiresGroupCreation: boolean;
@@ -54,6 +79,15 @@ const CreateModal: React.FC<Props> = ({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    try {
+      requiresGroupCreation
+        ? FormStateSchemaWithGroupCreation.parse(formState)
+        : FormStateSchemaWithoutGroupCreation.parse(formState);
+    } catch (error: any) {
+      alert(JSON.parse(error.message)[0].message);
+      console.log(JSON.parse(error.message));
+      return;
+    }
     updateUserName(formState.username);
     updateTelegramId(formState.telegramId);
     updateNameOfCommunity(formState.communityName);
