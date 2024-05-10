@@ -22,6 +22,9 @@ export default function Dashboard() {
   const [chatIDs, setChatIDs] = useState<{
     [tag: string]: string;
   }>({});
+  const [creatorTelegramId, setCreatorTelegramId] = useState<{
+    [tag: string]: string;
+  }>({});
 
   useEffect(() => {
     if (!superUsername) {
@@ -47,6 +50,9 @@ export default function Dashboard() {
       const chatIDsData: {
         [tag: string]: string;
       } = {};
+      const creatorTelegramIdData: {
+        [tag: string]: string;
+      } = {};
       const telegramMembersData: {
         [tag: string]: string[];
       } = {};
@@ -55,6 +61,7 @@ export default function Dashboard() {
         const tag = community.username.split('-')[1] as string;
         usersData[tag] = community.users as string[];
         chatIDsData[tag] = community.chatID;
+        creatorTelegramIdData[tag] = community.telegramID;
 
         const telegramMemberResponse = await fetch(
           `/api/telegram-member?chatID=${community.chatID}`,
@@ -68,6 +75,7 @@ export default function Dashboard() {
       }
       setUsers(usersData);
       setChatIDs(chatIDsData);
+      setCreatorTelegramId(creatorTelegramIdData);
       setTelegramMembers(telegramMembersData);
     }
     fetchCommunityData();
@@ -227,12 +235,14 @@ export default function Dashboard() {
                                 </p>
                               )}
                             </div>
-                            <div>
-                              <KickButton
-                                chatID={chatIDs[key]}
-                                telegramUserID={member}
-                              />
-                            </div>
+                            {member !== creatorTelegramId[key] && (
+                              <div>
+                                <KickButton
+                                  chatID={chatIDs[key]}
+                                  telegramUserID={member}
+                                />
+                              </div>
+                            )}
                           </div>
                         );
                       })}
