@@ -1,23 +1,76 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { DashboardBlockCard } from '@/components/cards';
+import { KickButton } from '@/components/buttons';
 import { IDashboardStore, useDashboardStore } from '@/stores';
 import Image from 'next/image';
 
 export default function Dashboard() {
   const router = useRouter();
-  const { superUsername, communityData } = useDashboardStore(
-    (store: IDashboardStore) => ({
-      superUsername: store.superUsername,
-      communityData: store.communityData,
-    })
-  );
+  const { superUsername } = useDashboardStore((store: IDashboardStore) => ({
+    superUsername: store.superUsername,
+  }));
+
+  const [avatar, setAvatar] = useState<string>('');
+  const [users, setUsers] = useState<{
+    [tag: string]: string[];
+  }>({});
+  const [telegramMembers, setTelegramMembers] = useState<{
+    [tag: string]: string[];
+  }>({});
+  const [chatIDs, setChatIDs] = useState<{
+    [tag: string]: string;
+  }>({});
 
   useEffect(() => {
     if (!superUsername) {
       router.push('/creator');
     }
+    async function fetchCommunityData() {
+      const response = await fetch(
+        `/api/communities?superUsername=${superUsername}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      const data = await response.json();
+      const communitiesData = data.documents;
+      setAvatar(communitiesData[0].avatar);
+
+      const usersData: {
+        [tag: string]: string[];
+      } = {};
+      const chatIDsData: {
+        [tag: string]: string;
+      } = {};
+      const telegramMembersData: {
+        [tag: string]: string[];
+      } = {};
+      for (let i = 0; i < communitiesData.length; i++) {
+        const community = communitiesData[i];
+        const tag = community.username.split('-')[1] as string;
+        usersData[tag] = community.users as string[];
+        chatIDsData[tag] = community.chatID;
+
+        const telegramMemberResponse = await fetch(
+          `/api/telegram-member?chatID=${community.chatID}`,
+          {
+            method: 'GET',
+          }
+        );
+        const telegramData = await telegramMemberResponse.json();
+        const memberList = telegramData.data as string[];
+        telegramMembersData[tag] = memberList;
+      }
+      setUsers(usersData);
+      setChatIDs(chatIDsData);
+      setTelegramMembers(telegramMembersData);
+    }
+    fetchCommunityData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [superUsername]);
 
@@ -96,11 +149,7 @@ export default function Dashboard() {
               </div>
               <div className="w-12 h-12 rounded-full bg-primary">
                 <img
-                  src={
-                    communityData && communityData[0].avatar
-                      ? communityData[0].avatar
-                      : '/assets/icons/profile.svg'
-                  }
+                  src={avatar ? avatar : '/assets/icons/profile.svg'}
                   alt="profile"
                   className="w-full h-full rounded-full object-cover"
                 />
@@ -108,43 +157,91 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="flex mt-12 flex-col items-center sm:flex-row sm:items-start">
-            <div className="basis-3/5 flex justify-center align-center px-10 mb-16">
-              <div />
-              {superUsername && (
-                <div className="w-[716px] h-[354px] flex flex-col justify-between bg-header py-11 px-14">
-                  <h1 className="text-primary text-5xl font-bold">
-                    Your community has been{' '}
-                    <span className="text-accent">successfully created!</span>
-                  </h1>
-                  <h5 className="text-2xl font-bold mt-24">
-                    You have been{' '}
-                    <span className="text-accent">directly added</span> to the
-                    group.
-                  </h5>
-                  <div className="flex flex-col px-14 mt-5">
-                    <p className="mt-10">
-                      Here is the link you can share with your collectors.
-                    </p>
-                    <div className="px-5 py-3 mt-3 w-full bg-tertiary rounded-2xl flex justify-between">
-                      <div>{`community.haus/communities/${superUsername}`}</div>
-                      <Image
-                        src="/assets/icons/copy.svg"
-                        alt="copy"
-                        width={20}
-                        height={20}
-                        className="cursor-pointer"
-                        onClick={() => {
-                          navigator.clipboard.writeText(
-                            `community.haus/communities/${superUsername}`
-                          );
-                        }}
-                      />
+            <div className="flex flex-col px-10 gap-20">
+              <div className="basis-3/5 flex justify-center align-center mb-16">
+                {superUsername && (
+                  <div className="w-[716px] h-[354px] flex flex-col justify-between bg-header py-11 px-14">
+                    <h1 className="text-primary text-5xl font-bold">
+                      Your community has been{' '}
+                      <span className="text-accent">successfully created!</span>
+                    </h1>
+                    <h5 className="text-2xl font-bold mt-20">
+                      You have been{' '}
+                      <span className="text-accent">directly added</span> to the
+                      group. If not check DM form{' '}
+                      <span className="text-accent">community_haus</span>.
+                    </h5>
+                    <div className="flex flex-col px-14 mt-5">
+                      <p className="mt-10">
+                        Here is the link you can share with your collectors.
+                      </p>
+                      <div className="px-5 py-3 mt-3 w-full bg-tertiary rounded-2xl flex justify-between">
+                        <div>{`community.haus/communities/${superUsername}`}</div>
+                        <Image
+                          src="/assets/icons/copy.svg"
+                          alt="copy"
+                          width={20}
+                          height={20}
+                          className="cursor-pointer"
+                          onClick={() => {
+                            navigator.clipboard.writeText(
+                              `community.haus/communities/${superUsername}`
+                            );
+                          }}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
+              <div className="flex flex-col p-5 bg-tertiary rounded-2xl">
+                <h4 className="text-base font-semibold leading-6 text-white">
+                  Members List
+                </h4>
+                {Object.keys(users).map((key) => {
+                  return (
+                    <div key={key} className="pt-4">
+                      <h5 className="text-sm font-semibold leading-6 text-white">
+                        {' '}
+                        {key}
+                      </h5>
+                      {telegramMembers[key].map((member, index) => {
+                        if (member === 'community_haus') return null;
+                        const isEligible = users[key].includes(member);
+                        return (
+                          <div
+                            key={member}
+                            className="flex flex-row w-full items-center justify-between"
+                          >
+                            <div className="flex items-center">
+                              <p className="text-sm text-white ">
+                                {`${index}. ${member}`}
+                              </p>
+                              {isEligible ? (
+                                <p className="text-xs text-accent ml-2">
+                                  {`(Eligible)`}
+                                </p>
+                              ) : (
+                                <p className="text-xs text-secondary ml-2">
+                                  {`(Not Eligible)`}
+                                </p>
+                              )}
+                            </div>
+                            <div>
+                              <KickButton
+                                chatID={chatIDs[key]}
+                                telegramUserID={member}
+                              />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-            <div className="basis-2/5 mt-20">
+            <div className="basis-2/5">
               <div className="grid grid-cols-2 gap-10		">
                 <DashboardBlockCard />
                 <DashboardBlockCard />
