@@ -19,6 +19,7 @@ export type CommunityDataType = {
   twitterUrl: string;
   contractAddress: string;
   _id: string;
+  avatar: string;
 };
 
 export interface IDashboardStore {

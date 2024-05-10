@@ -111,6 +111,7 @@ const CriteriaModal: React.FC<Props> = ({
     nameOfCommunity,
     communityChatId,
     description,
+    avatar,
   } = useCreateStore((store: ICreateStore) => ({
     twitterUrl: store.twitterUrl,
     address: store.address,
@@ -119,6 +120,7 @@ const CriteriaModal: React.FC<Props> = ({
     nameOfCommunity: store.nameOfCommunity,
     communityChatId: store.communityChatId,
     description: store.description,
+    avatar: store.avatar,
   }));
   const { updateSuperUsername, updateCommunityData } = useDashboardStore(
     (store: IDashboardStore) => ({
@@ -242,8 +244,22 @@ const CriteriaModal: React.FC<Props> = ({
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        communityDatas.push(data);
 
+        const avatarFormData = new FormData();
+        avatarFormData.append('avatar', avatar);
+        avatarFormData.append(
+          'username',
+          `${jsonFormatedData.creatorUsername}-${rarity.rarity}`
+        );
+        const avatarReponse = await fetch('/api/avatar', {
+          method: 'POST',
+          body: avatarFormData,
+        });
+
+        const avatarData = await avatarReponse.json();
+        data.avatar = avatarData.data.url;
+
+        communityDatas.push(data);
         await delay(1000);
       }
 
@@ -267,6 +283,21 @@ const CriteriaModal: React.FC<Props> = ({
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
+
+        const avatarFormData = new FormData();
+        avatarFormData.append('avatar', avatar);
+        avatarFormData.append(
+          'username',
+          `${jsonFormatedData.creatorUsername}-Droplets`
+        );
+        const avatarReponse = await fetch('/api/avatar', {
+          method: 'POST',
+          body: avatarFormData,
+        });
+
+        const avatarData = await avatarReponse.json();
+        data.avatar = avatarData.data.url;
+
         communityDatas.push(data);
       }
 
@@ -290,6 +321,20 @@ const CriteriaModal: React.FC<Props> = ({
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
+
+        const avatarFormData = new FormData();
+        avatarFormData.append('avatar', avatar);
+        avatarFormData.append(
+          'username',
+          `${jsonFormatedData.creatorUsername}-General`
+        );
+        const avatarReponse = await fetch('/api/avatar', {
+          method: 'POST',
+          body: avatarFormData,
+        });
+
+        const avatarData = await avatarReponse.json();
+        data.avatar = avatarData.data.url;
         communityDatas.push(data);
       }
       console.log(communityDatas);

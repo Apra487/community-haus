@@ -29,6 +29,7 @@ interface Props {
 const Username: NextPage<Props> = async ({ params }) => {
   const superusername = params.superusername;
   const data = await getCommunitiesByUserame(superusername);
+  console.log(data);
 
   return (
     <main className="container flex flex-col justify-center items-center">
@@ -104,7 +105,15 @@ const Username: NextPage<Props> = async ({ params }) => {
                 />
               </div>
               <div className="w-12 h-12 rounded-full">
-                <img src="/assets/icons/profile.svg" alt="profile" />
+                <img
+                  src={
+                    data && data[0] && data[0].avatar
+                      ? data[0].avatar
+                      : '/assets/icons/profile.svg'
+                  }
+                  alt="profile"
+                  className="w-full h-full rounded-full"
+                />
               </div>
             </div>
           </div>

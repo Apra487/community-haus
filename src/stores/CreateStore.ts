@@ -9,6 +9,7 @@ export interface ICreateStore {
   nameOfCommunity: string | undefined;
   communityChatId: string | undefined;
   description: string | undefined;
+  avatar: File | undefined;
   updateTwitterUrl: (_twitterUrl: string) => void;
   updateAddress: (_address: string) => void;
   updateUserName: (_userName: string) => void;
@@ -16,6 +17,7 @@ export interface ICreateStore {
   updateNameOfCommunity: (_nameOfCommunity: string) => void;
   updateCommunityChatId: (_communityChatId: string) => void;
   updateDescription: (_description: string) => void;
+  updateAvatar: (_avatar: File | undefined) => void;
 }
 
 export const useCreateStore = create<ICreateStore>()(
@@ -29,6 +31,7 @@ export const useCreateStore = create<ICreateStore>()(
         nameOfCommunity: undefined,
         communityChatId: undefined,
         description: undefined,
+        avatar: undefined,
         updateTwitterUrl: (_twitterUrl: string) =>
           set({ twitterUrl: _twitterUrl }),
         updateAddress: (_address: string) => set({ address: _address }),
@@ -41,6 +44,7 @@ export const useCreateStore = create<ICreateStore>()(
           set({ communityChatId: _communityChatId }),
         updateDescription: (_description: string) =>
           set({ description: _description }),
+        updateAvatar: (_avatar: File | undefined) => set({ avatar: _avatar }),
       }),
       {
         name: 'create-store',

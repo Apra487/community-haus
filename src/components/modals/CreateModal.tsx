@@ -11,7 +11,7 @@ type FormState = {
   communityName: string;
   communityChatId: string;
   description: string;
-  logo: File | null;
+  logo: File | undefined;
 };
 
 interface Props {
@@ -29,12 +29,14 @@ const CreateModal: React.FC<Props> = ({
     updateNameOfCommunity,
     updateCommunityChatId,
     updateDescription,
+    updateAvatar,
   } = useCreateStore((store: ICreateStore) => ({
     updateUserName: store.updateUserName,
     updateTelegramId: store.updateTelegramId,
     updateNameOfCommunity: store.updateNameOfCommunity,
     updateCommunityChatId: store.updateCommunityChatId,
     updateDescription: store.updateDescription,
+    updateAvatar: store.updateAvatar,
   }));
 
   const [formState, setFormState] = useState<FormState>({
@@ -43,18 +45,39 @@ const CreateModal: React.FC<Props> = ({
     communityName: '',
     communityChatId: '',
     description: '',
-    logo: null,
+    logo: undefined,
   });
   const [toggleInstructions, setToggleInstructions] = useState(false);
+  const [uploadedImageSrc, setUploadedImageSrc] = useState<string | undefined>(
+    undefined
+  );
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     updateUserName(formState.username);
     updateTelegramId(formState.telegramId);
     updateNameOfCommunity(formState.communityName);
     updateCommunityChatId(formState.communityChatId);
     updateDescription(formState.description);
+    updateAvatar(formState.logo);
     console.log(formState);
+
+    const res = await fetch(
+      `/api/check/super-username?superUsername=${formState.username}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    const data = await res.json();
+    console.log(data);
+    if (data.alredyExists) {
+      alert('Username should be unique!');
+      return;
+    }
+
     closeActon();
   };
 
@@ -62,6 +85,12 @@ const CreateModal: React.FC<Props> = ({
     const files = event.target.files;
     if (files && files[0]) {
       setFormState({ ...formState, logo: files[0] });
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        // @ts-ignore
+        setUploadedImageSrc(e.target.result);
+      };
+      reader.readAsDataURL(files[0]);
     }
   };
 
@@ -83,11 +112,13 @@ const CreateModal: React.FC<Props> = ({
         />
         <div className="relative">
           <Image
-            src="/assets/bgs/profile.svg"
+            src={
+              uploadedImageSrc ? uploadedImageSrc : '/assets/bgs/profile.svg'
+            }
             alt="cover-image"
             width={132}
             height={132}
-            className="opacity-50 absolute -translate-x-1/2 -translate-y-2/3 left-1/2"
+            className={`${!uploadedImageSrc && 'opacity-50'} absolute -translate-x-1/2 -translate-y-2/3 left-1/2`}
           />
         </div>
         <form onSubmit={handleSubmit} className=" mt-5">
@@ -207,21 +238,21 @@ const CreateModal: React.FC<Props> = ({
               className="bg-tertiary font-normal w-full text-sm py-3 px-4 rounded-2xl focus:outline-none mt-2"
             />
           </label>
-          {/* <label
+          <label
             htmlFor="logo"
-            className="mt-3 flex flex-col justify-center items-start text-sm font-semibold leading-6 text-white"
+            className="mt-3 flex flex-col justify-center items-start text-sm font-semibold leading-6 text-white cursor-pointer"
           >
             Upload your logo
             <input
-              className=""
               type="file"
               onChange={handleFileChange}
               accept="image/*"
+              className="cursor-pointer"
             />
           </label>
           <p className="text-xs text-secondary mt-1">
             Keep the logo size under 250 x 150 px.
-          </p> */}
+          </p>
           <div className="flex w-full justify-center">
             <button type="submit" className="btn-primary mt-10">
               Submit

@@ -7,9 +7,12 @@ import Image from 'next/image';
 
 export default function Dashboard() {
   const router = useRouter();
-  const { superUsername } = useDashboardStore((store: IDashboardStore) => ({
-    superUsername: store.superUsername,
-  }));
+  const { superUsername, communityData } = useDashboardStore(
+    (store: IDashboardStore) => ({
+      superUsername: store.superUsername,
+      communityData: store.communityData,
+    })
+  );
 
   useEffect(() => {
     if (!superUsername) {
@@ -91,8 +94,16 @@ export default function Dashboard() {
                   alt="notification"
                 />
               </div>
-              <div className="w-12 h-12 rounded-full">
-                <img src="/assets/icons/profile.svg" alt="profile" />
+              <div className="w-12 h-12 rounded-full bg-primary">
+                <img
+                  src={
+                    communityData && communityData[0].avatar
+                      ? communityData[0].avatar
+                      : '/assets/icons/profile.svg'
+                  }
+                  alt="profile"
+                  className="w-full h-full rounded-full"
+                />
               </div>
             </div>
           </div>

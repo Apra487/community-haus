@@ -7,6 +7,14 @@ body {
   background: #0d0d0d;
 }
 
+input[type='file'] {
+  cursor: pointer;
+}
+
+input[type='file']::file-selector-button {
+  cursor: pointer;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
