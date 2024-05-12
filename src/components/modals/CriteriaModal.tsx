@@ -208,6 +208,18 @@ const CriteriaModal: React.FC<Props> = ({
       }
       const data = await reponse.json();
       console.log(data);
+
+      const avatarFormData = new FormData();
+      avatarFormData.append('avatar', avatar);
+      avatarFormData.append('username', `${jsonFormatedData.creatorUsername}`);
+      const avatarReponse = await fetch('/api/avatar', {
+        method: 'POST',
+        body: avatarFormData,
+      });
+
+      const avatarData = await avatarReponse.json();
+      data.avatar = avatarData.data.url;
+
       await updateCommunityData([data]);
       updateSuperUsername(userName);
       router.push('/dashboard');
