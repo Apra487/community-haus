@@ -17,6 +17,7 @@ export async function POST(request: Request) {
     dropsNumber,
     twitterUrl,
     contractAddress,
+    isSuperGroup,
   } = await request.json();
 
   if (!creatorUsername) {
@@ -92,57 +93,135 @@ export async function POST(request: Request) {
     title: communityName,
   };
 
-  const result = <any>(
-    await telegramClient.invoke(new Api.messages.CreateChat(chatInfo))
-  );
+  if (isSuperGroup) {
+    const supergroup = await telegramClient.invoke(
+      new Api.channels.CreateChannel({
+        title: communityName,
+        about: communityDescription,
+        megagroup: true,
+      })
+    );
+    const channelID = (supergroup as any).updates[1].channelId;
+    await telegramClient.invoke(
+      new Api.channels.InviteToChannel({
+        channel: channelID,
+        users: [creatorTelegramID],
+      })
+    );
+    await telegramClient.invoke(
+      new Api.channels.EditAdmin({
+        channel: channelID,
+        userId: creatorTelegramID,
+        adminRights: new Api.ChatAdminRights({
+          changeInfo: true,
+          postMessages: true,
+          editMessages: true,
+          deleteMessages: true,
+          banUsers: true,
+          inviteUsers: true,
+          pinMessages: true,
+          addAdmins: true,
+          anonymous: true,
+          manageCall: true,
+          other: true,
+        }),
+        rank: 'admin',
+      })
+    );
+    const inviteResponse = await telegramClient.invoke(
+      new Api.messages.ExportChatInvite({
+        peer: channelID,
+        legacyRevokePermanent: true,
+        requestNeeded: false,
+        title: 'Invite Link',
+      })
+    );
+    const inviteLink = (inviteResponse as any).link;
+    await telegramClient.sendMessage(creatorTelegramID, {
+      message: inviteLink,
+    });
+    const creatorChannelInfo = {
+      username: creatorUsername,
+      telegramID: creatorTelegramID,
+      telegramInviteLink: inviteLink,
+      communityName,
+      communityDescription,
+      chatID: `-100${BigInteger(channelID).toString()}`,
+      users: [creatorTelegramID],
+      criteria: {
+        common: parseInt(commonCriteria),
+        rate: parseInt(rareCriteria),
+        legendary: parseInt(legendaryCriteria),
+        ultimate: parseInt(ultimateCriteria),
+        droplets: parseInt(droplets),
+        dropsNumber: parseInt(dropsNumber),
+      },
+      twitterUrl,
+      contractAddress,
+      supergroup: true,
+    };
+    await collection.insertOne(creatorChannelInfo);
+    return Response.json({
+      message: 'Supergroup created',
+      data: creatorChannelInfo,
+    });
+  } else {
+    const result = <any>(
+      await telegramClient.invoke(new Api.messages.CreateChat(chatInfo))
+    );
 
-  const chatID = result.chats.find((chat: any) => chat.className === 'Chat').id;
+    const chatID = result.chats.find(
+      (chat: any) => chat.className === 'Chat'
+    ).id;
 
-  await telegramClient.invoke(
-    new Api.messages.EditChatAdmin({
-      chatId: chatID,
-      userId: creatorTelegramID,
-      isAdmin: true,
-    })
-  );
+    await telegramClient.invoke(
+      new Api.messages.EditChatAdmin({
+        chatId: chatID,
+        userId: creatorTelegramID,
+        isAdmin: true,
+      })
+    );
 
-  const inviteResponse = await telegramClient.invoke(
-    new Api.messages.ExportChatInvite({
-      peer: BigInteger(chatID),
-      legacyRevokePermanent: true,
-      requestNeeded: false,
-      title: 'Invite Link',
-    })
-  );
+    const inviteResponse = await telegramClient.invoke(
+      new Api.messages.ExportChatInvite({
+        peer: BigInteger(chatID),
+        legacyRevokePermanent: true,
+        requestNeeded: false,
+        title: 'Invite Link',
+      })
+    );
 
-  const inviteLink = (inviteResponse as any).link;
+    const inviteLink = (inviteResponse as any).link;
 
-  await telegramClient.sendMessage(creatorTelegramID, { message: inviteLink });
+    await telegramClient.sendMessage(creatorTelegramID, {
+      message: inviteLink,
+    });
 
-  const creatorChannelInfo = {
-    username: creatorUsername,
-    telegramID: creatorTelegramID,
-    telegramInviteLink: inviteLink,
-    communityName,
-    communityDescription,
-    chatID: chatID.value.toString(),
-    users: [creatorTelegramID],
-    criteria: {
-      common: parseInt(commonCriteria),
-      rate: parseInt(rareCriteria),
-      legendary: parseInt(legendaryCriteria),
-      ultimate: parseInt(ultimateCriteria),
-      droplets: parseInt(droplets),
-      dropsNumber: parseInt(dropsNumber),
-    },
-    twitterUrl,
-    contractAddress,
-  };
+    const creatorChannelInfo = {
+      username: creatorUsername,
+      telegramID: creatorTelegramID,
+      telegramInviteLink: inviteLink,
+      communityName,
+      communityDescription,
+      chatID: chatID.value.toString(),
+      users: [creatorTelegramID],
+      criteria: {
+        common: parseInt(commonCriteria),
+        rate: parseInt(rareCriteria),
+        legendary: parseInt(legendaryCriteria),
+        ultimate: parseInt(ultimateCriteria),
+        droplets: parseInt(droplets),
+        dropsNumber: parseInt(dropsNumber),
+      },
+      twitterUrl,
+      contractAddress,
+    };
 
-  await collection.insertOne(creatorChannelInfo);
+    await collection.insertOne(creatorChannelInfo);
 
-  return Response.json({
-    message: 'Group created',
-    data: creatorChannelInfo,
-  });
+    return Response.json({
+      message: 'Group created',
+      data: creatorChannelInfo,
+    });
+  }
 }

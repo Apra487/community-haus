@@ -15,6 +15,7 @@ export async function POST(request: Request) {
     twitterUrl,
     contractAddress,
     chatID,
+    isSuperGroup,
   } = await request.json();
 
   if (!chatID) {
@@ -101,6 +102,7 @@ export async function POST(request: Request) {
     },
     twitterUrl,
     contractAddress,
+    isSuperGroup,
   };
 
   await collection.insertOne(creatorChannelInfo);

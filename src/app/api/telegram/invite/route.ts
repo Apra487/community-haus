@@ -3,7 +3,7 @@ import { telegramClient } from '@/utils/telegram';
 import { mongoClient } from '@/utils/mongodb';
 
 export async function POST(request: Request) {
-  const { chatID, userID } = await request.json();
+  const { chatID, userID, isSuperGroup } = await request.json();
 
   await telegramClient.start({
     phoneNumber: '',
@@ -13,19 +13,42 @@ export async function POST(request: Request) {
   });
   await mongoClient.connect();
 
+  const database = mongoClient.db('community_haus');
+  const collection = database.collection('creater_groups');
+
+  const query = { chatID };
+  const document = await collection.findOne(query);
+
   const inviteInfo = {
     chatId: chatID,
     userId: userID,
     fwdLimit: 43,
   };
 
-  await telegramClient.invoke(new Api.messages.AddChatUser(inviteInfo));
+  if (isSuperGroup) {
+    await telegramClient.invoke(
+      new Api.channels.InviteToChannel({
+        channel: chatID,
+        users: [userID],
+      })
+    );
 
-  const database = mongoClient.db('community_haus');
-  const collection = database.collection('creater_groups');
+    const inviteResponse = await telegramClient.invoke(
+      new Api.messages.ExportChatInvite({
+        peer: chatID,
+        legacyRevokePermanent: true,
+        requestNeeded: false,
+        title: 'Invite Link',
+      })
+    );
 
-  const query = { chatID };
-  const document = await collection.findOne(query);
+    const inviteLink = (inviteResponse as any).link;
+    await telegramClient.sendMessage(userID, {
+      message: inviteLink,
+    });
+  } else {
+    await telegramClient.invoke(new Api.messages.AddChatUser(inviteInfo));
+  }
 
   if (document) {
     document.users.push(userID);
