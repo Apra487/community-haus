@@ -25,6 +25,9 @@ export default function Dashboard() {
   const [creatorTelegramId, setCreatorTelegramId] = useState<{
     [tag: string]: string;
   }>({});
+  const [isSuperGroup, setIsSuperGroup] = useState<{
+    [tag: string]: boolean;
+  }>({});
 
   useEffect(() => {
     if (!superUsername) {
@@ -56,20 +59,25 @@ export default function Dashboard() {
       const telegramMembersData: {
         [tag: string]: string[];
       } = {};
+      const isSuperGroupData: {
+        [tag: string]: boolean;
+      } = {};
       for (let i = 0; i < communitiesData.length; i++) {
         const community = communitiesData[i];
         const tag = community.username.split('-')[1] as string;
         usersData[tag] = community.users as string[];
         chatIDsData[tag] = community.chatID;
         creatorTelegramIdData[tag] = community.telegramID;
+        isSuperGroupData[tag] = community.supergroup ? true : false;
 
         const telegramMemberResponse = await fetch(
-          `/api/telegram-member?chatID=${community.chatID}`,
+          `/api/telegram-member?chatID=${community.chatID}&isSuperGroup=${isSuperGroupData[tag]}`,
           {
             method: 'GET',
           }
         );
         const telegramData = await telegramMemberResponse.json();
+        console.log(telegramData);
         const memberList = telegramData.data as string[];
         telegramMembersData[tag] = memberList;
       }
@@ -77,6 +85,7 @@ export default function Dashboard() {
       setChatIDs(chatIDsData);
       setCreatorTelegramId(creatorTelegramIdData);
       setTelegramMembers(telegramMembersData);
+      setIsSuperGroup(isSuperGroupData);
     }
     fetchCommunityData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -213,7 +222,7 @@ export default function Dashboard() {
                         {' '}
                         {key}
                       </h5>
-                      {telegramMembers[key].map((member, index) => {
+                      {telegramMembers[key].map((member) => {
                         if (member === 'community_haus') return null;
                         const isEligible = users[key].includes(member);
                         return (
@@ -223,7 +232,7 @@ export default function Dashboard() {
                           >
                             <div className="flex items-center">
                               <p className="text-sm text-white ">
-                                {`${index}. ${member}`}
+                                {`${member}`}
                               </p>
                               {isEligible ? (
                                 <p className="text-xs text-accent ml-2">
@@ -240,6 +249,7 @@ export default function Dashboard() {
                                 <KickButton
                                   chatID={chatIDs[key]}
                                   telegramUserID={member}
+                                  isSuperGroup={isSuperGroup[key]}
                                 />
                               </div>
                             )}

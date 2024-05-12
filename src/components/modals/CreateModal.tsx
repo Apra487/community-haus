@@ -25,10 +25,7 @@ const FormStateSchemaWithoutGroupCreation = z.object({
     ),
   communityChatId: z
     .string()
-    .regex(
-      /^\d+$/,
-      'Community Chat ID must be a positive number without any signs'
-    ),
+    .regex(/^-?\d+(.\d+)?$/, 'Community Chat ID must be a number'),
 });
 
 const FormStateSchemaWithGroupCreation = z.object({
@@ -287,9 +284,9 @@ const CreateModal: React.FC<Props> = ({
                       • Add @community_haus to your group and make it admin.
                     </p>
                     <p className="text-xs text-secondary mt-1">
-                      {`• Add @raw_data_bot to your group. This would give you`}
+                      {`• Add @SimpleID_Bot to your group. This would give you`}
                       <br />
-                      {`chat ID. (eg: 4125558344)`}
+                      {`group ID (eg: 4125558344) or supergroup ID (eg: -1001234567890).`}
                     </p>
                   </div>
                 </section>

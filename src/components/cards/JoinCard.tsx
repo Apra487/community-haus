@@ -32,6 +32,7 @@ const JoinCard: React.FC<Props> = ({ communityData }) => {
       const jsonFormatedBody = JSON.stringify({
         chatID: communityData.chatID,
         userID: telegramId,
+        isSuperGroup: communityData.supergroup,
       });
       const response = await fetch('/api/telegram/invite', {
         method: 'POST',
@@ -51,7 +52,13 @@ const JoinCard: React.FC<Props> = ({ communityData }) => {
       setIsJoined(false);
       console.error('Error joining telegram group');
     }
-  }, [communityData.chatID, telegramId, setIsJoining, setIsJoined]);
+  }, [
+    communityData.chatID,
+    communityData.supergroup,
+    telegramId,
+    setIsJoining,
+    setIsJoined,
+  ]);
 
   // useEffect(() => {
   //   async function checkIfEligible(address: string) {

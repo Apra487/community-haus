@@ -127,6 +127,7 @@ const CriteriaModal: React.FC<Props> = ({
     telegramId,
     userName,
     nameOfCommunity,
+    communityType,
     communityChatId,
     description,
     avatar,
@@ -136,6 +137,7 @@ const CriteriaModal: React.FC<Props> = ({
     telegramId: store.telegramId,
     userName: store.userName,
     nameOfCommunity: store.nameOfCommunity,
+    communityType: store.communityType,
     communityChatId: store.communityChatId,
     description: store.description,
     avatar: store.avatar,
@@ -167,6 +169,7 @@ const CriteriaModal: React.FC<Props> = ({
       chatID: communityChatId,
       droplets: dropletsBasedEnabled ? droplets : '',
       dropsNumber: dropsOwnedEnabled ? dropsOwned : '',
+      isSuperGroup: communityType === 'supergroup',
     };
     if (rarityBasedEnabled) {
       const rarities = rarityToggles
@@ -233,6 +236,7 @@ const CriteriaModal: React.FC<Props> = ({
       communityDescription: description,
       twitterUrl: twitterUrl,
       contractAddress: address,
+      isSuperGroup: communityType === 'supergroup',
     };
 
     function delay(ms: number) {

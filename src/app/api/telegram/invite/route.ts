@@ -26,26 +26,25 @@ export async function POST(request: Request) {
   };
 
   if (isSuperGroup) {
-    await telegramClient.invoke(
-      new Api.channels.InviteToChannel({
-        channel: chatID,
-        users: [userID],
-      })
-    );
-
-    const inviteResponse = await telegramClient.invoke(
-      new Api.messages.ExportChatInvite({
-        peer: chatID,
-        legacyRevokePermanent: true,
-        requestNeeded: false,
-        title: 'Invite Link',
-      })
-    );
-
-    const inviteLink = (inviteResponse as any).link;
-    await telegramClient.sendMessage(userID, {
-      message: inviteLink,
-    });
+    try {
+      await telegramClient.invoke(
+        new Api.channels.InviteToChannel({
+          channel: chatID,
+          users: [userID],
+        })
+      );
+    } catch (error) {
+      const getFullChanel = await telegramClient.invoke(
+        new Api.channels.GetFullChannel({
+          channel: chatID,
+        })
+      );
+      console.log(getFullChanel);
+      const inviteLink = (getFullChanel as any).fullChat.exportedInvite.link;
+      await telegramClient.sendMessage(userID, {
+        message: inviteLink,
+      });
+    }
   } else {
     await telegramClient.invoke(new Api.messages.AddChatUser(inviteInfo));
   }

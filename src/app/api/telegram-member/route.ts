@@ -20,22 +20,33 @@ export async function GET(request: Request) {
     onError: (err) => console.log(err),
   });
 
-  let fullChat;
-  if (isSuperGroup) {
-    fullChat = await telegramClient.invoke(
-      new Api.channels.GetFullChannel({
+  if (isSuperGroup === 'true') {
+    const channelParticipants = await telegramClient.invoke(
+      new Api.channels.GetParticipants({
         channel: chatID,
+        filter: new Api.ChannelParticipantsRecent(),
+        offset: 0,
+        limit: 1000,
+        hash: BigNumber('-7429031120535214903'),
       })
     );
-  } else {
-    fullChat = await telegramClient.invoke(
-      new Api.messages.GetFullChat({
-        chatId: BigNumber(chatID),
-      })
-    );
+
+    const participantsArray = [];
+    for (const participant of (channelParticipants as any).participants) {
+      const userObj = await telegramClient.getEntity(participant.userId);
+      participantsArray.push((userObj as any).username);
+    }
+    return Response.json({
+      message: 'User list',
+      data: participantsArray,
+    });
   }
 
-  console.log(fullChat);
+  const fullChat = await telegramClient.invoke(
+    new Api.messages.GetFullChat({
+      chatId: BigNumber(chatID),
+    })
+  );
   return Response.json({
     message: 'User list',
     data: (fullChat as any).users.map((user: any) => user.username),

@@ -149,7 +149,7 @@ const VerifyModal: React.FC<Props> = ({ closeAction, waitlistAction }) => {
         </div>
         <div className="flex w-full mt-5 justify-between items-center space-x-2">
           <label className="text-base font-bold">
-            Already have telegram group?
+            Already have telegram community?
           </label>
           <button
             onClick={toggleSwitch}
