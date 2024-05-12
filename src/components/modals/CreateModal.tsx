@@ -10,6 +10,7 @@ type FormState = {
   username: string;
   telegramId: string;
   communityName: string;
+  communityType: 'group' | 'supergroup';
   communityChatId: string;
   description: string;
   logo: File | undefined;
@@ -52,6 +53,7 @@ const CreateModal: React.FC<Props> = ({
     updateUserName,
     updateTelegramId,
     updateNameOfCommunity,
+    updateCommunityType,
     updateCommunityChatId,
     updateDescription,
     updateAvatar,
@@ -59,6 +61,7 @@ const CreateModal: React.FC<Props> = ({
     updateUserName: store.updateUserName,
     updateTelegramId: store.updateTelegramId,
     updateNameOfCommunity: store.updateNameOfCommunity,
+    updateCommunityType: store.updateCommunityType,
     updateCommunityChatId: store.updateCommunityChatId,
     updateDescription: store.updateDescription,
     updateAvatar: store.updateAvatar,
@@ -68,6 +71,7 @@ const CreateModal: React.FC<Props> = ({
     username: '',
     telegramId: '',
     communityName: '',
+    communityType: 'group',
     communityChatId: '',
     description: '',
     logo: undefined,
@@ -79,6 +83,7 @@ const CreateModal: React.FC<Props> = ({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    console.log(event);
     try {
       requiresGroupCreation
         ? FormStateSchemaWithGroupCreation.parse(formState)
@@ -90,6 +95,7 @@ const CreateModal: React.FC<Props> = ({
     updateUserName(formState.username);
     updateTelegramId(formState.telegramId);
     updateNameOfCommunity(formState.communityName);
+    updateCommunityType(formState.communityType);
     updateCommunityChatId(formState.communityChatId);
     updateDescription(formState.description);
     updateAvatar(formState.logo);
@@ -205,6 +211,48 @@ const CreateModal: React.FC<Props> = ({
               required
               className="bg-tertiary w-full font-normal text-sm py-3 px-4 rounded-2xl focus:outline-none mt-2"
             />
+          </label>
+          <label
+            htmlFor="communityType"
+            className="mt-3 flex flex-col justify-center items-start text-sm font-semibold leading-6 text-white"
+          >
+            Type of the Community
+            <div className="flex flex-row items-center mt-2 justify-between gap-5">
+              <div className="flex items-center">
+                <input
+                  id="group-radio"
+                  type="radio"
+                  value="group"
+                  name="communityType"
+                  className="w-4 h-4 text-accent bg-gray-100 border-gray-300 focus:ring-transparent dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  onChange={handleChange}
+                  checked={formState.communityType === 'group'}
+                />
+                <label
+                  htmlFor="group-radio"
+                  className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  Group
+                </label>
+              </div>
+              <div className="flex items-center">
+                <input
+                  id="supergroup-radio"
+                  type="radio"
+                  value="supergroup"
+                  name="communityType"
+                  className="w-4 h-4 text-accent bg-gray-100 border-gray-300 focus:ring-transparent dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  onChange={handleChange}
+                  checked={formState.communityType === 'supergroup'}
+                />
+                <label
+                  htmlFor="supergroup-radio"
+                  className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  Supergroup
+                </label>
+              </div>
+            </div>
           </label>
           {!requiresGroupCreation && (
             <label
