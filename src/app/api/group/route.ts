@@ -16,6 +16,7 @@ export async function POST(request: Request) {
     contractAddress,
     chatID,
     isSuperGroup,
+    inviteLink,
   } = await request.json();
 
   if (!chatID) {
@@ -53,6 +54,11 @@ export async function POST(request: Request) {
       message: 'Contract address is required',
     });
   }
+  if (!inviteLink) {
+    return Response.json({
+      message: 'Invite link is required',
+    });
+  }
 
   if (!commonCriteria) {
     commonCriteria = -1;
@@ -88,6 +94,7 @@ export async function POST(request: Request) {
   const creatorChannelInfo = {
     username: creatorUsername,
     telegramID: creatorTelegramID,
+    telegramInviteLink: inviteLink,
     communityName,
     communityDescription,
     chatID,

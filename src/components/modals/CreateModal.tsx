@@ -12,6 +12,7 @@ type FormState = {
   communityName: string;
   communityType: 'group' | 'supergroup';
   communityChatId: string;
+  communityInviteLink: string;
   description: string;
   logo: File | undefined;
 };
@@ -54,6 +55,7 @@ const CreateModal: React.FC<Props> = ({
     updateCommunityChatId,
     updateDescription,
     updateAvatar,
+    updateCommunityInviteLink,
   } = useCreateStore((store: ICreateStore) => ({
     updateUserName: store.updateUserName,
     updateTelegramId: store.updateTelegramId,
@@ -62,6 +64,7 @@ const CreateModal: React.FC<Props> = ({
     updateCommunityChatId: store.updateCommunityChatId,
     updateDescription: store.updateDescription,
     updateAvatar: store.updateAvatar,
+    updateCommunityInviteLink: store.updateCommunityInviteLink,
   }));
 
   const [formState, setFormState] = useState<FormState>({
@@ -70,6 +73,7 @@ const CreateModal: React.FC<Props> = ({
     communityName: '',
     communityType: 'group',
     communityChatId: '',
+    communityInviteLink: '',
     description: '',
     logo: undefined,
   });
@@ -94,6 +98,7 @@ const CreateModal: React.FC<Props> = ({
     updateNameOfCommunity(formState.communityName);
     updateCommunityType(formState.communityType);
     updateCommunityChatId(formState.communityChatId);
+    updateCommunityInviteLink(formState.communityInviteLink);
     updateDescription(formState.description);
     updateAvatar(formState.logo);
     console.log(formState);
@@ -299,6 +304,23 @@ const CreateModal: React.FC<Props> = ({
                 onChange={handleChange}
                 required
                 className="bg-tertiary font-normal w-full text-sm py-3 px-4 rounded-2xl focus:outline-none mt-2"
+              />
+            </label>
+          )}
+          {!requiresGroupCreation && (
+            <label
+              htmlFor="communityInviteLink"
+              className="mt-3 flex flex-col justify-center items-start text-sm font-semibold leading-6 text-white"
+            >
+              Telegram Invite Link
+              <input
+                name="communityInviteLink"
+                type="text"
+                value={formState.communityInviteLink}
+                placeholder="Enter telegram invite link of your community"
+                onChange={handleChange}
+                required
+                className="bg-tertiary w-full font-normal text-sm py-3 px-4 rounded-2xl focus:outline-none mt-2"
               />
             </label>
           )}

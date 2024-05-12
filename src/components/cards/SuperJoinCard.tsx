@@ -215,7 +215,8 @@ const SuperJoinCard: React.FC<Props> = ({ superUsername, communities }) => {
         </h1>
         {isJoined ? (
           <p className="mt-10">
-            You have been added to the group. Pleas check your telegram.
+            You have been added to the group. If not check DM from
+            @community_haus.
           </p>
         ) : (
           isEligible &&

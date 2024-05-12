@@ -1,6 +1,7 @@
 import { Api } from 'telegram';
 import { telegramClient } from '@/utils/telegram';
 import { mongoClient } from '@/utils/mongodb';
+import BigInteger from 'big-integer';
 
 export async function POST(request: Request) {
   const { chatID, userID, isSuperGroup } = await request.json();
@@ -24,8 +25,7 @@ export async function POST(request: Request) {
     userId: userID,
     fwdLimit: 43,
   };
-
-  if (isSuperGroup) {
+  if (isSuperGroup === true || isSuperGroup === 'true') {
     try {
       await telegramClient.invoke(
         new Api.channels.InviteToChannel({
@@ -46,7 +46,14 @@ export async function POST(request: Request) {
       });
     }
   } else {
-    await telegramClient.invoke(new Api.messages.AddChatUser(inviteInfo));
+    try {
+      await telegramClient.invoke(new Api.messages.AddChatUser(inviteInfo));
+    } catch (error) {
+      if (document)
+        await telegramClient.sendMessage(userID, {
+          message: document.telegramInviteLink,
+        });
+    }
   }
 
   if (document) {

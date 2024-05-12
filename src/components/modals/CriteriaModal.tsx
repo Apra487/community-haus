@@ -129,6 +129,7 @@ const CriteriaModal: React.FC<Props> = ({
     nameOfCommunity,
     communityType,
     communityChatId,
+    communityInviteLink,
     description,
     avatar,
   } = useCreateStore((store: ICreateStore) => ({
@@ -139,6 +140,7 @@ const CriteriaModal: React.FC<Props> = ({
     nameOfCommunity: store.nameOfCommunity,
     communityType: store.communityType,
     communityChatId: store.communityChatId,
+    communityInviteLink: store.communityInviteLink,
     description: store.description,
     avatar: store.avatar,
   }));
@@ -170,6 +172,7 @@ const CriteriaModal: React.FC<Props> = ({
       droplets: dropletsBasedEnabled ? droplets : '',
       dropsNumber: dropsOwnedEnabled ? dropsOwned : '',
       isSuperGroup: communityType === 'supergroup',
+      inviteLink: communityInviteLink,
     };
     if (rarityBasedEnabled) {
       const rarities = rarityToggles

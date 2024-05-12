@@ -9,6 +9,7 @@ export interface ICreateStore {
   nameOfCommunity: string | undefined;
   communityType: 'group' | 'supergroup';
   communityChatId: string | undefined;
+  communityInviteLink: string | undefined;
   description: string | undefined;
   avatar: File | undefined;
   updateTwitterUrl: (_twitterUrl: string) => void;
@@ -18,6 +19,7 @@ export interface ICreateStore {
   updateNameOfCommunity: (_nameOfCommunity: string) => void;
   updateCommunityType: (_typeOfCommunit: 'group' | 'supergroup') => void;
   updateCommunityChatId: (_communityChatId: string) => void;
+  updateCommunityInviteLink: (_communityInviteLink: string) => void;
   updateDescription: (_description: string) => void;
   updateAvatar: (_avatar: File | undefined) => void;
 }
@@ -33,6 +35,7 @@ export const useCreateStore = create<ICreateStore>()(
         nameOfCommunity: undefined,
         communityType: 'group',
         communityChatId: undefined,
+        communityInviteLink: undefined,
         description: undefined,
         avatar: undefined,
         updateTwitterUrl: (_twitterUrl: string) =>
@@ -47,6 +50,8 @@ export const useCreateStore = create<ICreateStore>()(
           set({ communityType: _typeOfCommunit }),
         updateCommunityChatId: (_communityChatId: string) =>
           set({ communityChatId: _communityChatId }),
+        updateCommunityInviteLink: (_communityInviteLink: string) =>
+          set({ communityInviteLink: _communityInviteLink }),
         updateDescription: (_description: string) =>
           set({ description: _description }),
         updateAvatar: (_avatar: File | undefined) => set({ avatar: _avatar }),
