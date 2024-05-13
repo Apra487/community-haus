@@ -18,6 +18,7 @@ export async function POST(request: Request) {
     twitterUrl,
     contractAddress,
     isSuperGroup,
+    isChannel,
   } = await request.json();
 
   if (!creatorUsername) {
@@ -92,8 +93,80 @@ export async function POST(request: Request) {
     users: [creatorTelegramID],
     title: communityName,
   };
-
-  if (isSuperGroup) {
+  if (isChannel) {
+    const channel = await telegramClient.invoke(
+      new Api.channels.CreateChannel({
+        title: 'forum test channel',
+        about: 'some string here',
+        broadcast: true,
+        forum: true,
+      })
+    );
+    const channelID = (channel as any).updates[1].channelId;
+    await telegramClient.invoke(
+      new Api.channels.InviteToChannel({
+        channel: channelID,
+        users: [creatorTelegramID],
+      })
+    );
+    await telegramClient.invoke(
+      new Api.channels.EditAdmin({
+        channel: channelID,
+        userId: creatorTelegramID,
+        adminRights: new Api.ChatAdminRights({
+          changeInfo: true,
+          postMessages: true,
+          editMessages: true,
+          deleteMessages: true,
+          banUsers: true,
+          inviteUsers: true,
+          pinMessages: true,
+          addAdmins: true,
+          anonymous: true,
+          manageCall: true,
+          other: true,
+        }),
+        rank: 'admin',
+      })
+    );
+    const inviteResponse = await telegramClient.invoke(
+      new Api.messages.ExportChatInvite({
+        peer: channelID,
+        legacyRevokePermanent: true,
+        requestNeeded: false,
+        title: 'Invite Link',
+      })
+    );
+    const inviteLink = (inviteResponse as any).link;
+    await telegramClient.sendMessage(creatorTelegramID, {
+      message: inviteLink,
+    });
+    const creatorChannelInfo = {
+      username: creatorUsername,
+      telegramID: creatorTelegramID,
+      telegramInviteLink: inviteLink,
+      communityName,
+      communityDescription,
+      chatID: `-100${BigInteger(channelID).toString()}`,
+      users: [creatorTelegramID],
+      criteria: {
+        common: parseInt(commonCriteria),
+        rate: parseInt(rareCriteria),
+        legendary: parseInt(legendaryCriteria),
+        ultimate: parseInt(ultimateCriteria),
+        droplets: parseInt(droplets),
+        dropsNumber: parseInt(dropsNumber),
+      },
+      twitterUrl,
+      contractAddress,
+      channel: true,
+    };
+    await collection.insertOne(creatorChannelInfo);
+    return Response.json({
+      message: 'Channel created',
+      data: creatorChannelInfo,
+    });
+  } else if (isSuperGroup) {
     const supergroup = await telegramClient.invoke(
       new Api.channels.CreateChannel({
         title: communityName,
