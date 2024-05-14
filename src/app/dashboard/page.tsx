@@ -28,6 +28,8 @@ export default function Dashboard() {
   const [isSuperGroup, setIsSuperGroup] = useState<{
     [tag: string]: boolean;
   }>({});
+  const [kickedAll, setKickedAll] = useState<boolean>(false);
+  const [isKickingAll, setIsKickingAll] = useState<boolean>(false);
 
   useEffect(() => {
     if (!superUsername) {
@@ -218,10 +220,56 @@ export default function Dashboard() {
                 {Object.keys(users).map((key) => {
                   return (
                     <div key={key} className="pt-4">
-                      <h5 className="text-sm font-semibold leading-6 text-white">
-                        {' '}
-                        {key}
-                      </h5>
+                      <div className="flex flex-row w-full items-center justify-between">
+                        <h5 className="text-sm font-semibold leading-6 text-white">
+                          {' '}
+                          {key}
+                        </h5>
+                        <button
+                          className="text-sm text-accent ml-2"
+                          onClick={async () => {
+                            setIsKickingAll(true);
+                            const members = telegramMembers[key];
+                            const ineligibleMembers = members.filter(
+                              (member) => !users[key].includes(member)
+                            );
+                            try {
+                              for (
+                                let i = 0;
+                                i < ineligibleMembers.length;
+                                i++
+                              ) {
+                                if (ineligibleMembers[i] === 'community_haus')
+                                  continue;
+                                await fetch('/api/kick', {
+                                  method: 'POST',
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                  },
+                                  body: JSON.stringify({
+                                    chatID: chatIDs[key],
+                                    telegramUserID: ineligibleMembers[i],
+                                    isSuperGroup: isSuperGroup[key],
+                                  }),
+                                });
+                                await new Promise((resolve) =>
+                                  setTimeout(resolve, 100)
+                                );
+                              }
+                            } catch (error) {
+                              console.log(error);
+                            }
+                            setIsKickingAll(false);
+                            setKickedAll(true);
+                          }}
+                        >
+                          {kickedAll
+                            ? 'Kicked All'
+                            : isKickingAll
+                              ? 'Kicking All'
+                              : 'Kick All'}
+                        </button>
+                      </div>
                       {telegramMembers[key].map((member) => {
                         if (member === 'community_haus') return null;
                         const isEligible = users[key].includes(member);

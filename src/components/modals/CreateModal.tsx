@@ -85,6 +85,10 @@ const CreateModal: React.FC<Props> = ({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log(event);
+    if (!formState.logo) {
+      alert('Please upload a logo!');
+      return;
+    }
     try {
       requiresGroupCreation
         ? FormStateSchemaWithGroupCreation.parse(formState)
