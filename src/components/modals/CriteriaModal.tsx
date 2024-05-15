@@ -156,6 +156,356 @@ const CriteriaModal: React.FC<Props> = ({
     useState<boolean>(false);
   const [dropsOwnedEnabled, setDropsOwnedEnabled] = useState<boolean>(false);
 
+  const handleSumbitForChannelCreation = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+    setIsSumbitting(true);
+    const formData = {
+      rarities: rarityToggles
+        .filter((toggle) => toggle.isChecked)
+        .map(({ rarity, value }) => ({ rarity, value: value })),
+      droplets: droplets,
+      dropsOwned: dropsOwned,
+    };
+    const jsonFormatedData = {
+      creatorUsername: userName,
+      creatorTelegramID: telegramId,
+      communityName: nameOfCommunity,
+      communityDescription: description,
+      twitterUrl: twitterUrl,
+      contractAddress: address,
+      isChannel: communityType === 'channel',
+    };
+    console.log('submit with channel creation', jsonFormatedData);
+    let parentCommunityData: CommunityDataType | undefined;
+    let communityDatas: CommunityDataType[] = [];
+    try {
+      // signle group creation
+      if (formData.dropsOwned !== '') {
+        const jsonBodyWithDropsOwned = {
+          ...jsonFormatedData,
+          creatorUsername: `${jsonFormatedData.creatorUsername}-General`,
+          communityName: `${jsonFormatedData.communityName} (General)`,
+          communityDescription: `General - ${jsonFormatedData.communityDescription}`,
+          dropsNumber: formData.dropsOwned,
+        };
+        console.log(jsonBodyWithDropsOwned);
+        const response = await fetch('/api/telegram/group', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(jsonBodyWithDropsOwned) || JSON.stringify({}),
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+
+        const avatarFormData = new FormData();
+        avatarFormData.append('avatar', avatar);
+        avatarFormData.append(
+          'username',
+          `${jsonFormatedData.creatorUsername}-General`
+        );
+        const avatarReponse = await fetch('/api/avatar', {
+          method: 'POST',
+          body: avatarFormData,
+        });
+
+        const avatarData = await avatarReponse.json();
+        data.avatar = avatarData.data.url;
+        communityDatas.push(data);
+        parentCommunityData = data.data;
+      } else if (
+        formData.droplets !== '' &&
+        parentCommunityData === undefined
+      ) {
+        const jsonBodyWithDroplets = {
+          ...jsonFormatedData,
+          creatorUsername: `${jsonFormatedData.creatorUsername}-Droplets`,
+          communityName: `${jsonFormatedData.communityName} (Droplets)`,
+          communityDescription: `Droplets - ${jsonFormatedData.communityDescription}`,
+          droplets: formData.droplets,
+        };
+        console.log(jsonBodyWithDroplets);
+        const response = await fetch('/api/telegram/group', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(jsonBodyWithDroplets) || JSON.stringify({}),
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+
+        const avatarFormData = new FormData();
+        avatarFormData.append('avatar', avatar);
+        avatarFormData.append(
+          'username',
+          `${jsonFormatedData.creatorUsername}-Droplets`
+        );
+        const avatarReponse = await fetch('/api/avatar', {
+          method: 'POST',
+          body: avatarFormData,
+        });
+
+        const avatarData = await avatarReponse.json();
+        data.avatar = avatarData.data.url;
+
+        communityDatas.push(data);
+        parentCommunityData = data.data;
+      } else if (parentCommunityData === undefined) {
+        for (const rarity of formData.rarities) {
+          const jsonBodyWithRarity = {
+            ...jsonFormatedData,
+            creatorUsername: `${jsonFormatedData.creatorUsername}-${rarity.rarity}`,
+            communityName: `${jsonFormatedData.communityName} (${rarity.rarity})`,
+            communityDescription: `${rarity.rarity} - ${jsonFormatedData.communityDescription}`,
+            [`${rarity.rarity.toLowerCase()}Criteria`]: rarity.value,
+          };
+          console.log(jsonBodyWithRarity);
+          const response = await fetch('/api/telegram/group', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(jsonBodyWithRarity) || JSON.stringify({}),
+          });
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+
+          const avatarFormData = new FormData();
+          avatarFormData.append('avatar', avatar);
+          avatarFormData.append(
+            'username',
+            `${jsonFormatedData.creatorUsername}-${rarity.rarity}`
+          );
+          const avatarReponse = await fetch('/api/avatar', {
+            method: 'POST',
+            body: avatarFormData,
+          });
+
+          const avatarData = await avatarReponse.json();
+          data.avatar = avatarData.data.url;
+
+          communityDatas.push(data);
+          parentCommunityData = data.data;
+          break;
+        }
+      }
+
+      if (!parentCommunityData) {
+        throw new Error('Parent community data is not available');
+      }
+      const newJsonFormatedData = {
+        creatorUsername: userName,
+        creatorTelegramID: telegramId,
+        communityName: nameOfCommunity,
+        communityDescription: description,
+        twitterUrl: twitterUrl,
+        contractAddress: address,
+        isChannel: communityType === 'channel',
+        inviteLink: parentCommunityData.telegramInviteLink,
+        chatID: parentCommunityData.chatID,
+      };
+
+      if (
+        formData.dropsOwned !== '' &&
+        parentCommunityData.username !==
+          `${newJsonFormatedData.creatorUsername}-General`
+      ) {
+        const jsonBodyWithDropsOwned = {
+          ...newJsonFormatedData,
+          creatorUsername: `${newJsonFormatedData.creatorUsername}-General`,
+          communityName: `${newJsonFormatedData.communityName} (General)`,
+          communityDescription: `General - ${newJsonFormatedData.communityDescription}`,
+          dropsNumber: formData.dropsOwned,
+        };
+        console.log(jsonBodyWithDropsOwned);
+        try {
+          const reponse = await fetch('/api/group', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(jsonBodyWithDropsOwned) || JSON.stringify({}),
+          });
+          if (!reponse.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await reponse.json();
+          console.log(data);
+
+          await fetch('/api/telegram/topic', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              chatID: parentCommunityData.chatID,
+              topicName: 'General',
+            }),
+          });
+
+          const avatarFormData = new FormData();
+          avatarFormData.append('avatar', avatar);
+          avatarFormData.append(
+            'username',
+            `${jsonBodyWithDropsOwned.creatorUsername}`
+          );
+          const avatarReponse = await fetch('/api/avatar', {
+            method: 'POST',
+            body: avatarFormData,
+          });
+
+          const avatarData = await avatarReponse.json();
+          data.avatar = avatarData.data.url;
+
+          communityDatas.push(data);
+        } catch (error: any) {
+          console.error(
+            'Something went wrong while submitting without group creation for General:',
+            error
+          );
+        }
+      }
+      if (
+        formData.droplets !== '' &&
+        parentCommunityData.username !==
+          `${newJsonFormatedData.creatorUsername}-Droplets`
+      ) {
+        const jsonBodyWithDroplets = {
+          ...newJsonFormatedData,
+          creatorUsername: `${newJsonFormatedData.creatorUsername}-Droplets`,
+          communityName: `${newJsonFormatedData.communityName} (Droplets)`,
+          communityDescription: `Droplets - ${newJsonFormatedData.communityDescription}`,
+          droplets: formData.droplets,
+        };
+        console.log(jsonBodyWithDroplets);
+        try {
+          const reponse = await fetch('/api/group', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(jsonBodyWithDroplets) || JSON.stringify({}),
+          });
+          if (!reponse.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await reponse.json();
+
+          await fetch('/api/telegram/topic', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              chatID: parentCommunityData.chatID,
+              topicName: 'Droplets',
+            }),
+          });
+
+          const avatarFormData = new FormData();
+          avatarFormData.append('avatar', avatar);
+          avatarFormData.append(
+            'username',
+            `${jsonBodyWithDroplets.creatorUsername}`
+          );
+          const avatarReponse = await fetch('/api/avatar', {
+            method: 'POST',
+            body: avatarFormData,
+          });
+
+          const avatarData = await avatarReponse.json();
+          data.avatar = avatarData.data.url;
+
+          communityDatas.push(data);
+        } catch (error: any) {
+          console.error(
+            'Something went wrong while submitting without group creation for Droplets:',
+            error
+          );
+        }
+      }
+      for (const rarity of formData.rarities) {
+        if (
+          parentCommunityData.username ===
+          `${newJsonFormatedData.creatorUsername}-${rarity.rarity}`
+        )
+          continue;
+        const jsonBodyWithRarity = {
+          ...newJsonFormatedData,
+          creatorUsername: `${newJsonFormatedData.creatorUsername}-${rarity.rarity}`,
+          communityName: `${newJsonFormatedData.communityName} (${rarity.rarity})`,
+          communityDescription: `${rarity.rarity} - ${newJsonFormatedData.communityDescription}`,
+          [`${rarity.rarity.toLowerCase()}Criteria`]: rarity.value,
+        };
+        console.log(jsonBodyWithRarity);
+        try {
+          const reponse = await fetch('/api/group', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(jsonBodyWithRarity) || JSON.stringify({}),
+          });
+          if (!reponse.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await reponse.json();
+
+          await fetch('/api/telegram/topic', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              chatID: parentCommunityData.chatID,
+              topicName: rarity.rarity,
+            }),
+          });
+
+          const avatarFormData = new FormData();
+          avatarFormData.append('avatar', avatar);
+          avatarFormData.append(
+            'username',
+            `${jsonBodyWithRarity.creatorUsername}`
+          );
+          const avatarReponse = await fetch('/api/avatar', {
+            method: 'POST',
+            body: avatarFormData,
+          });
+
+          const avatarData = await avatarReponse.json();
+          data.avatar = avatarData.data.url;
+
+          communityDatas.push(data);
+        } catch (error: any) {
+          console.error(
+            'Something went wrong while submitting without group creation for Droplets:',
+            error
+          );
+        }
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+      console.log(communityDatas);
+      await updateCommunityData(communityDatas);
+      updateSuperUsername(userName);
+      router.push('/dashboard');
+      closeActon();
+    } catch (error: any) {
+      console.error('Error:', error);
+    }
+    setIsSumbitting(false);
+  };
+
   const handleSubmitWithoutGroupCreation = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
@@ -553,9 +903,11 @@ const CriteriaModal: React.FC<Props> = ({
           </form>
           <button
             onClick={
-              requiresGroupCreation
-                ? handleSubmit
-                : handleSubmitWithoutGroupCreation
+              communityType === 'channel'
+                ? handleSumbitForChannelCreation
+                : requiresGroupCreation
+                  ? handleSubmit
+                  : handleSubmitWithoutGroupCreation
             }
             className="btn-primary mt-6"
             type="submit"

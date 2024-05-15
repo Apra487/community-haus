@@ -4,9 +4,15 @@ interface Props {
   chatID: string;
   telegramUserID: string;
   isSuperGroup: boolean;
+  isChannel: boolean;
 }
 
-const KickButton: FC<Props> = ({ chatID, telegramUserID, isSuperGroup }) => {
+const KickButton: FC<Props> = ({
+  chatID,
+  telegramUserID,
+  isSuperGroup,
+  isChannel,
+}) => {
   const [isKicking, setIsKicking] = useState(false);
   const [kicked, setKicked] = useState(false);
 
@@ -22,6 +28,7 @@ const KickButton: FC<Props> = ({ chatID, telegramUserID, isSuperGroup }) => {
           chatID,
           telegramUserID,
           isSuperGroup,
+          isChannel,
         }),
       });
       const data = await response.json();

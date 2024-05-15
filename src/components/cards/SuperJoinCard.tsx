@@ -86,6 +86,7 @@ const SuperJoinCard: React.FC<Props> = ({ superUsername, communities }) => {
           chatID: community.chatID,
           userID: telegramId,
           isSuperGroup: community.supergroup,
+          isChannel: community.channel,
         });
         const response = await fetch('/api/telegram/invite', {
           method: 'POST',

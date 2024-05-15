@@ -6,6 +6,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const chatID = searchParams.get('chatID');
   const isSuperGroup = searchParams.get('isSuperGroup');
+  const isChannel = searchParams.get('isChannel');
 
   if (!chatID) {
     return Response.json({
@@ -20,7 +21,7 @@ export async function GET(request: Request) {
     onError: (err) => console.log(err),
   });
 
-  if (isSuperGroup === 'true') {
+  if (isSuperGroup === 'true' || isChannel === 'true') {
     const channelParticipants = await telegramClient.invoke(
       new Api.channels.GetParticipants({
         channel: chatID,

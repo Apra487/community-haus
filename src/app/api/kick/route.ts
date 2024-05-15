@@ -3,7 +3,8 @@ import { telegramClient } from '@/utils/telegram';
 import BigNumber from 'big-integer';
 
 export async function POST(request: Request) {
-  let { chatID, telegramUserID, isSuperGroup } = await request.json();
+  let { chatID, telegramUserID, isSuperGroup, isChannel } =
+    await request.json();
 
   await telegramClient.start({
     phoneNumber: '',
@@ -12,7 +13,7 @@ export async function POST(request: Request) {
     onError: (err) => console.log(err),
   });
 
-  if (isSuperGroup) {
+  if (isSuperGroup || isChannel) {
     await telegramClient.invoke(
       new Api.channels.EditBanned({
         channel: chatID,

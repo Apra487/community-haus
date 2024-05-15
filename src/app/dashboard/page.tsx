@@ -28,6 +28,9 @@ export default function Dashboard() {
   const [isSuperGroup, setIsSuperGroup] = useState<{
     [tag: string]: boolean;
   }>({});
+  const [isChannel, setIsChannel] = useState<{
+    [tag: string]: boolean;
+  }>({});
   const [kickedAll, setKickedAll] = useState<boolean>(false);
   const [isKickingAll, setIsKickingAll] = useState<boolean>(false);
 
@@ -64,6 +67,9 @@ export default function Dashboard() {
       const isSuperGroupData: {
         [tag: string]: boolean;
       } = {};
+      const isChannelData: {
+        [tag: string]: boolean;
+      } = {};
       for (let i = 0; i < communitiesData.length; i++) {
         const community = communitiesData[i];
         const tag = community.username.split('-')[1] as string;
@@ -71,9 +77,10 @@ export default function Dashboard() {
         chatIDsData[tag] = community.chatID;
         creatorTelegramIdData[tag] = community.telegramID;
         isSuperGroupData[tag] = community.supergroup ? true : false;
+        isChannelData[tag] = community.channel ? true : false;
 
         const telegramMemberResponse = await fetch(
-          `/api/telegram-member?chatID=${community.chatID}&isSuperGroup=${isSuperGroupData[tag]}`,
+          `/api/telegram-member?chatID=${community.chatID}&isSuperGroup=${isSuperGroupData[tag]}&isChannel=${isChannelData[tag]}`,
           {
             method: 'GET',
           }
@@ -88,6 +95,7 @@ export default function Dashboard() {
       setCreatorTelegramId(creatorTelegramIdData);
       setTelegramMembers(telegramMembersData);
       setIsSuperGroup(isSuperGroupData);
+      setIsChannel(isChannelData);
     }
     fetchCommunityData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -250,6 +258,7 @@ export default function Dashboard() {
                                     chatID: chatIDs[key],
                                     telegramUserID: ineligibleMembers[i],
                                     isSuperGroup: isSuperGroup[key],
+                                    isChannel: isChannel[key],
                                   }),
                                 });
                                 await new Promise((resolve) =>
@@ -298,6 +307,7 @@ export default function Dashboard() {
                                   chatID={chatIDs[key]}
                                   telegramUserID={member}
                                   isSuperGroup={isSuperGroup[key]}
+                                  isChannel={isChannel[key]}
                                 />
                               </div>
                             )}

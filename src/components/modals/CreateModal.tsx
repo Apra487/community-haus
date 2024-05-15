@@ -10,7 +10,7 @@ type FormState = {
   username: string;
   telegramId: string;
   communityName: string;
-  communityType: 'group' | 'supergroup';
+  communityType: 'group' | 'supergroup' | 'channel';
   communityChatId: string;
   communityInviteLink: string;
   description: string;
@@ -256,6 +256,23 @@ const CreateModal: React.FC<Props> = ({
                   className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                 >
                   Supergroup
+                </label>
+              </div>
+              <div className="flex items-center">
+                <input
+                  id="channel-radio"
+                  type="radio"
+                  value="channel"
+                  name="communityType"
+                  className="w-4 h-4 text-accent bg-gray-100 border-gray-300 focus:ring-transparent dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  onChange={handleChange}
+                  checked={formState.communityType === 'channel'}
+                />
+                <label
+                  htmlFor="channel-radio"
+                  className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  Channel
                 </label>
               </div>
             </div>

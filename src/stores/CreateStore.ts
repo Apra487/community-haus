@@ -7,7 +7,7 @@ export interface ICreateStore {
   userName: string | undefined;
   telegramId: string | undefined;
   nameOfCommunity: string | undefined;
-  communityType: 'group' | 'supergroup';
+  communityType: 'group' | 'supergroup' | 'channel';
   communityChatId: string | undefined;
   communityInviteLink: string | undefined;
   description: string | undefined;
@@ -17,7 +17,9 @@ export interface ICreateStore {
   updateUserName: (_userName: string) => void;
   updateTelegramId: (_telegramId: string) => void;
   updateNameOfCommunity: (_nameOfCommunity: string) => void;
-  updateCommunityType: (_typeOfCommunit: 'group' | 'supergroup') => void;
+  updateCommunityType: (
+    _typeOfCommunit: 'group' | 'supergroup' | 'channel'
+  ) => void;
   updateCommunityChatId: (_communityChatId: string) => void;
   updateCommunityInviteLink: (_communityInviteLink: string) => void;
   updateDescription: (_description: string) => void;
@@ -46,8 +48,9 @@ export const useCreateStore = create<ICreateStore>()(
           set({ telegramId: _telegramId }),
         updateNameOfCommunity: (_nameOfCommunity: string) =>
           set({ nameOfCommunity: _nameOfCommunity }),
-        updateCommunityType: (_typeOfCommunit: 'group' | 'supergroup') =>
-          set({ communityType: _typeOfCommunit }),
+        updateCommunityType: (
+          _typeOfCommunit: 'group' | 'supergroup' | 'channel'
+        ) => set({ communityType: _typeOfCommunit }),
         updateCommunityChatId: (_communityChatId: string) =>
           set({ communityChatId: _communityChatId }),
         updateCommunityInviteLink: (_communityInviteLink: string) =>

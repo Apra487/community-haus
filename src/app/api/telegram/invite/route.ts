@@ -1,10 +1,9 @@
 import { Api } from 'telegram';
 import { telegramClient } from '@/utils/telegram';
 import { mongoClient } from '@/utils/mongodb';
-import BigInteger from 'big-integer';
 
 export async function POST(request: Request) {
-  const { chatID, userID, isSuperGroup } = await request.json();
+  const { chatID, userID, isSuperGroup, isChannel } = await request.json();
 
   await telegramClient.start({
     phoneNumber: '',
@@ -25,7 +24,12 @@ export async function POST(request: Request) {
     userId: userID,
     fwdLimit: 43,
   };
-  if (isSuperGroup === true || isSuperGroup === 'true') {
+  if (
+    isSuperGroup === true ||
+    isSuperGroup === 'true' ||
+    isChannel === true ||
+    isChannel === 'true'
+  ) {
     try {
       await telegramClient.invoke(
         new Api.channels.InviteToChannel({
