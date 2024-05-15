@@ -96,8 +96,8 @@ export async function POST(request: Request) {
   if (isChannel) {
     const channel = await telegramClient.invoke(
       new Api.channels.CreateChannel({
-        title: 'forum test channel',
-        about: 'some string here',
+        title: communityName,
+        about: communityDescription,
         broadcast: true,
         forum: true,
       })
