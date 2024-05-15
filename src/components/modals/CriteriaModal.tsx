@@ -72,6 +72,11 @@ const CriteriaModal: React.FC<Props> = ({
   const [isSumbitting, setIsSumbitting] = useState<boolean>(false);
   const [maxCriteriaSelectionReached, setMaxCriteriaSelectionReached] =
     useState<boolean>(false);
+  const [commbinedRarityToggles, setCommbinedRarityToggles] = useState<{
+    [name: string]: RarityToggle[];
+  }>([]);
+
+  const combinedRarityToggleLength = Object.keys(commbinedRarityToggles).length;
 
   const handleRarityToggle = (index: number) => {
     if (!requiresGroupCreation) {
@@ -593,6 +598,7 @@ const CriteriaModal: React.FC<Props> = ({
         .map(({ rarity, value }) => ({ rarity, value: value })),
       droplets: droplets,
       dropsOwned: dropsOwned,
+      combinedRarities: Object.values(commbinedRarityToggles),
     };
     const jsonFormatedData = {
       creatorUsername: userName,
@@ -610,6 +616,51 @@ const CriteriaModal: React.FC<Props> = ({
 
     try {
       let communityDatas: CommunityDataType[] = [];
+
+      for (const combinedRarity of formData.combinedRarities) {
+        const jsonBodyWithCombinedRarity = {
+          ...jsonFormatedData,
+          creatorUsername: `${jsonFormatedData.creatorUsername}-`,
+          communityName: `${jsonFormatedData.communityName} (`,
+          communityDescription: `${jsonFormatedData.communityDescription}`,
+        };
+        for (const rarity of combinedRarity) {
+          jsonBodyWithCombinedRarity.creatorUsername += rarity.rarity;
+          jsonBodyWithCombinedRarity.communityName += rarity.rarity;
+          jsonBodyWithCombinedRarity[`${rarity.rarity.toLowerCase()}Criteria`] =
+            rarity.value;
+        }
+        jsonBodyWithCombinedRarity.communityName += ')';
+        const response = await fetch('/api/telegram/group', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body:
+            JSON.stringify(jsonBodyWithCombinedRarity) || JSON.stringify({}),
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+
+        const avatarFormData = new FormData();
+        avatarFormData.append('avatar', avatar);
+        avatarFormData.append(
+          'username',
+          `${jsonBodyWithCombinedRarity.creatorUsername}`
+        );
+        const avatarReponse = await fetch('/api/avatar', {
+          method: 'POST',
+          body: avatarFormData,
+        });
+
+        const avatarData = await avatarReponse.json();
+        data.avatar = avatarData.data.url;
+
+        communityDatas.push(data);
+        await delay(1000);
+      }
 
       for (const rarity of formData.rarities) {
         const jsonBodyWithRarity = {
@@ -743,7 +794,10 @@ const CriteriaModal: React.FC<Props> = ({
       droplets: droplets,
       dropsOwned: dropsOwned,
     };
-    const raritySelected = formData.rarities.length;
+    const raritySelected =
+      combinedRarityToggleLength !== 0
+        ? combinedRarityToggleLength + formData.rarities.length
+        : formData.rarities.length;
     const dropletsSelected = formData.droplets !== '' ? 1 : 0;
     const dropsOwnedSelected = formData.dropsOwned !== '' ? 1 : 0;
     const totalSelected =
@@ -751,7 +805,7 @@ const CriteriaModal: React.FC<Props> = ({
     totalSelected >= criteriaSelectionLimit
       ? setMaxCriteriaSelectionReached(true)
       : setMaxCriteriaSelectionReached(false);
-  }, [rarityToggles, droplets, dropsOwned]);
+  }, [rarityToggles, droplets, dropsOwned, combinedRarityToggleLength]);
 
   return (
     <Modal>
@@ -901,6 +955,88 @@ const CriteriaModal: React.FC<Props> = ({
               )}
             </div>
           </form>
+          {communityType !== 'channel' && (
+            <div>
+              <h5 className="bg-tertiary cursor-pointer text-secondary rounded-xl py-3 px-4 flex flex-row mt-5 justify-between items-center text-sm leading-6 text-white">
+                Combined criterias
+                <button
+                  onClick={() => {
+                    const checkedRarityToggles = rarityToggles.filter(
+                      (toggle) => toggle.isChecked
+                    );
+                    if (Object.values(commbinedRarityToggles).length === 0) {
+                      let combinedName = '';
+                      checkedRarityToggles.forEach((toggle) => {
+                        combinedName += toggle.rarity;
+                      });
+                      setCommbinedRarityToggles({
+                        [combinedName]: checkedRarityToggles,
+                      });
+                    } else {
+                      const combinedRaretyTogglesKeys = Object.keys(
+                        commbinedRarityToggles
+                      );
+                      checkedRarityToggles.forEach((toggle) => {
+                        if (
+                          !combinedRaretyTogglesKeys.includes(toggle.rarity) &&
+                          combinedRaretyTogglesKeys.length < 3
+                        ) {
+                          let combinedName = '';
+                          checkedRarityToggles.forEach((toggle) => {
+                            combinedName += toggle.rarity;
+                          });
+                          setCommbinedRarityToggles((prev) => {
+                            return {
+                              ...prev,
+                              [combinedName]: checkedRarityToggles,
+                            };
+                          });
+                        }
+                      });
+                    }
+                    setRarityToggles((prev) =>
+                      prev.map((item) => ({
+                        ...item,
+                        isChecked: false,
+                        value: '',
+                      }))
+                    );
+                  }}
+                  className="btn-primary py-1 px-3 text-xs mt-2"
+                >
+                  {'Add +'}
+                </button>
+              </h5>
+              {Object.keys(commbinedRarityToggles).length !== 0 && (
+                <div className="bg-tertiary rounded-xl mt-4 p-5">
+                  {Object.keys(commbinedRarityToggles).map((key, index) => {
+                    return (
+                      <div key={key}>
+                        {`${index + 1}. ${key}`}
+                        {commbinedRarityToggles[key].map((toggle) => (
+                          <div className="m-2 " key={toggle.rarity}>
+                            <label className="flex flex-row w-full justify-between">
+                              <div className="flex flex-row">
+                                <input
+                                  type="checkbox"
+                                  checked={toggle.isChecked}
+                                  className="bg-tertiary py-2 px-4 text-primary mr-5"
+                                />
+                                <h5 className="text-sm font-semibold">
+                                  {toggle.rarity}
+                                </h5>
+                              </div>
+                              <p className="text-sm ml-10">{toggle.value}</p>
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
           <button
             onClick={
               communityType === 'channel'

@@ -51,6 +51,7 @@ export default function Dashboard() {
       const data = await response.json();
       const communitiesData = data.documents;
       setAvatar(communitiesData[0].avatar);
+      console.log(communitiesData);
 
       const usersData: {
         [tag: string]: string[];
@@ -100,6 +101,8 @@ export default function Dashboard() {
     fetchCommunityData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [superUsername]);
+
+  // console.log(users);
 
   return (
     <main className="container flex flex-col justify-center items-center">
