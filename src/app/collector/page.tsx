@@ -13,13 +13,15 @@ export default function Collector() {
   useEffect(() => {
     if (publicKey) {
       const address = publicKey.toBase58();
-      fetch(`/api/wallet-community?address=${address}`)
+      fetch(`/api/eligible-group?address=${address}`)
         .then((res) => res.json())
-        .then((data) => {
-          setCommunityArray(data.communityArray);
+        .then((data: any) => {
+          console.log(data.eligibleGroups);
+          setCommunityArray(data.eligibleGroups);
         });
     }
   }, [publicKey]);
+
   return (
     <main className="container flex flex-col justify-center mt-10">
       <header className="absolute top-0 right-0 w-screen blurred-header h-28 z-50 flex items-center">
@@ -63,15 +65,30 @@ export default function Collector() {
         </div>
       )}
       {publicKey && (
-        <div className="fixed w-screen h-screen bg-collector top-0 right-0 bg-no-repeat bg-cover -z-50"></div>
-      )}
-      {communityArray.length === 0 && publicKey && <>Loading...</>}
-      {communityArray.length > 0 && publicKey && (
-        <>
-          <h1>
-            Congratulations! You are eligible to join the common community!
-          </h1>
-        </>
+        <div className="fixed w-screen h-screen bg-collector top-0 right-0 bg-no-repeat bg-cover -z-50">
+          {
+            <div className="ml-32 mt-48 flex flex-col gap-5 overflow-y-scroll">
+              {communityArray.length === 0 && publicKey && <>Loading...</>}
+              {communityArray.length > 0 && publicKey && (
+                <>
+                  <h1 className="font-semibold text-xl">
+                    Congratulations! You are eligible to join the follwing
+                    community!
+                  </h1>
+                  {communityArray.map((community: any) => (
+                    <div
+                      key={community._id}
+                      className="bg-tertiary p-4 rounded-2xl"
+                    >
+                      <h2>{community.username}</h2>
+                      <p>{community.communityDescription}</p>
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
+          }
+        </div>
       )}
     </main>
   );
