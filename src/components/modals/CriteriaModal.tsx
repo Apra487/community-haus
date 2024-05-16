@@ -173,6 +173,16 @@ const CriteriaModal: React.FC<Props> = ({
       droplets: droplets,
       dropsOwned: dropsOwned,
     };
+
+    const checkedRarityToggles = rarityToggles.filter(
+      (toggle) => toggle.isChecked
+    );
+    if (checkedRarityToggles.some((toggle) => toggle.value === '')) {
+      alert('Please fill the value for the selected rarity');
+      setIsSumbitting(false);
+      return;
+    }
+
     const jsonFormatedData = {
       creatorUsername: userName,
       creatorTelegramID: telegramId,
@@ -600,6 +610,16 @@ const CriteriaModal: React.FC<Props> = ({
       dropsOwned: dropsOwned,
       combinedRarities: Object.values(commbinedRarityToggles),
     };
+
+    const checkedRarityToggles = rarityToggles.filter(
+      (toggle) => toggle.isChecked
+    );
+    if (checkedRarityToggles.some((toggle) => toggle.value === '')) {
+      alert('Please fill the value for the selected rarity');
+      setIsSumbitting(false);
+      return;
+    }
+
     const jsonFormatedData = {
       creatorUsername: userName,
       creatorTelegramID: telegramId,
@@ -964,6 +984,14 @@ const CriteriaModal: React.FC<Props> = ({
                     const checkedRarityToggles = rarityToggles.filter(
                       (toggle) => toggle.isChecked
                     );
+
+                    if (
+                      checkedRarityToggles.some((toggle) => toggle.value === '')
+                    ) {
+                      alert('Please fill the value for the selected rarity');
+                      return;
+                    }
+
                     if (Object.values(commbinedRarityToggles).length === 0) {
                       let combinedName = '';
                       checkedRarityToggles.forEach((toggle) => {
@@ -1012,7 +1040,28 @@ const CriteriaModal: React.FC<Props> = ({
                   {Object.keys(commbinedRarityToggles).map((key, index) => {
                     return (
                       <div key={key}>
-                        {`${index + 1}. ${key}`}
+                        <div className="flex flex-row items-center gap-2">
+                          {`${index + 1}. ${key}`}
+                          <span
+                            className="cursor-pointer"
+                            onClick={() => {
+                              const newCombinedRarityToggles = {
+                                ...commbinedRarityToggles,
+                              };
+                              delete newCombinedRarityToggles[key];
+                              setCommbinedRarityToggles(
+                                newCombinedRarityToggles
+                              );
+                            }}
+                          >
+                            <Image
+                              src={'/assets/icons/delete.svg'}
+                              alt="delete"
+                              width={12}
+                              height={12}
+                            />
+                          </span>
+                        </div>
                         {commbinedRarityToggles[key].map((toggle) => (
                           <div className="m-2 " key={toggle.rarity}>
                             <label className="flex flex-row w-full justify-between">
