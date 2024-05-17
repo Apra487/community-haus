@@ -35,7 +35,7 @@ export const useCreateStore = create<ICreateStore>()(
         userName: undefined,
         telegramId: undefined,
         nameOfCommunity: undefined,
-        communityType: 'group',
+        communityType: 'supergroup',
         communityChatId: undefined,
         communityInviteLink: undefined,
         description: undefined,

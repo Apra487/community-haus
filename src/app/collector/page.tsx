@@ -7,11 +7,20 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { ConnectButton } from '@/components/buttons';
 
 const JoinButton: FC<{
-  isJoining: boolean;
-  onClick: () => void;
-}> = ({ isJoining, onClick }) => {
+  superUsername: string;
+}> = ({ superUsername }) => {
+  const router = useRouter();
+  const [isJoining, setIsJoining] = useState(false);
+
   return (
-    <button className="btn-primary h-12" onClick={onClick}>
+    <button
+      className="btn-primary h-12"
+      onClick={() => {
+        setIsJoining(true);
+        router.push(`/communities/${superUsername}`);
+        setIsJoining(false);
+      }}
+    >
       {isJoining ? 'Joining...' : 'Join'}
     </button>
   );
@@ -23,7 +32,6 @@ export default function Collector() {
   const [communityArray, setCommunityArray] = useState([]);
   const [isFetchingEligibleGroups, setIsFetchingEligibleGroups] =
     useState(false);
-  const [isJoining, setIsJoining] = useState(false);
 
   useEffect(() => {
     async function fetchEligibleGroups(address: string) {
@@ -120,14 +128,7 @@ export default function Collector() {
                         </p>
                       </div>
                       <JoinButton
-                        isJoining={isJoining}
-                        onClick={() => {
-                          setIsJoining(true);
-                          const superUsername =
-                            community.username.split('-')[0];
-                          router.push(`/communities/${superUsername}`);
-                          setIsJoining(false);
-                        }}
+                        superUsername={community.username.split('-')[0]}
                       />
                     </div>
                   ))}

@@ -71,7 +71,7 @@ const CreateModal: React.FC<Props> = ({
     username: '',
     telegramId: '',
     communityName: '',
-    communityType: 'group',
+    communityType: 'supergroup',
     communityChatId: '',
     communityInviteLink: '',
     description: '',
@@ -224,7 +224,7 @@ const CreateModal: React.FC<Props> = ({
           >
             Type of the Community
             <div className="flex flex-row items-center mt-2 justify-between gap-5">
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 <input
                   id="group-radio"
                   type="radio"
@@ -240,7 +240,7 @@ const CreateModal: React.FC<Props> = ({
                 >
                   Group
                 </label>
-              </div>
+              </div> */}
               <div className="flex items-center">
                 <input
                   id="supergroup-radio"

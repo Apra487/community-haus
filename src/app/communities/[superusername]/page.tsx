@@ -1,24 +1,8 @@
+'use client';
 import { NextPage } from 'next';
+import { useRouter } from 'next/navigation';
 import { SuperJoinCard, DashboardBlockCard } from '@/components/cards';
-import { redirect } from 'next/navigation';
-
-async function getCommunitiesByUserame(superusername: string) {
-  const res = await fetch(
-    `https://www.community.haus/api/communities?superUsername=${superusername}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  );
-  const data = await res.json();
-
-  if (data.document === null) {
-    redirect('/collector');
-  }
-  return data;
-}
+import { useEffect, useState } from 'react';
 
 interface Props {
   params: {
@@ -26,10 +10,32 @@ interface Props {
   };
 }
 
-const Username: NextPage<Props> = async ({ params }) => {
+const Username: NextPage<Props> = ({ params }) => {
   const superusername = params.superusername;
-  const data = await getCommunitiesByUserame(superusername);
-  console.log(data);
+  const router = useRouter();
+  const [data, setData] = useState<any | undefined>(undefined);
+
+  useEffect(() => {
+    async function getCommunitiesByUserame(superusername: string) {
+      const res = await fetch(
+        `/api/communities?superUsername=${superusername}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      const data = await res.json();
+
+      if (data.document === null) {
+        router.push('/collector');
+      }
+      setData(data);
+    }
+    getCommunitiesByUserame(superusername);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <main className="container flex flex-col justify-center items-center">
@@ -119,10 +125,12 @@ const Username: NextPage<Props> = async ({ params }) => {
           </div>
           <div className="flex mt-12 flex-col items-center sm:flex-row sm:items-start">
             <div className="basis-3/5 flex justify-center align-center px-10 mb-16">
-              <SuperJoinCard
-                superUsername={superusername}
-                communities={data.documents}
-              />
+              {data && (
+                <SuperJoinCard
+                  superUsername={superusername}
+                  communities={data.documents}
+                />
+              )}
             </div>
             <div className="basis-2/5">
               <div className="grid grid-cols-2 gap-10		">
