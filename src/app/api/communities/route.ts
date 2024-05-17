@@ -1,5 +1,7 @@
 import { mongoClient } from '@/utils/mongodb';
 
+export const maxDuration = 60;
+
 export async function GET(request: Request) {
   // get request params
   const { searchParams } = new URL(request.url);
